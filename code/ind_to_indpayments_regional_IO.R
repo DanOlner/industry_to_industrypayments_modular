@@ -85,6 +85,19 @@ flow_lqs %>%
 
 # CREATE SECTION x SECTION LQ MATRICES PER REGION ----
 
+# Via prompt here: https://github.com/DanOlner/RegEconWorks/blob/a482801f001b3625e325688a4b6c302a551ee822/llm_convos/llm_convos_from_regecontools/2026-02-05_1346_The_user_opened_the_file_UsersdanolnerCodeRegional.md#human-3
+# Rather than the traditional LQ on employment/output, calculate flow-based LQs:
+#   
+#   LQ_ij = (Flow_ij in region / Total flows in region) / (Flow_ij in UK / Total UK flows)
+# Where i = payer sector, j = payee sector. This reveals which sector-to-sector linkages are over/under-represented in each region compared to the national pattern.
+# 
+# Advantage: Captures not just "how much manufacturing" but "how manufacturing connects to other sectors locally".
+
+# Log(2) values:
+# +1 means 2× over-represented
+# -1 means 2× under-represented
+# 0 means matches UK average
+
 # Function to create LQ matrix for a single region
 make_lq_matrix = function(region_name, lq_data) {
 
@@ -112,6 +125,7 @@ lq_matrices = map(regions, ~make_lq_matrix(.x, flow_lqs)) %>%
 
 # Check one
 lq_matrices[["Yorkshire and The Humber"]]
+lq_matrices[["London"]]
 
 
 # VISUALISE LQ MATRICES ----
@@ -153,6 +167,8 @@ plot_lq_heatmap = function(region_name, lq_data, use_log = TRUE, use_short_names
 
 # Plot for one region
 plot_lq_heatmap("Yorkshire and The Humber", flow_lqs)
+plot_lq_heatmap("London", flow_lqs)
+plot_lq_heatmap("North West", flow_lqs)
 
 # Plot all regions in a grid
 all_region_plots = map(regions, ~plot_lq_heatmap(.x, flow_lqs))
