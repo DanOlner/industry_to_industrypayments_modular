@@ -1,0 +1,37 @@
+---
+title: "Module Title: Method Note"
+author: "Dan Olner"
+date: last-modified
+format:
+  html:
+    toc: true
+  pdf:
+    toc: true
+---
+
+## Summary
+
+Brief description of the method.
+
+## Method
+
+Detailed method description.
+
+## Reproducible Example
+
+```{r}
+#| label: setup
+#| message: false
+
+# Load dependencies and data
+```
+
+```{r}
+#| label: analysis
+
+# Run the analysis
+```
+
+## Assumptions and Limitations
+
+## References

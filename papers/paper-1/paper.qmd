@@ -1,0 +1,42 @@
+---
+title: "Working Paper Title"
+author:
+  - name: Dan Olner
+    orcid: 0000-0000-0000-0000
+    affiliation: Your Affiliation
+date: last-modified
+format:
+  html:
+    toc: true
+  pdf:
+    toc: true
+    number-sections: true
+abstract: |
+  Abstract goes here. This working paper assembles modular components
+  developed openly at [GitHub repo link] with feedback from [list key
+  contributors/organisations].
+keywords:
+  - regional economics
+  - subnational statistics
+bibliography: references.bib
+---
+
+## Introduction
+
+## Background
+
+## Methods
+
+{{< include ../../modules/expected-vs-observed/method.qmd >}}
+
+## Results
+
+## Discussion
+
+## Conclusion
+
+## Acknowledgements
+
+This work was developed openly with feedback from [list contributors, referencing GitHub issues where applicable]. All modules, code, and data are available at [repo DOI link].
+
+## References

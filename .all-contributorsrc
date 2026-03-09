@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "DanOlner",
+      "name": "Dan Olner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5830743?v=4",
+      "profile": "http://danolner.net",
+      "contributions": [
+        "design",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "RegEconWorks",
+  "projectOwner": "DanOlner"
+}

@@ -1,0 +1,29 @@
+{
+  "creators": [
+    {
+      "name": "Olner, Dan",
+      "orcid": "0000-0001-7584-6033",
+      "affiliation": "Sheffield University"
+    }
+  ],
+  "title": "",
+  "version": "0.1.1",
+  "access_right": "open",
+  "license": "mit",
+  "upload_type": "software",
+  "language": "eng",
+  "keywords": [
+    "regional economics",
+    "subnational statistics",
+    "R"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://coveredinbees.org/",
+      "relation": "isDocumentedBy",
+      "resource_type": "publication-other"
+    }
+  ],
+  "communities": [],
+  "doi": ""
+}

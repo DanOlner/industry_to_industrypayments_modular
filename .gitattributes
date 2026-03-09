@@ -1,0 +1,4 @@
+# Exclude from release archives (git archive / Zenodo)
+# docs/               export-ignore
+#.github/            export-ignore
+# scripts/            export-ignore
