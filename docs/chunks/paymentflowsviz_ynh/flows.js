@@ -1,22 +1,22 @@
-/* Yorkshire and the Humber payment flows: the page's drawing and controls.
-   Data: ynh_flows_data.js (window.YNH_FLOWS), built by build_data.R. Values are GBP thousands; counts are payments.
+/* Regional payment flows: the page's drawing and controls.
+   Data, built by build_data.R: data/regions.js (window.FLOWS_REGIONS, a small index of all twelve ITL1 regions, loaded with
+   the page) and data/flows_<region>.js (window.FLOWS_DATA[region], fetched when that region is chosen).
+   Values are GBP thousands; counts are payments.
    Drawing is on a 2D canvas, one fill per link: tests/outputs/drawing_timing.csv shows that is the fast way.
    Money runs from the paying industry (the buyer) to the industry paid (the supplier). */
 (() => {
   'use strict';
-  const D = window.YNH_FLOWS, d3 = window.d3;
+  const d3 = window.d3, IDX = window.FLOWS_REGIONS;
   const $ = id => document.getElementById(id);
-  if (!D || !d3) { document.body.insertAdjacentText('afterbegin', 'The data or drawing library did not load.'); return; }
+  if (!IDX || !d3) { document.body.insertAdjacentText('afterbegin', 'The data or drawing library did not load.'); return; }
 
-  const NM = D.months.length, NL = D.links.supplier.length;
-  const NOGROUP = 'Not in a group', GROUPS = D.sector_groups, PAYGROUPS = [...D.pay_groups, NOGROUP];
-  const nodes = D.nodes.map((n, i) => ({ ...n, i, paygroup: n.pay_group || NOGROUP }));
-  const NN = nodes.length;
+  // The region's data in use. Everything here is set by setData(), which runs again whenever the region changes.
+  let D = null, NM = 0, NL = 0, NN = 0, nodes = [], GROUPS = [], PAYGROUPS = [], monthDate = [];
+  const NOGROUP = 'Not in a group';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const SHORT_HEAD = { 'Primary and utilities': 'Primary', 'Manufacturing': 'Manuf.', 'Construction': 'Constr.', 'Trade and transport': 'Trade', 'Business services': 'Business',
                        'Public services': 'Public', 'Hospitality, arts and other': 'Other', 'Distribution': 'Distrib.', 'Engineering and metals': 'Engin.', 'Local and public services': 'Local', 'Not in a group': 'None' };
   const DOT_UNIT = 100;                                  // one dot per 100 payments: the unit ONS rounds counts to
-  const monthDate = D.months.map(d3.timeParse('%Y-%m'));
   const fmtMonth = d3.timeFormat('%B %Y'), fmtMonthShort = d3.timeFormat('%b %Y');
 
   // ---------------------------------------------------------------- formatting
@@ -32,16 +32,18 @@
   // ---------------------------------------------------------------- state, readable from the address bar
   const q = new URLSearchParams(location.search);
   const pick = (v, allowed, dflt) => allowed.includes(v) ? v : dflt;
-  const monthFromParam = v => { if (v == null) return NM - 1; const i = D.months.indexOf(v); return i >= 0 ? i : Math.max(0, Math.min(NM - 1, +v || 0)); };
-  const DEFAULTS = { layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
+  const monthFromParam = v => { const i = v == null ? -1 : D.months.indexOf(v); return i >= 0 ? i : /^\d+$/.test(v || '') && +v < NM ? +v : NM - 1; };   // anything unrecognised: the latest month
+  const regionOf = code => IDX.regions.find(r => r.code === code);
+  let wantMonth = q.get('m'), wantSel = q.get('sel');     // resolved once the region's data has arrived
+  const DEFAULTS = { region: IDX.default, layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
                      smooth: true, dots: true, inter: false, halo: false, pubonly: false, speed: '3' };
-  const S = { layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'free'], DEFAULTS.cols),
+  const S = { region: (regionOf(q.get('region')) || {}).built ? q.get('region') : IDX.default, layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
               show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir),
               smooth: q.get('smooth') !== '0', dots: q.get('dots') !== '0', inter: q.get('inter') === '1', halo: q.get('halo') === '1',
-              pubonly: q.get('pubonly') === '1', t: monthFromParam(q.get('m')), sel: nodes.findIndex(n => n.id === q.get('sel')) };
+              pubonly: q.get('pubonly') === '1', t: 0, sel: -1 };
 
   // ---------------------------------------------------------------- colours, from the stylesheet so light and dark both work
   let C = {};
@@ -53,10 +55,8 @@
   }
 
   // ---------------------------------------------------------------- link series
-  const sup = Int16Array.from(D.links.supplier), buy = Int16Array.from(D.links.buyer), basis = D.links.basis;
-  const pairKey = (a, b) => a * 1000 + b, linkAt = new Map();
-  for (let k = 0; k < NL; k++) linkAt.set(pairKey(sup[k], buy[k]), k);
-  const rev = Int32Array.from({ length: NL }, (_, k) => linkAt.has(pairKey(buy[k], sup[k])) ? linkAt.get(pairKey(buy[k], sup[k])) : -1);
+  let sup, buy, basis, rev, REF;                           // per link: supplier and buyer (indices into nodes), flags by month, the reverse link; reference sizes
+  const pairKey = (a, b) => a * 1000 + b;
   // [link * NM + month]. smooth: trailing three-month average. pub: published months only (a hidden month counts as nothing,
   // and the average is taken over the published months in the window).
   function flatten(rows, pub, smooth) {
@@ -73,17 +73,34 @@
   const series = (measure, smooth, pub) => { const key = measure + (smooth ? 's' : 'r') + (pub ? 'p' : 'h');
     return seriesCache[key] || (seriesCache[key] = flatten(measure === 'value' ? D.links.value : D.links.count, pub, smooth)); };
   const quantilePos = (a, p) => d3.quantile(Float32Array.from(a).filter(v => v > 0).sort(), p);
-  const REF = { value: quantilePos(series('value', true, false), 0.9995), count: quantilePos(series('count', true, false), 0.9995) };   // fixed, so widths compare across months
 
   // ---------------------------------------------------------------- node series (rest of the UK, and payments within an industry)
   const smooth3 = a => Float32Array.from(a, (_, m) => { let s = 0, c = 0; for (let j = Math.max(0, m - 2); j <= m; j++) { s += a[j]; c++; } return s / c; });
   const both = a => [Float32Array.from(a), smooth3(a)];                       // [single month, three-month average]
   const plus = (a, b) => a.map((v, i) => v + b[i]);
-  for (const d of nodes) { const e = d.ext;                                   // [intermediaries out, in][single, smoothed]
-    d.x = { self: both(d.self), buy: [both(e.buy_core), both(plus(e.buy_core, e.buy_int))], sell: [both(e.sell_core), both(plus(e.sell_core, e.sell_int))],
-            buyLon: [both(e.buy_lon_core), both(plus(e.buy_lon_core, e.buy_lon_int))], sellLon: [both(e.sell_lon_core), both(plus(e.sell_lon_core, e.sell_lon_int))] }; }
   const lerp = (a, t) => { const m0 = Math.floor(t), m1 = Math.min(NM - 1, m0 + 1), f = t - m0; return a[m0] * (1 - f) + a[m1] * f; };
   const xAt = (d, name, t) => { const s = d.x[name]; return name === 'self' ? lerp(s[S.smooth ? 1 : 0], t) : lerp(s[S.inter ? 1 : 0][S.smooth ? 1 : 0], t); };
+
+  // ---------------------------------------------------------------- taking on a region's data
+  function setData(data) {
+    D = data; NM = D.months.length; NL = D.links.supplier.length;
+    GROUPS = D.sector_groups; PAYGROUPS = [...D.pay_groups, NOGROUP];
+    nodes = D.nodes.map((n, i) => ({ ...n, i, paygroup: n.pay_group || NOGROUP })); NN = nodes.length;
+    monthDate = D.months.map(d3.timeParse('%Y-%m'));
+    sup = Int16Array.from(D.links.supplier); buy = Int16Array.from(D.links.buyer); basis = D.links.basis;
+    const linkAt = new Map(); for (let k = 0; k < NL; k++) linkAt.set(pairKey(sup[k], buy[k]), k);
+    rev = Int32Array.from({ length: NL }, (_, k) => linkAt.has(pairKey(buy[k], sup[k])) ? linkAt.get(pairKey(buy[k], sup[k])) : -1);
+    for (const cache of [seriesCache, totalsCache, shiftCache, layouts]) for (const k in cache) delete cache[k];
+    REF = { value: quantilePos(series('value', true, false), 0.9995), count: quantilePos(series('count', true, false), 0.9995) };   // fixed, so widths compare across months
+    for (const d of nodes) { const e = d.ext;                                 // [intermediaries out, in][single, smoothed]
+      d.x = { self: both(d.self), buy: [both(e.buy_core), both(plus(e.buy_core, e.buy_int))], sell: [both(e.sell_core), both(plus(e.sell_core, e.sell_int))],
+              buyLon: [both(e.buy_lon_core), both(plus(e.buy_lon_core, e.buy_lon_int))], sellLon: [both(e.sell_lon_core), both(plus(e.sell_lon_core, e.sell_lon_int))] }; }
+    curV = new Float32Array(NL); curN = new Float32Array(NL); disp = new Float32Array(NL); shown = new Float32Array(NL);
+    paidD = new Float64Array(NN); recvD = new Float64Array(NN); paidV = new Float64Array(NN); recvV = new Float64Array(NN);
+    geo = new Float32Array(NL * (NSEG + 1) * 4); ctrl = new Float32Array(NL * 3); widthNow = new Float32Array(NL); radNow = new Float32Array(NN);
+    hoverNode = hoverLink = -1; drawn = []; pos = null; tween = null; geoDirty = true; shownMonth = -1;
+    buildOptions(); $('month').max = NM - 1;
+  }
 
   // ---------------------------------------------------------------- which industries are switched in, and the totals that follow
   let act, lact, wholeTotal, nodeRef, lev;
@@ -229,8 +246,7 @@
   }
 
   // ---------------------------------------------------------------- values at a (possibly fractional) month
-  const curV = new Float32Array(NL), curN = new Float32Array(NL), disp = new Float32Array(NL), shown = new Float32Array(NL);
-  const paidD = new Float64Array(NN), recvD = new Float64Array(NN), paidV = new Float64Array(NN), recvV = new Float64Array(NN);
+  let curV, curN, disp, shown, paidD, recvD, paidV, recvV;  // allocated by setData()
   let scaleNow = 1, monthTotalNow = 0;
   function valuesAt(t) {
     const va = series('value', S.smooth, S.pubonly), na = series('count', S.smooth, S.pubonly);
@@ -258,7 +274,7 @@
   }
 
   // ---------------------------------------------------------------- link geometry: fixed while the layout is still
-  const NSEG = 8, geo = new Float32Array(NL * (NSEG + 1) * 4), ctrl = new Float32Array(NL * 3);   // geo: x, y, normal x, normal y; ctrl: control x, y, length
+  const NSEG = 8; let geo, ctrl;                           // geo: x, y, normal x, normal y for each point along a link; ctrl: control x, y, length
   let geoDirty = true;
   function buildGeo() {
     for (let k = 0; k < NL; k++) {
@@ -284,12 +300,13 @@
 
   // ---------------------------------------------------------------- drawing
   let hoverNode = -1, hoverLink = -1, phase = 0, drawn = [], lastScriptMs = 0;
-  const widthNow = new Float32Array(NL), radNow = new Float32Array(NN);
+  let widthNow, radNow;
   function wrapText(text, maxW) { const words = text.split(' '), lines = []; let line = '';
     for (const w of words) { const t = line ? line + ' ' + w : w; if (line && ctx.measureText(t).width > maxW) { lines.push(line); line = w; } else line = t; }
     lines.push(line); return lines; }
 
   function draw() {
+    if (!D || !pos) return;
     const t0 = performance.now(), t = S.t, m0 = Math.round(t), P = pos;
     valuesAt(t);
     if (geoDirty) buildGeo();
@@ -325,7 +342,7 @@
     if (S.layout === 'order' && (S.cols === 'group' || S.cols === 'paygroup')) {
       const cc = columns(S.cols);
       ctx.textAlign = 'center'; ctx.fillStyle = C.ink2;
-      if (W < 620) cc.names.forEach((g, j) => ctx.fillText(SHORT_HEAD[g] || g, cc.centre[g], 11 + (j % 2) * (fs + 3)));      // narrow: short names on two staggered rows
+      if (W < 620) cc.names.forEach((g, j) => ctx.fillText(SHORT_HEAD[g] || g.split(/,| and /)[0], cc.centre[g], 11 + (j % 2) * (fs + 3)));      // narrow: short names on two staggered rows
       else for (const g of cc.names) wrapText(g, cc.width[g] - 8).slice(0, 3).forEach((ln, i) => ctx.fillText(ln, cc.centre[g], 12 + i * (fs + 2)));
       ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath();                                                           // hairlines between the columns
       cc.names.slice(1).forEach(g => { const x = Math.round(cc.centre[g] - cc.width[g] / 2) + 0.5; ctx.moveTo(x, pad.t - 6); ctx.lineTo(x, H - pad.b + 6); }); ctx.stroke();
@@ -538,12 +555,12 @@
     box.append(el('h3', null, `${periodText(m)}, a month`));
     const bar = (label, inside, lon, rest) => { const tot = inside + lon + rest || 1, r = el('div');
       const head = el('div', 'd-row'); head.append(el('span', null, label), el('span', 'v', fmtMoney(inside + lon + rest))); r.append(head);
-      const b = el('div', 'bar3'); b.setAttribute('role', 'img'); b.setAttribute('aria-label', `${label}: ${fmtMoney(inside)} inside the region, ${fmtMoney(lon)} London, ${fmtMoney(rest)} rest of the UK`);
+      const b = el('div', 'bar3'); b.setAttribute('role', 'img'); b.setAttribute('aria-label', `${label}: ${fmtMoney(inside)} inside the region, ${fmtMoney(lon)} ${D.facts.partner}, ${fmtMoney(rest)} rest of the UK`);
       for (const [cls, v] of [['s-inside', inside], ['s-london', lon], ['s-rest', rest]]) { if (v <= 0) continue; const sgm = el('span', cls); sgm.style.flex = `${v / tot} 1 0`; b.append(sgm); }
-      r.append(b, el('div', 'd-small', `${fmtMoney(inside)} inside (${fmtPct(inside / tot)}), ${fmtMoney(lon)} London, ${fmtMoney(rest)} elsewhere`)); return r; };
+      r.append(b, el('div', 'd-small', `${fmtMoney(inside)} inside (${fmtPct(inside / tot)}), ${fmtMoney(lon)} ${D.facts.partner}, ${fmtMoney(rest)} elsewhere`)); return r; };
     const self = xAt(d, 'self', m), bl = xAt(d, 'buyLon', m), sl = xAt(d, 'sellLon', m);
     box.append(bar(goods() ? 'It buys' : 'It pays', paidV[i], bl, xAt(d, 'buy', m) - bl), bar(goods() ? 'It sells' : 'It is paid', recvV[i], sl, xAt(d, 'sell', m) - sl));
-    const keyRow = el('div', 'bar3-key'); for (const [c, tx] of [['var(--seg-inside)', 'Other industries here'], ['var(--seg-london)', 'London'], ['var(--seg-rest)', 'Rest of the UK']]) { const sp = el('span'); const sw = el('i'); sw.style.background = c; sp.append(sw, document.createTextNode(tx)); keyRow.append(sp); }
+    const keyRow = el('div', 'bar3-key'); for (const [c, tx] of [['var(--seg-inside)', 'Other industries here'], ['var(--seg-london)', D.facts.partner], ['var(--seg-rest)', 'Rest of the UK']]) { const sp = el('span'); const sw = el('i'); sw.style.background = c; sp.append(sw, document.createTextNode(tx)); keyRow.append(sp); }
     box.append(keyRow, el('p', 'd-small', `Firms in this industry also ${goods() ? 'buy from' : 'pay'} each other ${fmtMoney(self)} a month inside the region.`));
 
     for (const [title, asPayer] of [[goods() ? 'It buys most from' : 'It pays most to', true], [goods() ? 'It sells most to' : 'It is paid most by', false]]) {
@@ -645,16 +662,18 @@
   function select(i) { S.sel = i >= 0 && act[i] ? i : -1; pickSel.value = S.sel >= 0 ? nodes[S.sel].id : ''; renderDetail(); requestDraw(); syncUrl(); }
 
   // ---------------------------------------------------------------- controls
-  const lens = $('lens');
+  const lens = $('lens'), pickSel = $('pick');
   const optgroup = (label, opts) => { const g = el('optgroup'); g.label = label; for (const [v, t] of opts) { const o = el('option', null, t); o.value = v; g.append(o); } return g; };
-  { const none = el('option', null, 'None'); none.value = 'none';
-    lens.append(none, optgroup('Sector group', GROUPS.map(g => ['group:' + g, g])), optgroup('Payment group', D.pay_groups.map(g => ['pay:' + g, g])),
-      optgroup('Industrial strategy', [['is8:any', 'Any industrial strategy sector'], ...D.is8_names.map(g => ['is8:' + g, g])]));
-    if (![...lens.options].some(o => o.value === S.lens)) S.lens = 'none'; }
-  const pickSel = $('pick');
-  { const none = el('option', null, 'None'); none.value = ''; pickSel.append(none);
+  function buildOptions() {                               // the highlight sets and the list of industries, which differ by region
+    const none = el('option', null, 'None'); none.value = 'none';
+    lens.replaceChildren(none, optgroup('Sector group', GROUPS.map(g => ['group:' + g, g])));
+    if (D.pay_groups.length) lens.append(optgroup('Payment group', D.pay_groups.map(g => ['pay:' + g, g])));
+    if (D.is8_names.length) lens.append(optgroup('Industrial strategy', [['is8:any', 'Any industrial strategy sector'], ...D.is8_names.map(g => ['is8:' + g, g])]));   // none for Northern Ireland: no jobs data
+    if (![...lens.options].some(o => o.value === S.lens)) S.lens = 'none';
+    const no = el('option', null, 'None'); no.value = ''; pickSel.replaceChildren(no);
     for (const d of nodes.slice().sort((a, b) => a.short.localeCompare(b.short))) { const o = el('option', null, d.short); o.value = d.id; pickSel.append(o); }
-    pickSel.addEventListener('change', e => select(nodes.findIndex(n => n.id === e.target.value))); }
+  }
+  pickSel.addEventListener('change', e => select(nodes.findIndex(n => n.id === e.target.value)));
   const selects = ['cols', 'lens', 'show', 'measure', 'scale', 'net', 'cover', 'speed'], checks = ['smooth', 'dots', 'inter', 'halo', 'pubonly'];
   function wording() {                                     // the fixed text that depends on money or goods
     const g = goods();
@@ -675,6 +694,7 @@
     $('play').textContent = playing ? 'Pause' : 'Play';
   }
   function changed(k) {                                    // what each control has to refresh
+    if (!D) return;
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
     if (k === 'layout' || k === 'cols') moveTo(false);
     if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
@@ -688,7 +708,7 @@
   document.querySelectorAll('input[name=dir]').forEach(r => r.addEventListener('change', () => { if (r.checked) { S.dir = r.value; changed('dir'); } }));
 
   // ---- time: step, scrub, play
-  const slider = $('month'); slider.max = NM - 1;
+  const slider = $('month');
   function setMonth(m) { S.t = Math.max(0, Math.min(NM - 1, m)); refresh(); syncUrl(); }
   function setPlaying(on) { playing = on; if (on && S.t >= NM - 1) S.t = 0; $('play').textContent = on ? 'Pause' : 'Play'; if (on) schedule(); else { S.t = Math.round(S.t); refresh(); syncUrl(); } }
   slider.addEventListener('input', e => { if (playing) setPlaying(false); setMonth(+e.target.value); });
@@ -710,8 +730,9 @@
   // ---- keep the address bar in step, so a view can be shared
   let urlTimer = 0;
   function syncUrl() { clearTimeout(urlTimer); urlTimer = setTimeout(() => {
+    if (!D) return;
     const p = new URLSearchParams();
-    for (const k of [...selects, 'layout', 'dir']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k]);
+    for (const k of ['region', ...selects, 'layout', 'dir']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k]);
     for (const k of checks) if (S[k] !== DEFAULTS[k]) p.set(k, S[k] ? '1' : '0');
     if (Math.round(S.t) !== NM - 1) p.set('m', D.months[Math.round(S.t)]);
     if (S.sel >= 0) p.set('sel', nodes[S.sel].id);
@@ -719,13 +740,111 @@
   }, 250); }
 
   // ---------------------------------------------------------------- start
-  function relayout() { resize(); for (const k in layouts) delete layouts[k]; pos = null; moveTo(true); buildSpark(); buildKey(); refresh(); }
-  readTheme(); setActive(); updateStripMax(); reflect(); wording(); relayout();
-  $('built').textContent = `Data built ${D.built}.`;
+  function relayout() { if (!D) return; resize(); for (const k in layouts) delete layouts[k]; pos = null; moveTo(true); buildSpark(); buildKey(); refresh(); }
+
+  // ---------------------------------------------------------------- regions
+  // Text that names the region or quotes one of its figures: every element with data-f takes that entry of the region's
+  // facts, worked out by the build. data-if and data-unless show or hide an element on a true-or-false entry.
+  function fillText() {
+    const F = D.facts, R = regionOf(S.region), Q = R.quality;
+    document.querySelectorAll('[data-f]').forEach(e => { const v = F[e.dataset.f]; e.textContent = v == null ? '' : v; });
+    document.querySelectorAll('[data-if]').forEach(e => { e.hidden = !F[e.dataset.if]; });
+    document.querySelectorAll('[data-unless]').forEach(e => { e.hidden = !!F[e.dataset.unless]; });
+    $('h-title').textContent = `How industries in ${D.the_name} pay each other`; document.title = `${D.name} payment flows`;
+    $('built').textContent = `Data built ${D.built}.`;
+    const io = IDX.regions.map(r => r.quality.io_cor); $('io-range').textContent = `${d3.min(io).toFixed(2)} to ${d3.max(io).toFixed(2)}`;
+    const qEl = $('quality'); qEl.classList.toggle('thin', R.thin);
+    qEl.replaceChildren(el('strong', null, R.thin ? `Thin data for ${D.the_name}. ` : 'Data here. '),
+      document.createTextNode(`${fmtPct(Q.hidden)} of monthly figures are hidden and ${fmtPct(Q.never)} sit in links never published at all. Held averages add ${fmtPct(Q.held_adds)} to what is published. ` +
+        `${Q.small} of ${Q.industries} industries are too small to place. ${fmtPct(Q.no_count)} of the value is in links with under 50 payments a month, which ONS records as none, so those get no payment dots.` +
+        (R.thin ? ' Much of what is drawn here is an estimate, and many links are missing: read it with care.' : '')));
+    // the region picker and "most like"
+    const sel = $('region'); if (!sel.options.length) for (const r of IDX.regions) { const o = el('option', null, r.name + (r.built ? '' : ' (not built yet)')); o.value = r.code; o.disabled = !r.built; sel.append(o); }
+    sel.value = S.region;
+    const alike = $('alike'); alike.replaceChildren(document.createTextNode('Most like it: '));
+    R.distances.slice(0, 2).forEach((d, j) => { if (j) alike.append(document.createTextNode(', ')); alike.append(regionLink(d.code)); });
+    alike.append(document.createTextNode('. '), Object.assign(el('a', null, 'How regions compare'), { href: '#compare' }));
+  }
+  function regionLink(code) {                              // a region's name: a button if its data are built, plain text if not
+    const r = regionOf(code); if (!r.built) return el('span', null, r.name);
+    const b = el('button', 'linklike', r.name); b.type = 'button'; b.addEventListener('click', () => loadRegion(code)); return b;
+  }
+  function loadRegion(code) {
+    const keepSel = D && S.sel >= 0 ? nodes[S.sel].id : wantSel, keepMonth = D ? D.months[Math.round(S.t)] : wantMonth;
+    const arrive = () => {
+      if (playing) { playing = false; $('play').textContent = 'Play'; }
+      setData(window.FLOWS_DATA[code]); S.region = code;
+      S.t = monthFromParam(keepMonth); S.sel = nodes.findIndex(n => n.id === keepSel);
+      readTheme(); setActive(); updateStripMax(); fillText(); reflect(); wording(); relayout(); renderCompare();
+      wrap.classList.remove('loading'); syncUrl();
+    };
+    if (window.FLOWS_DATA && window.FLOWS_DATA[code]) { arrive(); return; }
+    wrap.classList.add('loading');                         // the old picture stays, dimmed, until the new region arrives
+    const sc = document.createElement('script'); sc.src = `data/flows_${code}.js`;
+    sc.onload = arrive;
+    sc.onerror = () => { wrap.classList.remove('loading'); $('region').value = S.region; $('quality').textContent = `The data for ${regionOf(code).name} could not be loaded.`; };
+    document.head.appendChild(sc);
+  }
+  $('region').addEventListener('change', e => loadRegion(e.target.value));
+
+  // ---- how this region compares with the others (plan section 10.3; figures from data/regions.js)
+  function renderCompare() {
+    const R = regionOf(S.region), box = $('compare-body'); box.replaceChildren();
+    const svgNS = 'http://www.w3.org/2000/svg';
+    // A. overall similarity
+    box.append(el('h3', null, 'Which regions are most alike'));
+    const near = R.distances.slice(0, 2), far = R.distances[R.distances.length - 1], p1 = el('p');
+    const The = D.the_name[0].toUpperCase() + D.the_name.slice(1);
+    p1.append(document.createTextNode(`${The} is most like `)); near.forEach((d, j) => { if (j) p1.append(document.createTextNode(' and ')); p1.append(regionLink(d.code), document.createTextNode(` (${d.d.toFixed(2)})`)); });
+    p1.append(document.createTextNode(`, and least like ${regionOf(far.code).name} (${far.d.toFixed(2)}). The number is the share of one region's payments that would have to move to a different pair of paying and paid industry to match the other: 0 is identical, 1 is nothing in common. It takes in which industries a region has as well as who pays whom, and mostly reflects the first.`));
+    box.append(p1);
+    const list = el('div', 'cmp-bars'); list.setAttribute('role', 'list');
+    for (const d of R.distances) { const row = el('div', 'cmp-row'); row.setAttribute('role', 'listitem');
+      const name = el('span', 'cmp-name'); name.append(regionLink(d.code)); const track = el('span', 'cmp-track'), bar = el('span', 'cmp-bar'); bar.style.width = (100 * d.d / 0.7).toFixed(1) + '%'; track.append(bar);
+      row.append(name, track, el('span', 'cmp-val', d.d.toFixed(2))); list.append(row); }
+    box.append(list, el('p', 'd-small', `Are these differences real? Regions are ${IDX.distance.lo.toFixed(2)} to ${IDX.distance.hi.toFixed(2)} apart. On the same measure a region is only ${IDX.distance.own_lo.toFixed(2)} to ${IDX.distance.own_hi.toFixed(2)} from its own earlier self (2019 to 2022 against 2023 on): ${D.the_name}, ${R.own_shift.toFixed(2)}. So the differences between regions are several times larger than a region's own change over time. Even the closest pair has a third of its payments in different places, so "most alike" is relative.`));
+
+    // B. chain or web
+    box.append(el('h3', null, 'Chain or web'));
+    box.append(el('p', null, 'Two numbers for how chain-like a region’s payments are. The first is the share of money running down the order: higher means more one-way. The second is how many supplier industries a typical pound’s buyer in effect spreads its spending across: lower means narrower. Each dot is the whole period; the line through it is the range of the seven full years, 2019 to 2025. Where two regions’ lines overlap, they cannot be told apart.'));
+    const order = IDX.regions.slice().sort((a, b) => b.chain.down.v - a.chain.down.v);
+    const rowH = 20, top = 36, w = 720, h = top + rowH * order.length + 6, x0 = 150, pw = 230, gap = 70;
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('class', 'cmp-chart'); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'The twelve regions on two measures of how chain-like their payments are. The values are printed beside each row.');
+    const add = (tag, attrs, text) => { const e = document.createElementNS(svgNS, tag); for (const a in attrs) e.setAttribute(a, attrs[a]); if (text != null) e.textContent = text; svg.appendChild(e); return e; };
+    const panels = [{ key: 'down', title: 'Money running down the order', x: x0, fmt: v => (v * 100).toFixed(0) + '%', note: 'further right: more chain-like' },
+                    { key: 'spread', title: 'Supplier industries per buyer, in effect', x: x0 + pw + gap, fmt: v => v.toFixed(1), note: 'further left: more chain-like' }];
+    for (const pn of panels) {
+      const lo = d3.min(IDX.regions, r => r.chain[pn.key].lo), hi = d3.max(IDX.regions, r => r.chain[pn.key].hi), sx = d3.scaleLinear().domain([lo, hi]).nice().range([pn.x, pn.x + pw]);
+      add('text', { x: pn.x, y: 10, class: 'cmp-title' }, pn.title); add('text', { x: pn.x, y: 24, class: 'cmp-tick' }, pn.note);
+      for (const t of sx.ticks(4)) { add('line', { x1: sx(t), x2: sx(t), y1: top - 4, y2: h - 4, class: 'cmp-grid' }); add('text', { x: sx(t), y: h + 8, class: 'cmp-tick', 'text-anchor': 'middle' }, pn.fmt(t)); }
+      order.forEach((r, i) => { const c = r.chain[pn.key], y = top + rowH * i + rowH / 2, me = r.code === S.region;
+        add('line', { x1: sx(c.lo), x2: sx(c.hi), y1: y, y2: y, class: 'cmp-range' + (me ? ' me' : '') }); add('circle', { cx: sx(c.v), cy: y, r: me ? 5 : 4, class: 'cmp-dot' + (me ? ' me' : '') });
+        add('text', { x: pn.x + pw + 8, y: y + 3.5, class: 'cmp-num' + (me ? ' me' : '') }, pn.fmt(c.v)); });
+    }
+    order.forEach((r, i) => add('text', { x: x0 - 10, y: top + rowH * i + rowH / 2 + 3.5, 'text-anchor': 'end', class: 'cmp-label' + (r.code === S.region ? ' me' : '') }, r.short + (r.thin ? ' *' : '')));
+    svg.setAttribute('viewBox', `0 0 ${w} ${h + 14}`); box.append(svg);
+    // what can and cannot be said about this region
+    const overlap = key => IDX.regions.filter(r => r.code !== R.code && r.chain[key].lo <= R.chain[key].hi && r.chain[key].hi >= R.chain[key].lo).length;
+    const rank = order.findIndex(r => r.code === R.code) + 1, o1 = overlap('down'), o2 = overlap('spread');
+    const where = rank <= 3 ? 'near the chain end' : rank >= 10 ? 'near the web end' : 'in the middle';
+    box.append(el('p', null, `${The} is ${where}: ${ordinal(rank)} of 12 on the first number. Its range overlaps ${o1} other region${o1 === 1 ? '' : 's'} on the first number and ${o2} on the second, ` +
+      (Math.min(o1, o2) >= 4 ? 'so it cannot be told apart from most of them.' : Math.max(o1, o2) <= 2 ? 'so it stands clearly apart.' : 'so it is distinct from some and not from others.') +
+      (R.thin ? ' Its data are also among the thinnest, which by itself pushes a region towards the chain end (see the caution below).' : '')));
+    box.append(el('p', 'd-small', `* Thin data. A caution on this whole comparison: across the twelve regions the first number goes up with the share of figures hidden (a rank correlation of ${IDX.chain.down_cor_hidden.toFixed(2)}) and down with the size of the region (${IDX.chain.down_cor_size.toFixed(2)}). Small regions with more hidden look more chain-like. That may be true of smaller economies, or it may be that the thin two-way links that make a web are the ones ONS hides. These data cannot separate the two.`));
+  }
+  const ordinal = n => n + (['th', 'st', 'nd', 'rd'][n % 10 > 3 || Math.floor(n / 10) === 1 ? 0 : n % 10]);
+  $('compare-link') && $('compare-link').addEventListener('click', () => { $('compare').open = true; });
+  window.addEventListener('hashchange', () => { if (location.hash === '#compare') $('compare').open = true; }); if (location.hash === '#compare') $('compare').open = true;
+  $('alike').addEventListener('click', e => { if (e.target.tagName === 'A') $('compare').open = true; });
+
+  // ---------------------------------------------------------------- start
+  readTheme(); loadRegion(S.region);
   let lastW = wrap.clientWidth;
   new ResizeObserver(() => { if (Math.abs(wrap.clientWidth - lastW) > 1) { lastW = wrap.clientWidth; relayout(); } }).observe(wrap);
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readTheme(); requestDraw(); });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readTheme(); if (D) requestDraw(); });
   // for the checks in tests/: set state from outside, and read how long a draw takes
-  window.ynhFlows = { state: S, set(o) { const inter = 'inter' in o && o.inter !== S.inter; Object.assign(S, o); if (inter) { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); }
+  window.ynhFlows = { state: S, load: code => new Promise(res => { loadRegion(code); (function wait() { if (S.region === code && D && D.region === code && !wrap.classList.contains('loading')) res(); else setTimeout(wait, 30); })(); }),
+    set(o) { const inter = 'inter' in o && o.inter !== S.inter; Object.assign(S, o); if (inter) { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); }
       geoDirty = true; pos = null; moveTo(true); buildKey(); reflect(); wording(); refresh(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, play: setPlaying };
 })();

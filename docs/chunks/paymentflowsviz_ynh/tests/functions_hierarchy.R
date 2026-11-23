@@ -144,3 +144,14 @@ payment_groups <- function(own, nodes, small, runs = 2000) {   # 2,000: fewer ru
   res[, status := fifelse(sic2 %in% small, 'too small', fifelse(years_with_group >= 6 & firmness >= 0.6, 'core', 'floating'))]
   list(groups = res, m_year = m_year, m_all = m_all, years = years)
 }
+
+# ---- Comparing regions (see 16_region_similarity.R for the reasoning and the checks) ----------------
+# effective_number: 1 if everything is in one place, n if spread evenly over n.
+effective_number <- function(p) { p <- p[p > 0]; exp(-sum(p * log(p))) }
+# For the typical pound spent, how many supplier industries its buyer's spending is in effect spread across.
+suppliers_per_buyer <- function(M) { buy <- colSums(M); weighted.mean(vapply(which(buy > 0), function(j) effective_number(M[, j] / buy[j]), 0), buy[buy > 0]) }
+# Chain or web: the share of money running down the order, and the spread of each buyer's spending.
+chain_measures <- function(M) { diag(M) <- 0; tr <- trophic(M); c(down = tr$up_share, spread = suppliers_per_buyer(M), incoherence = tr$F0) }
+# Distance between two regions' flows: each as shares of its own total, one per ordered pair of industries; half the sum
+# of absolute differences. The share of one region's payments that would have to move to another pair to match the other.
+flow_distance <- function(A, B) 0.5 * sum(abs(A / sum(A) - B / sum(B)))

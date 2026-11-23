@@ -446,7 +446,7 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 
 ## 10. Scoped, not built: links, all twelve regions, and how alike regions are
 
-*Scoped on 23 November 2026. Nothing in this section has been applied to the page. The tests are `tests/14_all_regions_extract.R`, `tests/15_url_roundtrip.cjs` and `tests/16_region_similarity.R`.*
+*Scoped on 23 November 2026, with tests `tests/14_all_regions_extract.R`, `tests/15_url_roundtrip.cjs` and `tests/16_region_similarity.R`. Sections 10.2 and 10.3 have since been built for a sample of three regions: see 10.5. Section 10.1 is not built.*
 
 **In short.**
 
@@ -612,3 +612,83 @@ Both measures use each region's inside flows over the whole period, between diff
 3. **Northern Ireland's industrial strategy shares.** I'd leave the highlight off there unless you have a jobs source for it.
 4. **Chain or web.** I'd show it with its caveat, as above. If the caveat makes it not worth the space, measure A alone is on firmer ground.
 5. **Order of work.** I'd do 10.1 first, since 10.2 needs the region in the address anyway, then 10.2, then 10.3.
+
+### 10.5 Built so far: the foundation, on three regions
+
+**Built on 23 November 2026,** after the scoping above. The page now switches between regions and compares them. Three regions have data: Yorkshire and the Humber, the North West (well published, and Yorkshire and the Humber's nearest neighbour) and the North East (the most hidden). The other nine appear in the region list as "not built yet".
+
+**What was done,** against the steps in 10.2 and the design in 10.3:
+
+| Step | State |
+|----|----|
+| `build_data.R` takes a region | Done. `Rscript build_data.R TLE TLD`, `all`, or `index`. One file per region in `data/`. |
+| Index of all twelve regions | Done: `data/regions.js`, 8 KB, loaded with the page. Data quality, distances, and the chain-or-web numbers with year-to-year ranges, for all twelve. |
+| The build writes each region's quoted figures | Done. 29 figures and sentences per region, in the data file. Nothing about a region is typed into the page any more. |
+| The page's start-up can re-run | Done. Choosing a region loads its file on demand and rebuilds everything from it. The old picture stays dimmed until the new one arrives. |
+| Region picker, region in the address | Done. The pinned industry, month and every other setting carry over when the region changes. |
+| Data-quality line | Done, on every region, with a boxed warning on thin ones. |
+| "Most like this region" | Done, beside the picker and in the comparison section. |
+| Chart of the twelve regions, with ranges | Done, in an expandable "How this region compares with the others". It states how many regions this one overlaps, and carries the size-and-hiding caution. |
+| Checks run over every built region | Done in `tests/13`: each region loads from its own address, has no unfilled text, and switching keeps the view. |
+
+Yorkshire and the Humber's build still matches all 14 test checks after the rework.
+
+**What the patchy region showed.** The North East was chosen to break things. What it turned up, and what was done:
+
+- **Numbers of payments are unusable there.** 40% of the North East's value sits in links with under 50 payments a month, which ONS records as none (Yorkshire and the Humber: 16%; London: 4%). On the raw figures the North East's payment count "rose 152%" and its average payment "fell 30%", which is rounding, not fact. The build now measures this for every region. Above 25% it stops quoting payment counts in the text, and the quality line says how much value gets no payment dots.
+- **A third of its industries are too small to place** (25 of 74). They're drawn hollow as before. The chart is still readable, and the order's span stretches to 2.2 levels because small industries sit at the ends.
+- **Text written for Yorkshire and the Humber was wrong elsewhere.** "Retail sits at the top" isn't true of the North East. Headings like "It agrees with the input-output table" claimed too much for a region where the figure is 0.52. Those are now neutral, with the region's own figure and the range across regions beside it.
+- **Being thin didn't make its order worse.** The North East's order agrees with the input-output table as well as the North West's does (0.52 each), and is as steady from year to year.
+- **"Thin" needed a rule.** A region is flagged when 35% or more of its monthly figures sit in links never published. That picks out the North East, Wales and Northern Ireland, and nothing else is close (the next highest is 29%).
+
+**Other things settled along the way.**
+
+- **Payment groups** are worked out per region and labelled by their largest members ("Wholesale, Retail and 11 more"), with hand-given names kept for Yorkshire and the Humber. The North West and North East each get four groups.
+- **Industrial strategy shares** now come from one source for every region: jobs by ITL3 area and five-digit SIC for 2023. Yorkshire and the Humber's shares were previously from 2024 local-authority figures, so its wedges have moved slightly (by 4 points at most).
+- **The outside partner shown separately** in the side panel is named by the data: London everywhere, and for London its largest partner.
+- **A bad month in the address** now falls back to the latest month (the bug noted in 10.1).
+
+**Not done.**
+
+- **The other nine regions on the site.** Their data are built and staged, not added: see 10.6.
+- **Section 10.1,** the link work, apart from the region entry and the month fix.
+- **"Actual amounts" still aren't comparable between regions.** Each region sets its own reference width.
+- **The payment groups outside Yorkshire and the Humber** haven't been looked over.
+
+### 10.6 The other nine: built and staged, not on the site
+
+**Built on 23 November 2026** with `Rscript build_data.R stage …`, which writes to `local/paymentflowsviz_ynh/staged_data/` and leaves the site's `data/` alone. All nine built without error in 21 minutes. The staged folder holds all twelve regions and its own index, 30 MB in all, so putting them on the site is a matter of copying it over `data/`.
+
+**Checked on a private copy of the page** holding the staged data (`tests/13` pointed at it): all twelve load with no errors and no unfilled text, and switching through all twelve keeps the pinned industry, month and settings.
+
+| Region | Money running down the order | Agreement with input-output table | Hidden | Never published | Value with no payment count | Too small to place | Payment groups (core industries in each) |
+|----|----|----|----|----|----|----|----|
+| North East * | 74% | 0.52 | 71% | 41% | 40% | 25 of 74 | 4 (10, 5, 12, 5) |
+| North West | 70% | 0.52 | 49% | 22% | 11% | 6 of 78 | 4 (13, 18, 17, 5) |
+| Yorkshire and the Humber | 71% | 0.71 | 56% | 27% | 16% | 11 of 77 | 5 (9, 8, 16, 3, 7) |
+| East Midlands | 72% | 0.75 | 58% | 28% | 22% | 14 of 76 | 2 (6, 12) |
+| West Midlands | 69% | 0.55 | 56% | 28% | 15% | 10 of 77 | 4 (16, 20, 7, 5) |
+| East of England | 73% | 0.65 | 54% | 24% | 14% | 8 of 76 | 4 (9, 11, 20, 13) |
+| London | 68% | 0.63 | 52% | 24% | 4% | 4 of 79 | 5 (16, 9, 16, 7, 7) |
+| South East | 67% | 0.46 | 48% | 21% | 9% | 4 of 78 | 4 (15, 14, 16, 8) |
+| South West | 72% | 0.54 | 55% | 27% | 20% | 6 of 76 | 6 (10, 10, 10, 10, 10, 3) |
+| Wales * | 73% | 0.42 | 71% | 39% | 38% | 24 of 74 | 4 (12, 8, 11, 10) |
+| Scotland | 71% | 0.51 | 58% | 28% | 22% | 7 of 78 | 4 (13, 14, 13, 11) |
+| Northern Ireland * | 78% | 0.29 | 68% | 38% | 22% | 17 of 75 | 3 (10, 16, 14) |
+
+\* Flagged as thin.
+
+**What turned up.**
+
+- **The East Midlands barely has payment groups.** Only 18 of its 76 industries sit firmly in one. Its first build gave two "groups" of a single industry each; the build now needs three core industries before it calls something a group, which doesn't change any region already on the site.
+- **Northern Ireland is a different kind of case, not only a thin one.** More is paid inside it (£648m a month) than to the rest of the UK (£522m) or from it (£402m). Every other region sends and receives three to four times its inside total. Its order is also the most one-way (78%) and agrees least with the input-output table (0.29). It has no industrial strategy highlight, as expected, and the page says why.
+- **London works as built.** The partner shown separately in its side panel is the South East. It is the least hidden on payment counts (4%).
+- **Wales behaves like the North East:** 38% of its value has no usable payment count, so the build drops payment counts from its text too.
+- **Agreement with the input-output table varies more than anything else,** from 0.29 to 0.75, and not with how thin the data are: the South East, the best published region, is second lowest at 0.46.
+
+**To settle before these go on the site.**
+
+- **Whether Northern Ireland needs its own wording.** Its inside-heavy balance and low agreement suggest its payments are being recorded differently, or that its economy really is that self-contained within the UK. Cross-border trade with Ireland isn't in the data at all. I'd add a sentence saying so.
+- **Whether a region with almost no payment groups should offer them.** For the East Midlands I'd keep the option but say on the page that few industries group there.
+- **Repository size.** 30 MB of data files, added to the history again on each rebuild.
+- **A look at each region's picture by a person,** as Yorkshire and the Humber had. The checks show the pages work, not that they read sensibly.

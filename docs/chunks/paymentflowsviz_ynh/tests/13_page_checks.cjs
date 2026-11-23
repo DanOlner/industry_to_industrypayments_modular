@@ -3,10 +3,13 @@
 // works, screenshots in light, dark and narrow layouts, and how fast it plays.
 // Needs puppeteer-core and Google Chrome, as 07 does:
 //   NODE_PATH=/path/to/node_modules node 13_page_checks.cjs            (add --shots-only to skip the timing)
+// To check a copy of the page somewhere else (for example one holding staged data that is not on the site yet):
+//   PAGE_DIR=/path/to/copy OUT_DIR=/path/for/screenshots node 13_page_checks.cjs --regions-only
 const puppeteer = require('puppeteer-core');
 const path = require('path'), fs = require('fs');
-const url = 'file://' + path.resolve(__dirname, '../index.html');
-const out = path.resolve(__dirname, 'outputs/page'); fs.mkdirSync(out, { recursive: true });
+const url = 'file://' + path.resolve(process.env.PAGE_DIR || path.join(__dirname, '..'), 'index.html');
+const out = path.resolve(process.env.OUT_DIR || path.join(__dirname, 'outputs/page')); fs.mkdirSync(out, { recursive: true });
+const regionsOnly = process.argv.includes('--regions-only');
 const problems = [];
 
 (async () => {
@@ -26,8 +29,10 @@ const problems = [];
   const shot = async (page, name, sel) => { const t = sel ? await page.$(sel) : page; await t.screenshot({ path: path.join(out, name + '.png'), ...(sel ? {} : { fullPage: true }) }); console.log('saved', name); };
   const set = (page, o) => page.evaluate(s => window.ynhFlows.set(s), o);
 
+  let page;
+  if (!regionsOnly) {
   // ---- 1. the opening view, light and dark, wide and narrow
-  let page = await open(1440, 1000, 'light');
+  page = await open(1440, 1000, 'light');
   await shot(page, '01_open_light_full');
   await shot(page, '02_open_light_stage', '.stage');
   await set(page, { sel: 39 }); await shot(page, '03_pinned_industry', '.stage');
@@ -61,6 +66,30 @@ const problems = [];
   page = await open(390, 844, 'light', '', 2); await shot(page, '18_phone_full'); await shot(page, '18b_phone_chart', '#chartwrap'); await page.close();
   page = await open(900, 1100, 'light'); await shot(page, '19_tablet_full'); await page.close();
 
+  }
+  // ---- 1b. every region that has been built: loads from its own address, with its own text; and switching keeps the view
+  page = await open(1440, 1000, 'light');
+  const built = await page.evaluate(() => window.FLOWS_REGIONS.regions.filter(r => r.built).map(r => ({ code: r.code, name: r.name, thin: r.thin })));
+  await page.close();
+  for (const r of built) {
+    page = await open(1440, 1000, 'light', '?region=' + r.code);
+    const info = await page.evaluate(() => ({ title: document.getElementById('h-title').textContent, links: window.ynhFlows.drawnLinks(), industries: document.getElementById('pick').options.length - 1,
+      highlights: document.getElementById('lens').options.length, unfilled: [...document.querySelectorAll('[data-f]')].filter(e => !e.textContent && e.dataset.f !== 'small_example').map(e => e.dataset.f) }));
+    console.log(`${r.code}${r.thin ? ' (thin)' : ''}: "${info.title}", ${info.links} links drawn, ${info.industries} industries, ${info.highlights} highlight sets` + (info.unfilled.length ? `, UNFILLED TEXT: ${info.unfilled.join(' ')}` : ''));
+    if (info.unfilled.length) problems.push(`${r.code}: text with no figure: ${info.unfilled.join(' ')}`);
+    await shot(page, `20_${r.code}_full`);
+    await page.evaluate(() => { document.getElementById('compare').open = true; document.getElementById('order-note').open = true; }); await new Promise(res => setTimeout(res, 200));
+    await shot(page, `21_${r.code}_compare`, '#compare'); await shot(page, `22_${r.code}_order_note`, '#order-note');
+    await set(page, { cols: 'paygroup' }); await shot(page, `23_${r.code}_payment_groups`, '#chartwrap');
+    await page.close();
+  }
+  page = await open(1440, 1000, 'light', '?sel=46&cols=shift&m=2022-06&dir=down');
+  for (const r of [...built, built[0]]) { await page.evaluate(c => window.ynhFlows.load(c), r.code); await new Promise(res => setTimeout(res, 500));
+    const st = await page.evaluate(() => { const s = window.ynhFlows.state; return `${s.region}: pinned ${document.getElementById('pick').value}, month ${Math.round(s.t)}, cols ${s.cols}, dir ${s.dir}, address ${location.search}`; });
+    console.log('switched to', st); }
+  await page.close();
+
+  if (!regionsOnly) {
   // ---- 2. every control changes something and nothing throws
   page = await open(1280, 900, 'light');
   const results = [];
@@ -78,8 +107,9 @@ const problems = [];
   console.log('controls exercised:', results.join('; '), '| month label now:', label, '| url:', await page.evaluate(() => location.search));
   await page.close();
 
+  }
   // ---- 3. playing
-  if (!process.argv.includes('--shots-only')) {
+  if (!regionsOnly && !process.argv.includes('--shots-only')) {
     for (const [name, q, dsf] of [['opening view', '', 2], ['every link, both directions, intermediaries in', '?cover=1&net=gross&inter=1', 2]]) {
       page = await open(1440, 1000, 'light', q, dsf);
       const r = await page.evaluate(() => new Promise(res => { let n = 0; const ms = [], t0 = performance.now(); window.ynhFlows.state.t = 0; window.ynhFlows.play(true);

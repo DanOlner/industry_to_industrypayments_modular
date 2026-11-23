@@ -3,17 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yorkshire and the Humber payment flows</title>
-<meta name="description" content="Monthly business-to-business payments between Yorkshire and the Humber's industries, January 2019 to September 2026, drawn as a network that can be stepped or played through time.">
+<title>Regional payment flows</title>
+<meta name="description" content="Monthly business-to-business payments between the industries of a UK region, January 2019 to September 2026, drawn as a network that can be stepped or played through time.">
 <link rel="stylesheet" href="flows.css">
 </head>
 <body>
 <main class="viz-root">
 
   <header class="top">
-    <h1>How Yorkshire and the Humber's industries pay each other</h1>
+    <div class="regionbar">
+      <label class="ctl">Region <select id="region"></select></label>
+      <span id="alike"></span>
+    </div>
+    <h1 id="h-title">How a region's industries pay each other</h1>
     <p class="lede">Payments between businesses registered in the region, month by month from January 2019 to September 2026. Each circle is an industry and each link is the money one industry's firms paid another's. <span id="lede-order">Industries that mostly buy sit higher and those that mostly supply sit lower, so money mostly runs down the page.</span> <a href="#order-note" id="order-link">How the order is worked out</a>.</p>
   </header>
+
+  <p id="quality" class="quality" role="note"></p>
 
   <section class="strip" aria-label="Totals for the period shown">
     <div class="tile"><div class="tile-label" id="l-inside">Paid inside the region</div><div class="tile-value" id="t-inside">–</div><div class="tile-bar"><span id="b-inside"></span></div></div>
@@ -86,29 +92,34 @@
         <li><strong>What comes out.</strong> Each industry gets a level. The levels are chosen so that, as far as the payments allow, a buyer sits one level above each of its suppliers, and big payments count for more than small ones. Precisely: they make the sum, over every link, of the payment times (buyer's level minus supplier's level minus one) squared as small as it can be. These are called trophic levels, after the food webs they were first used on.</li>
         <li><strong>Where zero is.</strong> Levels are measured from the average industry, weighted by size. Height on the chart is the level, give or take a few pixels so that circles at the same level can sit side by side.</li>
         <li><strong>One order for the whole period.</strong> Circles don't move as time plays, so everything that moves is a change in payments. Pin an industry to see how its level drifts, worked out on the 12 months to each month. The Columns option "By how much its place shifts" lines industries up by the standard deviation of that drifting level, steadiest on the left.</li>
-        <li><strong>A plainer way to think of it.</strong> The order is almost the same as ranking industries by the balance of their dealings with other industries here: how much of it is paying out, and how much is being paid (the two rankings correlate 0.96). The level adds one thing: who you buy from matters, not only how much.</li>
+        <li><strong>A plainer way to think of it.</strong> The order is almost the same as ranking industries by the balance of their dealings with other industries here: how much of it is paying out, and how much is being paid (the two rankings correlate <span data-f="balance_cor"></span>). The level adds one thing: who you buy from matters, not only how much.</li>
         <li><strong>Goods and services view.</strong> The same order, turned upside down.</li>
       </ul>
       <h3>How well it holds up</h3>
       <ul>
-        <li><strong>It's real but loose.</strong> 71% of the money runs down the order, where chance would give 50%. On a score where 0 is perfect tiers and 1 is no order at all, these payments score 0.74. Shuffling which way round each pair's payments go gives 0.90.</li>
-        <li><strong>The real supply chain is just as loose.</strong> The UK's input-output table scores 0.71 on the same method. Industries trade in both directions a great deal.</li>
-        <li><strong>It agrees with the input-output table.</strong> Ranking industries by level from these payments and from the national table gives a correlation of 0.71.</li>
-        <li><strong>It's steady over time.</strong> Each single year's order correlates 0.94 to 0.98 with the whole-period one, and each single month's 0.94 at the median.</li>
+        <li><strong>It's real but loose.</strong> <span data-f="down_pct"></span> of the money runs down the order, where chance would give 50%. On a score where 0 is perfect tiers and 1 is no order at all, these payments score <span data-f="incoherence"></span>. Shuffling which way round each pair's payments go gives <span data-f="shuffled"></span>.</li>
+        <li><strong>The real supply chain is just as loose.</strong> The UK's input-output table scores <span data-f="io_incoherence"></span> on the same method. Industries trade in both directions a great deal.</li>
+        <li><strong>How far it agrees with the input-output table.</strong> Ranking industries by level from these payments and from the national table gives a correlation of <span data-f="io_cor"></span>. Across the twelve regions that figure runs from <span id="io-range"></span>.</li>
+        <li><strong>How steady it is over time.</strong> Each single year's order correlates <span data-f="yearly_cor"></span> with the whole-period one, and each single month's <span data-f="monthly_cor"></span> at the median.</li>
       </ul>
       <h3>What to keep in mind</h3>
       <ul>
-        <li><strong>Small gaps mean little.</strong> The whole order spans only about one and a half levels, and an industry's level wobbles by about 0.08 from month to month. Read top, middle and bottom, not fine rankings.</li>
+        <li><strong>Small gaps mean little.</strong> The whole order spans only about <span data-f="span"></span> levels, and an industry's level wobbles by about <span data-f="wobble"></span> from month to month. Read top, middle and bottom, not fine rankings.</li>
         <li><strong>"Supplier" means "gets paid".</strong> Landlords, insurers and councils collecting rates are suppliers here.</li>
         <li><strong>The top is partly who's missing.</strong> Households aren't in the data, and public money mostly arrives from outside the region. Industries that sell to the public or are publicly funded have few paying customers left in the data, so they look like pure buyers.</li>
         <li><strong>It's the order inside the region only.</strong> An industry that buys mostly from elsewhere in the UK, or sells mostly to it, is placed on the small part of its dealings that stays here.</li>
-        <li><strong>Hidden figures shape it.</strong> Over a quarter of monthly figures belong to links ONS never publishes, and those links count as nothing. Using published months only gives a similar order that is less steady (single months correlate 0.85 with the whole period, not 0.94).</li>
-        <li><strong>Value and number of payments disagree.</strong> An order built on the number of payments correlates only 0.67 with this one, and 0.40 with the input-output table. Value is used because it tracks the table better.</li>
-        <li><strong>Small industries are unreliable.</strong> The 11 with under £0.5m a month are drawn hollow and held inside the range of the rest. Gambling would otherwise top the order on about £5m in eight years.</li>
-        <li><strong>Intermediaries are left out of it</strong> unless switched in. Switching them in barely moves the others (their order correlates 0.99 either way).</li>
+        <li><strong>Hidden figures shape it.</strong> <span data-f="never_pct"></span> of monthly figures belong to links ONS never publishes, and those links count as nothing. Using published months only gives single months that correlate <span data-f="monthly_cor_published"></span> with their whole period, against <span data-f="monthly_cor"></span> with held values.</li>
+        <li><strong>Value and number of payments disagree.</strong> An order built on the number of payments correlates <span data-f="count_cor"></span> with this one, and <span data-f="count_io_cor"></span> with the input-output table, against <span data-f="io_cor"></span> for value. Value is used because across the regions it tracks the table better.</li>
+        <li><strong>Small industries are unreliable.</strong> The <span data-f="small_n"></span> with under £0.5m a month are drawn hollow and held inside the range of the rest. <span data-f="small_example"></span></li>
+        <li><strong>Intermediaries are left out of it</strong> unless switched in. Switching them in barely moves the others (their order correlates <span data-f="inter_cor"></span> either way).</li>
       </ul>
       <p class="source">Method: MacKay, Johnson and Sansom (2020), <a href="https://doi.org/10.1098/rsos.201138">How directed is a directed network?</a>, Royal Society Open Science 7. The figures above come from the tests in the <a href="https://github.com/DanOlner/industry_to_industrypayments_modular/tree/master/docs/chunks/paymentflowsviz_ynh">project folder</a>, run on the editions named below.</p>
     </div>
+  </details>
+
+  <details id="compare" class="fold">
+    <summary>How this region compares with the others</summary>
+    <div class="fold-body" id="compare-body"></div>
   </details>
 
   <details id="tablebox" class="fold">
@@ -123,20 +134,20 @@
       <li><strong>Payments, not trade.</strong> These are Bacs and Faster Payments between businesses. Read a link as a sign that two industries are connected, not as a measure of what they sell each other. Rent, insurance premiums and business rates are in here alongside purchases.</li>
       <li><strong>Goods and services are an inference.</strong> Switching "Flows of" to goods and services turns every payment round and the order upside down, on the assumption that each payment bought something that travelled the other way. Nothing in the data says what was bought, and for rent, insurance, rates and refunds nothing travelled back.</li>
       <li><strong>Registered offices, not where the work happens.</strong> A payment is placed where the paying and receiving organisations are registered. A firm headquartered elsewhere pays from elsewhere. That's why this page is about payments where both sides are in the region: no head office can move those.</li>
-      <li><strong>Households aren't in it.</strong> Industries that sell to the public, or are publicly funded from outside the region, show here mostly as buyers. That's part of why retail, hospitality, health and education sit at the top.</li>
-      <li><strong>Over half the monthly figures are hidden,</strong> and hidden doesn't mean small: a figure is withheld when few organisations are behind it or one dominates. A hidden month is shown at the average of that link's published months, marked with a dashed line. Over a quarter of monthly figures belong to links never published at all, so those links are missing. Retail paying food manufacturing is one.</li>
-      <li><strong>Growth over time is partly coverage.</strong> The value captured rose 72% from 2019 to 2025 while the average payment stayed flat, which suggests more payments being captured. The page opens on each month's shares for that reason.</li>
-      <li><strong>The order is a gradient, not tiers.</strong> About 71% of the money runs down it. The UK's input-output tables show the same loose order.</li>
-      <li><strong>Payment groups are a statistical grouping,</strong> named by hand: industries that pay each other more than their sizes would predict, in most years. About two in five industries don't sit firmly in any group.</li>
+      <li><strong>Households aren't in it.</strong> Industries that sell to the public, or are publicly funded from outside the region, show here mostly as buyers. That's part of why hospitality, health and education tend to sit towards the top.</li>
+      <li><strong><span data-f="hidden_pct"></span> of the monthly figures here are hidden,</strong> and hidden doesn't mean small: a figure is withheld when few organisations are behind it or one dominates. A hidden month is shown at the average of that link's published months, marked with a dashed line. <span data-f="never_pct"></span> of monthly figures belong to links never published at all, so those links are missing. <span data-f="never_example"></span> is one.</li>
+      <li><strong>Growth over time may be coverage.</strong> <span data-f="growth"></span> The page opens on each month's shares so that a rising total doesn't swamp everything else.</li>
+      <li><strong>The order is a gradient, not tiers.</strong> About <span data-f="down_pct"></span> of the money runs down it. The UK's input-output tables show the same loose order.</li>
+      <li><strong>Payment groups are a statistical grouping:</strong> industries that pay each other more than their sizes would predict, in most years. <span data-if="groups_named_by_hand">Here they have been looked at and named by hand.</span><span data-unless="groups_named_by_hand">For this region nobody has looked them over, and each is labelled by its largest members.</span> <span data-f="groups_not_firm"></span> industries here don't sit firmly in any group.</li>
       <li><strong>Intermediaries</strong> (banking and finance, financial support services, information services, office and business support) are left out unless switched in. Card takings and platform payouts pass through them, so their links are partly money passing through.</li>
       <li><strong>Nominal pounds, not seasonally adjusted.</strong> These are official statistics in development and are revised between editions. Values are rounded to £1,000 and numbers of payments to 100.</li>
     </ul>
-    <p class="source">Source: Office for National Statistics, <a href="https://www.ons.gov.uk/economy/economicoutputandproductivity/output/datasets/industrytoindustrypaymentflowsbyregionuk">Industry-to-industry payment flows by region, UK</a>, from Pay.UK data (editions of 17 September and 22 October 2026). Contains public sector information licensed under the Open Government Licence v3.0. Industrial strategy sectors follow the UK Industrial Strategy sector definitions list, with jobs from the Business Register and Employment Survey 2024. <a href="https://github.com/DanOlner/industry_to_industrypayments_modular/tree/master/docs/chunks/paymentflowsviz_ynh">Method, tests and code</a>. <span id="built"></span></p>
+    <p class="source">Source: Office for National Statistics, <a href="https://www.ons.gov.uk/economy/economicoutputandproductivity/output/datasets/industrytoindustrypaymentflowsbyregionuk">Industry-to-industry payment flows by region, UK</a>, from Pay.UK data (editions of 17 September and 22 October 2026). Contains public sector information licensed under the Open Government Licence v3.0. Industrial strategy sectors follow the UK Industrial Strategy sector definitions list, with jobs from the Business Register and Employment Survey <span data-f="is8_year"></span>. <a href="https://github.com/DanOlner/industry_to_industrypayments_modular/tree/master/docs/chunks/paymentflowsviz_ynh">Method, tests and code</a>. <span id="built"></span></p>
   </section>
 
 </main>
 <script src="lib/d3.v7.9.0.min.js"></script>
-<script src="ynh_flows_data.js"></script>
+<script src="data/regions.js"></script>
 <script src="flows.js"></script>
 </body>
 </html>

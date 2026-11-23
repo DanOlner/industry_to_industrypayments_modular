@@ -1,4 +1,5 @@
 control,kind,values_tried,came_back,problems
+region,select,3,3,""
 cols,select,4,4,""
 lens,select,22,22,""
 pick,select,78,78,""

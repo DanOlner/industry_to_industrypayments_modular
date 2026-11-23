@@ -35,7 +35,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
         else if (c.kind === 'radio') { const r = document.querySelector(`input[name=${c.id}][value="${v}"]`); r.checked = true; r.dispatchEvent(new Event('change')); }
         else { const b = document.getElementById(c.id); if (b.checked !== v) { b.checked = v; b.dispatchEvent(new Event('change')); } }
       }, c, v);
-      await wait(450);
+      if (c.id === 'region') await page.waitForFunction(v => window.ynhFlows.state.region === v, {}, v);   // a region's data has to arrive first
+      await wait(c.id === 'region' ? 700 : 450);
       const q = await page.evaluate(() => location.search), before = await state(page); await page.close();
       const fresh = await open(q), after = await state(fresh); await fresh.close();
       const key = c.id === 'pick' ? 'sel' : c.id; tried++;
