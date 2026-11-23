@@ -29,6 +29,8 @@ Run the R scripts from the repo root, for example `Rscript docs/chunks/paymentfl
 | `17_foundational_read_list.py` | Scoping: reads the Foundational Economy Collective's activity classification, where each code's zone is its row colour, into a table. Takes the path to the downloaded spreadsheet | `lookups/foundational_sic5.csv` |
 | `18_foundational_divisions.R` | Scoping: weights that list by jobs to see how each division splits between zones, what a division-level label loses, each region's zone shares, and where the zones sit in Y&H's payments | `outputs/foundational_*.csv` |
 | `19_foundational_tradeable.R` | Scoping: whether the foundational zones line up with tradeable against local, on three measures: outside share of receipts in the payments (every region), how bunched jobs are across areas, and the input-output table's export and household shares (about 90 seconds) | `outputs/foundational_tradeable_*.csv` |
+| `20_io_estimates_scoping.R` | Scoping: whether the input-output table could fill in what the payments leave out. Sets national payments for 2019 against the 2019 table (scale, pattern, public administration, households), and checks whether a jobs split puts an industry's income in the regions where the payments put it | `outputs/io_estimates_*.csv` |
+| `21_ties_columns.cjs` | Whether "ties to what is highlighted" spreads industries out enough to order columns by: the page's own sum, run on the built data files for the four foundational economy highlights. Needs only Node | `outputs/ties_spread.csv` |
 
 `functions_hierarchy.R` holds the shared pieces: held values for hidden months, the flow matrix, levels and the direction-shuffle check.
 

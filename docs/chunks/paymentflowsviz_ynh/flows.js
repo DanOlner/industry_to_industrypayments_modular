@@ -37,7 +37,7 @@
   let wantMonth = q.get('m'), wantSel = q.get('sel');     // resolved once the region's data has arrived
   const DEFAULTS = { region: IDX.default, layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
                      smooth: true, dots: true, inter: false, halo: false, pubonly: false, speed: '3' };
-  const S = { region: (regionOf(q.get('region')) || {}).built ? q.get('region') : IDX.default, layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'free'], DEFAULTS.cols),
+  const S = { region: (regionOf(q.get('region')) || {}).built ? q.get('region') : IDX.default, layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'ties', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
@@ -90,7 +90,7 @@
     sup = Int16Array.from(D.links.supplier); buy = Int16Array.from(D.links.buyer); basis = D.links.basis;
     const linkAt = new Map(); for (let k = 0; k < NL; k++) linkAt.set(pairKey(sup[k], buy[k]), k);
     rev = Int32Array.from({ length: NL }, (_, k) => linkAt.has(pairKey(buy[k], sup[k])) ? linkAt.get(pairKey(buy[k], sup[k])) : -1);
-    for (const cache of [seriesCache, totalsCache, shiftCache, layouts]) for (const k in cache) delete cache[k];
+    for (const cache of [seriesCache, totalsCache, shiftCache, tieCache, layouts]) for (const k in cache) delete cache[k];
     REF = { value: quantilePos(series('value', true, false), 0.9995), count: quantilePos(series('count', true, false), 0.9995) };   // fixed, so widths compare across months
     for (const d of nodes) { const e = d.ext;                                 // [intermediaries out, in][single, smoothed]
       d.x = { self: both(d.self), buy: [both(e.buy_core), both(plus(e.buy_core, e.buy_int))], sell: [both(e.sell_core), both(plus(e.sell_core, e.sell_int))],
@@ -166,8 +166,24 @@
   }
   // Columns "by how much its place shifts": industries in rank order, steadiest on the left, evenly spaced, with a
   // strip at the far right for the small ones. xOfSd places a standard deviation on that rank axis, for the tick marks.
-  function shiftAxis() {
-    const st = shifts(), xa = pad.l + 30 * K, xEnd = W - pad.r + 24 * K, stripW = 62 * K, xb = xEnd - stripW - 16 * K, step = (xb - xa) / st.n;
+  // Ties to the highlighted industries: of everything an industry pays to and is paid by other industries here, over the
+  // whole period, the share that is with the highlighted set. A highlighted industry's partner counts by its share in the
+  // set, so a partner that is 40% in the set counts for 40% of the payment. Same shape as shifts(), so it can use the same axis.
+  const tieCache = {};
+  function ties() {
+    const key = (S.inter ? 'all' : 'core') + '|' + S.lens; if (tieCache[key]) return tieCache[key];
+    const sh = nodes.map(lensShare), num = new Float64Array(NN), den = new Float64Array(NN), sd = new Float64Array(NN), rank = new Int16Array(NN).fill(-1);
+    const a = series('value', false, false);
+    for (let k = 0; k < NL; k++) { if (!lact[k]) continue; let t = 0; for (let m = 0; m < NM; m++) t += a[k * NM + m];
+      const s = sup[k], b = buy[k]; num[s] += t * sh[b]; den[s] += t; num[b] += t * sh[s]; den[b] += t; }
+    for (let i = 0; i < NN; i++) sd[i] = den[i] > 0 ? num[i] / den[i] : 0;
+    const ranked = nodes.filter(d => act[d.i] && !d.small).sort((a, b) => sd[a.i] - sd[b.i]); ranked.forEach((d, j) => { rank[d.i] = j; });
+    return (tieCache[key] = { sd, rank, n: ranked.length, sorted: ranked.map(d => sd[d.i]) });
+  }
+  // The columns in use. "By ties" needs a highlight to measure ties to; without one it falls back to sector groups.
+  const colsNow = () => (S.cols === 'ties' && S.lens === 'none' ? 'group' : S.cols);
+  function shiftAxis(cols) {
+    const st = cols === 'ties' ? ties() : shifts(), xa = pad.l + 30 * K, xEnd = W - pad.r + 24 * K, stripW = 62 * K, xb = xEnd - stripW - 16 * K, step = (xb - xa) / st.n;
     const xOfRank = j => xa + (j + 0.5) * step;
     const xOfSd = v => { const a = st.sorted, j = d3.bisectLeft(a, v); return j <= 0 ? xOfRank(0) : j >= a.length ? xOfRank(a.length - 1) : xOfRank(j - 1 + (v - a[j - 1]) / ((a[j] - a[j - 1]) || 1)); };
     return { st, xa, xb, step, xOfRank, xOfSd, stripW, stripX: xEnd - stripW / 2, stripLeft: xb + 8 * K };
@@ -177,10 +193,10 @@
     const y0 = pad.t + 22 * K, y1 = H - pad.b - 22 * K, y = d3.scaleLinear().domain(lev).range([y1, y0]).clamp(true)(v);
     return goods() ? y0 + y1 - y : y;
   }
-  const layoutKey = (mode, cols) => [mode, mode === 'order' ? cols : '-', S.inter ? 'all' : 'core'].join('|');
+  const layoutKey = (mode, cols) => [mode, mode === 'order' ? cols : '-', S.inter ? 'all' : 'core', mode === 'order' && cols === 'ties' ? S.lens : ''].join('|');
   function computeLayout(mode, cols) {
-    const byShift = mode === 'order' && cols === 'shift', banded = mode === 'order' && (cols === 'group' || cols === 'paygroup');
-    const cc = columns(byShift ? 'group' : cols), colOf = cc.colOf, gx = g => cc.centre[g], ax = byShift ? shiftAxis() : null;
+    const byShift = mode === 'order' && (cols === 'shift' || cols === 'ties'), banded = mode === 'order' && (cols === 'group' || cols === 'paygroup');
+    const cc = columns(byShift ? 'group' : cols), colOf = cc.colOf, gx = g => cc.centre[g], ax = byShift ? shiftAxis(cols) : null;
     const txOf = d => d.small ? ax.stripX : ax.xOfRank(ax.st.rank[d.i]);       // by shift: where an industry belongs sideways
     const x0 = pad.l + 24 * K, x1 = W - pad.r, y0 = pad.t + 22 * K, y1 = H - pad.b - 22 * K;
     const y = d3.scaleLinear().domain(lev).range([y1, y0]).clamp(true);
@@ -232,9 +248,9 @@
   }
   function layoutFor(mode, cols) { const k = layoutKey(mode, cols); return layouts[k] || (layouts[k] = computeLayout(mode, cols)); }
   function targetLayout() {
-    const base = layoutFor(S.layout, S.cols);
+    const base = layoutFor(S.layout, colsNow());
     if (!goods() || S.layout === 'force') return base;
-    const k = layoutKey(S.layout, S.cols) + '|flipped', mid = (pad.t + 22 * K) + (H - pad.b - 22 * K);
+    const k = layoutKey(S.layout, colsNow()) + '|flipped', mid = (pad.t + 22 * K) + (H - pad.b - 22 * K);
     return layouts[k] || (layouts[k] = base.map(p => (p.y < -100 ? p : { x: p.x, y: mid - p.y })));
   }
   let pos = null, tween = null;
@@ -269,6 +285,7 @@
     const i = S.lens.indexOf(':'), kind = S.lens.slice(0, i), name = S.lens.slice(i + 1);
     if (kind === 'group') return d.group === name ? 1 : 0;
     if (kind === 'pay') return d.paygroup === name ? 1 : 0;
+    if (kind === 'fe') { const f = d.fe || [0, 0, 0]; return Math.min(1, name === 'material' ? f[0] : name === 'providential' ? f[1] : name === 'overlooked' ? f[2] : f[0] + f[1]); }
     if (kind === 'is8') { if (name === 'any') return Math.min(1, d.is8_any_share || 0); const h = d.is8.find(e => e.name === name); return h ? Math.min(1, h.share) : 0; }
     return 0;
   }
@@ -329,18 +346,19 @@
       ctx.strokeStyle = C.axis; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l - 4, ya); ctx.lineTo(W - 6, ya); ctx.stroke();
       ctx.textAlign = 'right'; ctx.fillStyle = C.muted; ctx.fillText('average industry', W - 8, ya - fs * 0.75);
     }
-    if (S.layout === 'order' && S.cols === 'shift') {
-      const ax = shiftAxis(), narrow = W < 620;
-      ctx.fillStyle = C.ink2; ctx.textAlign = 'left'; ctx.fillText(narrow ? 'steadier' : 'place in the order shifts least', ax.xa, 12);
-      ctx.textAlign = 'right'; ctx.fillText(narrow ? 'shifts more' : 'shifts most', ax.xb - 10 * K, 12);
+    if (S.layout === 'order' && (colsNow() === 'shift' || colsNow() === 'ties')) {
+      const byTies = colsNow() === 'ties', ax = shiftAxis(colsNow()), narrow = W < 620;
+      ctx.fillStyle = C.ink2; ctx.textAlign = 'left'; ctx.fillText(byTies ? (narrow ? 'fewer ties' : 'least of its local payments are with the highlighted industries') : narrow ? 'steadier' : 'place in the order shifts least', ax.xa, 12);
+      ctx.textAlign = 'right'; ctx.fillText(byTies ? (narrow ? 'more ties' : 'most') : narrow ? 'shifts more' : 'shifts most', ax.xb - 10 * K, 12);
       ctx.textAlign = 'center'; (narrow ? ['Small'] : ['Too small', 'to say']).forEach((ln, i) => ctx.fillText(ln, ax.stripX + 4 * K, 12 + i * (fs + 3)));
-      ctx.fillStyle = C.muted; ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath();
-      for (const v of [0.02, 0.05, 0.1, 0.15]) { if (v < ax.st.sorted[0] || v > ax.st.sorted[ax.st.n - 1]) continue;       // ticks: the standard deviation at that point in the ranking
-        const x = Math.round(ax.xOfSd(v)) + 0.5; ctx.moveTo(x, pad.t - 8); ctx.lineTo(x, H - pad.b + 6); ctx.fillText(v.toFixed(2), x, 28); }
+      ctx.fillStyle = C.muted; ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath(); let lastTick = -1e9;
+      for (const v of byTies ? [0.02, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] : [0.02, 0.05, 0.1, 0.15]) { if (v < ax.st.sorted[0] || v > ax.st.sorted[ax.st.n - 1]) continue;       // ticks: the measure at that point in the ranking
+        const x = Math.round(ax.xOfSd(v)) + 0.5; if (x - lastTick < 38 * K) continue; lastTick = x;       // skip a tick that would sit on top of the one before
+        ctx.moveTo(x, pad.t - 8); ctx.lineTo(x, H - pad.b + 6); ctx.fillText(byTies ? Math.round(100 * v) + '%' : v.toFixed(2), x, 28); }
       const xs = Math.round(ax.stripLeft) + 0.5; ctx.moveTo(xs, pad.t - 8); ctx.lineTo(xs, H - pad.b + 6); ctx.stroke();
     }
-    if (S.layout === 'order' && (S.cols === 'group' || S.cols === 'paygroup')) {
-      const cc = columns(S.cols);
+    if (S.layout === 'order' && (colsNow() === 'group' || colsNow() === 'paygroup')) {
+      const cc = columns(colsNow());
       ctx.textAlign = 'center'; ctx.fillStyle = C.ink2;
       if (W < 620) cc.names.forEach((g, j) => ctx.fillText(SHORT_HEAD[g] || g.split(/,| and /)[0], cc.centre[g], 11 + (j % 2) * (fs + 3)));      // narrow: short names on two staggered rows
       else for (const g of cc.names) wrapText(g, cc.width[g] - 8).slice(0, 3).forEach((ln, i) => ctx.fillText(ln, cc.centre[g], 12 + i * (fs + 2)));
@@ -528,6 +546,8 @@
       add(s, 'path', { d: 'M19,22A14,14 0 0 0 47,22Z', fill: `var(--halo-${dn})`, 'fill-opacity': 0.3, stroke: `var(--halo-${dn})`, 'stroke-opacity': 0.85 });
       add(s, 'circle', { cx: 33, cy: 22, r: 8, fill: 'var(--node)', stroke: 'var(--node-line)' });
       row(s, goods() ? '<b>Halo:</b> above, bought from the rest of the UK; below, sold to it. Areas are on the circle’s scale.' : '<b>Halo:</b> above, received from the rest of the UK; below, paid to it. Areas are on the circle’s scale.'); }
+    if (S.layout === 'order' && S.cols === 'ties') key.appendChild(el('p', 'd-small', S.lens === 'none' ? 'Columns: choose a highlight, and the industries are put in order of how much of their trade here is with it.'
+      : 'Columns: left to right, from the industry with the least of its local payments going to or coming from the highlighted industries, to the one with the most. The measure covers the whole period and payments in both directions; the percentages along the top are that share. Highlighted industries are placed the same way, by their payments with each other. Industries too small to place are kept apart on the right.'));
     if (S.layout === 'order' && S.cols === 'shift') key.appendChild(el('p', 'd-small', 'Columns: left to right, from the industry whose place in the order shifts least to the one whose place shifts most. The measure is the standard deviation of its level, worked out on the 12 months to each month; the numbers along the top are that figure, in levels. Industries too small to place are kept apart on the right.'));
     if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought, and rent, insurance and rates are in here too.'); key.appendChild(note); }
   }
@@ -548,6 +568,8 @@
     item('Sector group', `${d.group} (section ${d.section})`);
     item('Payment group', d.role === 'intermediary' ? 'Not grouped (intermediary)' : d.pay_status === 'core' ? d.pay_group
       : d.pay_status === 'too small' ? 'Too small to place' : d.pay_group_loose ? `None firmly. Most often with ${d.pay_group_loose} (${d.pay_group_years} of 8 years)` : 'None firmly');
+    if (d.fe) { const z = [['material', d.fe[0]], ['providential', d.fe[1]], ['overlooked', d.fe[2]]].filter(e => e[1] >= 0.005), cap = t => t[0].toUpperCase() + t.slice(1);
+      item('Foundational economy', !z.length ? 'Not in it' : z.length === 1 && z[0][1] >= 0.995 ? cap(z[0][0]) : cap(z.map(e => `${e[0]} ${fmtPct(e[1])}`).join(', ')) + ' of its jobs'); }
     item('Industrial strategy', d.is8.length ? d.is8.map(e => e.name + (e.whole ? '' : ` (${fmtPct(e.share)} of its jobs)`)).join('; ') : 'Not on the list');
     box.append(dl);
 
@@ -582,6 +604,8 @@
       .attr('d', d3.line().defined(v => v != null).x((_, j) => sx(j)).y(v => sy(v))(roll));
     if (roll[m] != null) svg.append('circle').attr('cx', sx(m)).attr('cy', sy(roll[m])).attr('r', 4).attr('fill', 'var(--ink)').attr('stroke', 'var(--surface)').attr('stroke-width', 2);
     box.append(svg.node(), el('p', 'd-small', `Over the whole period it sits ${Math.abs(lvl) < 0.05 ? 'at about the average' : `${Math.abs(lvl).toFixed(2)} levels to the ${lvl > 0 ? 'buyer' : 'supplier'} side of the average industry`}${d.small ? ', but it is too small for that to be reliable' : ''}.`));
+    if (S.lens !== 'none') { const tt = ties(), r = tt.rank[i];
+      box.append(el('p', 'd-small', `${fmtPct(tt.sd[i])} of its payments to and from other industries here, over the whole period, are with the highlighted industries${r < 0 ? '' : `: ${r + 1} of ${tt.n} counting from the least`}.`)); }
     { const st = shifts(), r = st.rank[i];
       box.append(el('p', 'd-small', r < 0 ? `Its level moves about by ${st.sd[i].toFixed(3)} (standard deviation), but that is mostly noise in so small an industry.`
         : `Its place shifts ${r < st.n / 3 ? 'less than most' : r >= 2 * st.n / 3 ? 'more than most' : 'about as much as most'}: a standard deviation of ${st.sd[i].toFixed(3)} levels, ${r + 1} of ${st.n} counting from the steadiest.`)); }
@@ -669,6 +693,8 @@
     lens.replaceChildren(none, optgroup('Sector group', GROUPS.map(g => ['group:' + g, g])));
     if (D.pay_groups.length) lens.append(optgroup('Payment group', D.pay_groups.map(g => ['pay:' + g, g])));
     if (D.is8_names.length) lens.append(optgroup('Industrial strategy', [['is8:any', 'Any industrial strategy sector'], ...D.is8_names.map(g => ['is8:' + g, g])]));   // none for Northern Ireland: no jobs data
+    if (nodes.some(d => d.fe)) lens.append(optgroup('Foundational economy', [['fe:both', 'Material and providential'], ['fe:material', 'Material: utilities, food, transport'],
+      ['fe:providential', 'Providential: health, education, care'], ['fe:overlooked', 'Overlooked: occasional everyday buys']]));
     if (![...lens.options].some(o => o.value === S.lens)) S.lens = 'none';
     const no = el('option', null, 'None'); no.value = ''; pickSel.replaceChildren(no);
     for (const d of nodes.slice().sort((a, b) => a.short.localeCompare(b.short))) { const o = el('option', null, d.short); o.value = d.id; pickSel.append(o); }
@@ -696,9 +722,9 @@
   function changed(k) {                                    // what each control has to refresh
     if (!D) return;
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
-    if (k === 'layout' || k === 'cols') moveTo(false);
+    if (k === 'layout' || k === 'cols' || (k === 'lens' && S.cols === 'ties')) moveTo(false);
     if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
-    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show', 'layout', 'cols'].includes(k)) buildKey();
+    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show', 'layout', 'cols', 'lens'].includes(k)) buildKey();
     if (k === 'smooth') updateStripMax();
     reflect(); refresh(); syncUrl();
   }

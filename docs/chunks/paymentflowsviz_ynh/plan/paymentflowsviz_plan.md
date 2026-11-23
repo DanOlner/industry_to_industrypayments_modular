@@ -442,7 +442,8 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/00` to `12`, `functions_hierarchy.R` | The tests |
 | `tests/13_page_checks.cjs` | Checks on the finished page; screenshots in `tests/outputs/page/` |
 | `tests/14` to `16` | Scoping tests for section 10: all regions' data, links, and how alike regions are |
-| `tests/17` to `19` | Scoping tests for section 11: the foundational economy list, how it fits divisions, and how it sits against tradeable |
+| `tests/17` to `20` | Scoping tests for section 11: the foundational economy list, how it fits divisions, how it sits against tradeable, and whether the input-output table could fill what the payments leave out |
+| `tests/21_ties_columns.cjs` | The test behind the columns "by ties to what is highlighted" (section 11.13) |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
@@ -960,3 +961,99 @@ Results by division are in `tests/outputs/foundational_tradeable_divisions.csv`,
 - **Payers of unknown industry are bigger still,** at 38% to 78% of what education, health and care were paid, and nothing says who they are.
 
 **A first thought.** Treat it like the halo: for each industry, an amount received from and paid to public administration, drawn separately from the rest-of-UK halo and off unless switched on. It wouldn't join the order, because it has no counterpart inside the region.
+
+### 11.12 Filling the gaps from the input-output table: examined, and not recommended as a switch
+
+*Test `tests/20_io_estimates_scoping.R`, 23 November 2026. Nothing built.*
+
+**The idea.** Use the UK input-output or supply and use tables to estimate what the payments leave out (sales to households, to government and abroad), split the national figures between regions with a proxy, and put a switch on the page to add them.
+
+**In short: I'd push back.** The tables exist for most of the years, and the arithmetic is easy. But where the table and the payments can both be seen they disagree too much for one to fill in for the other, and three separate problems would each make the added figures misleading: no steady rate of exchange between the two, no way to know what is already counted, and a different geography. There are sturdier ways to get most of what the idea is after, at the end of this section.
+
+**What data there is.**
+
+| | Years | Notes |
+|----|----|----|
+| Input-output analytical tables (ONS) | An edition each for 2019, 2020, 2021, 2022 and 2023; 2024 is provisionally due on 26 November 2026 | Two years behind. Each is built on a different year's national accounts, so they are not one consistent series |
+| Supply and use tables (ONS) | Every year 1997 to 2023, one consistent set | The same lag |
+| The payments | Monthly, January 2019 to September 2026 | |
+| On disk | The 2019 analytical table only | Also Scotland's own supply and use tables for 1998 to 2022, and a 2019 workbook of trade between UK regions, neither examined |
+
+So the tables cover five of the payments' eight years, annually. 2025 and 2026 won't have one for two years, and 2020 and 2021 are pandemic years. A month-by-month picture of the estimated part would have to be invented.
+
+Regional proxies exist too: ONS regional GVA by industry, the Treasury's public spending by region and function, ONS regional household spending, and regional trade figures. I haven't checked their latest years. Only jobs by region and industry are on disk, and that is what the test uses.
+
+**Test 1: does the table describe the payments where both can be seen?** National payments for 2019 (the file with no regions, so public administration is all there) against the 2019 table, 75 groups of industries, intermediaries left out of both.
+
+- **There is no steady rate of exchange.** Payments between industries come to £482 billion against the table's £1,231 billion of sales between industries. Industry by industry, payments run from 0.06 of the table's figure (a tenth of industries are below that) to 2.1 times (a tenth are above), with a middle of 0.30. So a table figure can't be turned into "payment pounds" by one factor, and a factor for each industry is the thing being guessed.
+- **The patterns are alike in outline only.** Ranked by size, who-sells-to-whom agrees at 0.62. But 62% of the money would have to move for one pattern to match the other. Two regions' payments differ from each other by 33 to 66% (section 10.3), so the national table is as far from the national payments as one region is from another.
+- **Public administration's payments are not the table's government spending.** It paid other industries £73 billion. The table has £54 billion of purchases by public administration and £276 billion of government spending on other industries' output, mostly health, education and care. Health gets 4% of public administration's payments and 46% of the table's two figures together. The payments go instead to construction (15%, against 1.5% in the table), consultancy and IT. So the funding of health and education doesn't arrive as "public administration pays health". It is somewhere else in the data, or not in it, and a table-based figure for it could double count.
+- **Nothing says what the unknown half is.** Industries received £482 billion from each other, another £482 billion from payers of unknown industry, £156 billion from the intermediaries and £73 billion from public administration. The table's household spending on their output is £942 billion. Receipts from unknown payers follow the table's sales to businesses (0.74) more than its sales to households (0.47) or government (0.21): the unknown payers look like businesses. Retail gets £18 billion through the intermediaries against £124 billion of household spending in the table. So an estimate of household or government spending can't be said to fill a gap, because the size of the gap isn't known.
+- **Scaling up from what is seen fails where it matters most.** The alternative to a rate of exchange is to multiply each industry's business receipts by the table's ratio of other sales to business sales. That multiple is 42 for health, 10 for public administration, 7 for food and drink service and 5 for retail and for education. The estimate would be many times the data, resting on the smallest and least reliable part of it.
+
+**Test 2: does a regional proxy put income where the payments put it?** Each industry's receipts in 2019 split between the eleven regions of Great Britain by its jobs, against where the payments record them.
+
+- **A jobs split puts a quarter of the money in the wrong region:** 25% for the middle industry's receipts from businesses (20% weighted by value), and 40% for receipts from public administration (26% by value).
+- **The payments' geography is registered offices.** London has 17% of jobs and 29% of industries' receipts. Scotland has 8% of jobs, 4% of receipts from businesses and 2% of receipts from public administration. Wales has 4% of jobs and 1% of receipts.
+- **So an estimate split by jobs or GVA would sit on a different map** from the payments beside it: where people work, against where firms are registered. Adding them would make London look smaller and Scotland and Wales larger than the rest of the page says, for the estimated part only.
+
+**What it would take anyway.** Four more tables to download and one mapping of their 105 products to divisions; regional GVA by industry for the split; a rule for 2024 to 2026; a monthly shape for annual figures; a rule against double counting when intermediaries are switched in; and the same for all twelve regions. A few days' work. The work isn't the objection. The result would be a modelled layer several times the size of the data for exactly the industries in question, and switching it on would make the page's measures more complete-looking, not more complete.
+
+**What I'd do instead.**
+
+- **Bring in what the data already has, as data.** Public administration's payments to each region's industries are observed, monthly and by region (section 11.11). The intermediaries are already a switch. These make the picture more complete without estimating anything.
+- **Use the table for shares, not pounds.** For each industry, the national share of its output that goes to other businesses, households, government and abroad, shown in the side panel and offered as a highlight or columns. It is fixed to the industry, needs no regional split and no rate of exchange, and one year's table is enough. This is also the measure section 11.10 recommends for "tradeable". It tells the reader what the page can't see for that industry, which is the honest version of filling the gap.
+- **If a full estimated picture is wanted, make it its own view, in the table's pounds,** not a switch on the payments: a regional input-output estimate with households, government and abroad as extra buyers, set beside the payments for comparison. That is a known kind of model with known errors, and a project in its own right. It belongs with the flow model in `modelling_demand` more than on this page.
+- **Ask ONS what "unknown industry" is.** If it is businesses whose industry couldn't be matched, the gap is mostly coverage of payments between businesses, which no table can fill. That one answer would settle more than any proxy.
+
+Results are in `tests/outputs/io_estimates_by_industry.csv` and `io_estimates_region_proxy.csv`.
+
+### 11.13 Built: the highlight, and columns by ties
+
+*Built 23 November 2026, from the payment flows and the jobs data only. Sections 11.11 and 11.12 are parked.*
+
+**What was asked.** How best to show foundational against other: highlight the circles where they are, or find a column split that isn't simply the zones against the rest.
+
+**Both, because they answer different questions.**
+
+- **Highlight in place** shows where the foundational industries sit in the order and which links are theirs. It is the clearer of the two and the one to lead with.
+- **Columns by ties** answers the question the payments are best placed to answer: who trades with the foundational economy, and who doesn't.
+
+**Why not the zones as columns.** "Other" would hold 36 industries and the eight split divisions belong to no single column. It would also only repeat what the highlight shows.
+
+**The highlight.**
+
+- **Four choices** in a new "Foundational economy" group of the Highlight menu: material and providential; material; providential; overlooked (section 11.9).
+- **Shares by region.** Each industry carries the share of its jobs in each zone, from that region's five-digit jobs (`fe_for()` in `build_data.R`). Northern Ireland, and any division with no jobs recorded in a region, takes the Great Britain shares.
+- **Drawn as the industrial strategy highlight is:** a filled circle is wholly in the zone, a wedge is the share. Retail in Yorkshire and the Humber is 44% material, 6% providential and 23% overlooked.
+- **Side panel:** a "Foundational economy" line for the pinned industry.
+- **A note on the page** names the list, says it was made to count jobs, gives the region's jobs in each zone, says these industries show by what they buy, and separates it from the industrial strategy's "Foundational industries".
+
+**Columns "By ties to what is highlighted".**
+
+- **The measure:** of everything an industry pays to and is paid by other industries in the region, over the whole period, the share that is with the highlighted industries. A partner that is 40% in the highlighted set counts for 40% of the payment.
+- **It works with any highlight,** not only the foundational one: a sector group, a payment group or an industrial strategy sector. With no highlight chosen the columns fall back to sector groups and the key says to choose one.
+- **Laid out like "by how much its place shifts":** industries in rank order from least tied to most, percentages along the top, small industries in a strip on the right. Height is still the place in the order.
+- **There is enough spread to use** (`tests/21_ties_columns.cjs`). For material and providential in Yorkshire and the Humber a tenth of industries are below 17%, the middle is 27% and a tenth are above 43%. Across the twelve regions the middle runs from 21% to 31%, and the South East has the narrowest spread (15% to 34%). For providential alone Yorkshire and the Humber has 1%, 4% and 15%, with a few far above.
+
+**What it shows in Yorkshire and the Humber** (material and providential highlighted).
+
+- **Most tied:** farming (58%), post and courier (57%), social work (52%), personal services (51%), residential care (45%), wholesale (43%), warehousing (40%), rental and leasing (40%). Personal services, wholesale and rental are not foundational themselves: they are its close local partners.
+- **Least tied:** electronics (12%), wood products (13%), fabricated metal (15%), basic metals (15%), civil engineering (16%). Mostly manufacturing.
+- **Education sits near the least-tied end** (17%, eighth of 66 from the least) and health below the middle (23%). Their trade inside the region is mostly with industries outside the foundational economy, which is section 11.7's finding seen from the other side.
+
+**To keep in mind.**
+
+- **It measures payments between businesses inside the region,** about a tenth of what the region's industries are paid (section 11.10). It says nothing about households or public money.
+- **The axis is a ranking,** so equal distances are not equal differences. The percentages along the top give the scale.
+- **A highlighted industry is placed by its payments with the rest of the set,** so a set whose members trade little with each other, like the public services, ends up towards the least-tied end.
+
+**Checks** (`tests/13_page_checks.cjs`, `tests/15_url_roundtrip.cjs`).
+
+- **All twelve regions** were rebuilt and load with no errors and no gaps in the text. Yorkshire and the Humber's 14 build checks still match.
+- **The address** carries the new settings: all 5 column choices and all 26 highlights come back.
+- **Speed is unchanged:** 60 frames a second on the opening view, 56 with every link drawn.
+- **Screenshots:** `tests/outputs/page/06b` to `06e`.
+
+**Not done.** Nobody has looked at the eleven other regions' pictures with these options on. The ticks along the top skip any that would overlap, so a bunched measure (providential alone) shows few of them.
+

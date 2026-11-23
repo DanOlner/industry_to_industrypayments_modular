@@ -137,6 +137,24 @@ is8_for <- function(code) {
   list(memb = memb[, .(sic2, is8, share, whole)], any = any[, .(sic2, share)], year = j5$year[1])
 }
 
+# ---- Foundational economy zones, region by region -------------------------------------------------
+# The Foundational Economy Collective's list places each five-digit code in a zone (tests/17 reads it; plan section 11).
+# Each division gets the share of its jobs in the region that sits in each zone. Where the region has no jobs recorded
+# for a division, or no jobs data at all (Northern Ireland), the Great Britain shares stand in: test 18 found they give
+# a region's totals to within a point. A division with no jobs anywhere takes its share of the list's codes.
+fe_for <- function(code) {
+  fe <- fread(file.path(chunk_dir, 'lookups/foundational_sic5.csv'), colClasses = 'character')
+  zs <- c('Material', 'Providential', 'Overlooked', 'Other')
+  wide <- function(d, v) { w <- dcast(d, sic2 ~ zone, value.var = v, fun.aggregate = sum, fill = 0); for (z in zs) if (!z %in% names(w)) w[, (z) := 0]
+    w[, tot := Material + Providential + Overlooked + Other][tot > 0, .(sic2, material = Material / tot, providential = Providential / tot, overlooked = Overlooked / tot)] }
+  j <- merge(jobs_by_region(), fe[, .(sic5, zone)], by = 'sic5', all.x = TRUE)
+  j[sic5 == '01000', zone := 'Material'][is.na(zone), zone := 'Other'][, sic2 := substr(sic5, 1, 2)]   # 01000 is BRES's farm total
+  own <- wide(j[itl1 == code], 'jobs'); gb <- wide(j, 'jobs'); by_code <- wide(fe[, .(sic2 = substr(sic5, 1, 2), zone, n = 1)], 'n')
+  share <- function(s) { for (t in list(own, gb, by_code)) if (s %in% t$sic2) return(round(unlist(t[sic2 == s, .(material, providential, overlooked)], use.names = FALSE), 3)); c(0, 0, 0) }
+  tot <- j[itl1 == code, .(jobs = sum(jobs)), by = zone]
+  list(share = share, regional = nrow(own) > 0, year = j$year[1], jobs = if (nrow(tot)) setNames(tot$jobs / sum(tot$jobs), tot$zone) else NULL)
+}
+
 # ---- One region ------------------------------------------------------------------------------------
 build_region <- function(code) {
   set.seed(1); t0 <- Sys.time(); this <- code; reg <- regions[code == this]      # `this`, because `code` is also a column of regions
@@ -194,7 +212,7 @@ build_region <- function(code) {
   never_count <- function(s, set) cells[(payer_sic == s | payee_sic == s) & payer_sic %in% set & payee_sic %in% set, .(never = sum(never), cells = .N)]
 
   # 7. Nodes
-  i8 <- is8_for(code); r3 <- function(v) round(v, 3)
+  i8 <- is8_for(code); r3 <- function(v) round(v, 3); fz <- fe_for(code)
   nodes <- lapply(ids, function(s) {
     lk <- sic2_lk[sic2 == s]; mb <- i8$memb[sic2 == s]; g <- pg[sic2 == s]; is_core <- s %in% core
     nc <- never_count(s, core); na <- never_count(s, ids)
@@ -207,6 +225,7 @@ build_region <- function(code) {
          pay_status = if (nrow(g)) g$status else 'not grouped', pay_group_years = if (nrow(g)) g$years_with_group else NULL,
          is8 = lapply(seq_len(nrow(mb)), function(k) list(name = mb$is8[k], share = mb$share[k], whole = mb$whole[k])),
          is8_any_share = if (s %in% i8$any$sic2) i8$any[sic2 == s, share] else 0,
+         fe = fz$share(s),                                  # share of its jobs in the material, providential and overlooked zones
          never_core = if (is_core) nc$never else NULL, cells_core = if (is_core) nc$cells else NULL, never_all = na$never, cells_all = na$cells,
          self = unname(self[s, ]), ext = lapply(ext, function(m) unname(m[s, ])))
   })
@@ -264,6 +283,8 @@ build_region <- function(code) {
     groups_named_by_hand = !is.null(hn), partner = regions[code == partner, name],
     is8_year = if (is.na(i8$year)) sprintf('%s (Great Britain only: Northern Ireland is not covered, so that highlight is left out here)', jobs_by_region()$year[1]) else i8$year)
   facts <- c(facts, left_out(code, core))
+  facts <- c(facts, list(fe_year = fz$year, fe_regional = fz$regional,
+                         fe_jobs = if (fz$regional) sprintf('%s of jobs here are in the material zone, %s in the providential and %s in the overlooked.', pct(fz$jobs[['Material']]), pct(fz$jobs[['Providential']]), pct(fz$jobs[['Overlooked']])) else 'There are no jobs figures for this region, so the wedges use the shares for Great Britain.'))
 
   dat <- list(region = code, name = reg$name, the_name = reg$the_name, built = format(Sys.Date()),
               source = 'ONS, Industry-to-industry payment flows by region, UK (editions of 17 September and 22 October 2026)',

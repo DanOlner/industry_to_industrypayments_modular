@@ -39,6 +39,8 @@ Rscript docs/chunks/paymentflowsviz_ynh/build_data.R stage TLF    # build withou
 
 Payment group names are set by hand at the top of `build_data.R`, for Yorkshire and the Humber only. Other regions' groups are labelled by their largest members.
 
+The foundational economy highlight uses the Foundational Economy Collective's list of activities, kept as `tests/lookups/foundational_sic5.csv` (read from their spreadsheet by `tests/17_foundational_read_list.py`). The build turns it into each industry's share of jobs in each zone, region by region.
+
 The figures the page quotes about a region (in "How the order is worked out" and "What this shows") are worked out by the build and carried in that region's data file, so they follow the data.
 
 ## Checking the page
