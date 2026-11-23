@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yorkshire and the Humber payment flows</title>
+<meta name="description" content="Monthly business-to-business payments between Yorkshire and the Humber's industries, January 2019 to September 2026, drawn as a network that can be stepped or played through time.">
+<link rel="stylesheet" href="flows.css">
+</head>
+<body>
+<main class="viz-root">
+
+  <header class="top">
+    <h1>How Yorkshire and the Humber's industries pay each other</h1>
+    <p class="lede">Payments between businesses registered in the region, month by month from January 2019 to September 2026. Each circle is an industry and each link is the money one industry's firms paid another's. Industries that mostly buy sit higher and those that mostly supply sit lower, so money mostly runs down the page.</p>
+  </header>
+
+  <section class="strip" aria-label="Totals for the period shown">
+    <div class="tile"><div class="tile-label">Paid inside the region</div><div class="tile-value" id="t-inside">–</div><div class="tile-bar"><span id="b-inside"></span></div></div>
+    <div class="tile"><div class="tile-label">Paid to the rest of the UK</div><div class="tile-value" id="t-out">–</div><div class="tile-bar"><span id="b-out"></span></div></div>
+    <div class="tile"><div class="tile-label">Received from the rest of the UK</div><div class="tile-value" id="t-in">–</div><div class="tile-bar"><span id="b-in"></span></div></div>
+    <p class="strip-note" id="strip-note"></p>
+  </section>
+
+  <section class="controls" aria-label="What to show">
+    <fieldset class="seg" id="layout">
+      <legend>Layout</legend>
+      <label><input type="radio" name="layout" value="order"><span>Supplier order</span></label>
+      <label><input type="radio" name="layout" value="hybrid"><span>Hybrid</span></label>
+      <label><input type="radio" name="layout" value="force"><span>Connections</span></label>
+    </fieldset>
+    <label class="ctl">Columns <select id="cols"><option value="group">By sector group</option><option value="paygroup">By payment group</option><option value="free">Free</option></select></label>
+    <label class="ctl">Highlight <select id="lens"></select></label>
+    <label class="ctl">Pin an industry <select id="pick"></select></label>
+    <label class="ctl">Measure <select id="measure"><option value="value">Value</option><option value="count">Number of payments</option></select></label>
+    <label class="ctl">Widths <select id="scale"><option value="share">Share of the month</option><option value="amount">Actual amounts</option></select></label>
+    <label class="ctl">Links <select id="net"><option value="net">Net per pair</option><option value="gross">Both directions</option></select></label>
+    <label class="ctl">Show <select id="cover"><option value="0.5">Links carrying 50%</option><option value="0.8">Links carrying 80%</option><option value="0.9">Links carrying 90%</option><option value="1">All links</option></select></label>
+    <div class="checks">
+      <label><input type="checkbox" id="smooth"> Three-month average</label>
+      <label><input type="checkbox" id="dots"> Payment dots</label>
+      <label><input type="checkbox" id="inter"> Include intermediaries</label>
+      <label><input type="checkbox" id="halo"> Rest of UK halo</label>
+      <label><input type="checkbox" id="pubonly"> Published months only</label>
+    </div>
+  </section>
+
+  <section class="timebar" aria-label="Time">
+    <div class="time-buttons">
+      <button id="play" type="button">Play</button>
+      <button id="prev" type="button" aria-label="Previous month">&lsaquo;</button>
+      <button id="next" type="button" aria-label="Next month">&rsaquo;</button>
+      <label class="ctl">Speed <select id="speed"><option value="1.5">Slow</option><option value="3">Normal</option><option value="6">Fast</option><option value="12">Faster</option></select></label>
+    </div>
+    <div class="time-label" id="monthLabel" aria-live="polite"></div>
+    <div class="time-track">
+      <svg id="spark" aria-hidden="true"></svg>
+      <input id="month" type="range" min="0" max="92" step="1" value="92" aria-label="Month">
+    </div>
+  </section>
+
+  <section class="stage">
+    <div id="chartwrap">
+      <canvas id="chart" role="img" aria-label="Network of payments between industries. The table below the chart lists the same links."></canvas>
+      <div id="tip" role="status"></div>
+    </div>
+    <aside id="side">
+      <div id="detail"></div>
+      <div id="key" aria-label="Key"></div>
+    </aside>
+  </section>
+
+  <details id="tablebox">
+    <summary>Table of the links shown</summary>
+    <div class="table-tools"><span id="tablecap"></span><button id="csv" type="button">Download as CSV</button></div>
+    <div class="table-scroll"><table id="linktable"><thead></thead><tbody></tbody></table></div>
+  </details>
+
+  <section class="notes">
+    <h2>What this shows, and what it doesn't</h2>
+    <ul>
+      <li><strong>Payments, not trade.</strong> These are Bacs and Faster Payments between businesses. Read a link as a sign that two industries are connected, not as a measure of what they sell each other. Rent, insurance premiums and business rates are in here alongside purchases.</li>
+      <li><strong>Registered offices, not where the work happens.</strong> A payment is placed where the paying and receiving organisations are registered. A firm headquartered elsewhere pays from elsewhere. That's why this page is about payments where both sides are in the region: no head office can move those.</li>
+      <li><strong>Households aren't in it.</strong> Industries that sell to the public, or are publicly funded from outside the region, show here mostly as buyers. That's part of why retail, hospitality, health and education sit at the top.</li>
+      <li><strong>Over half the monthly figures are hidden,</strong> and hidden doesn't mean small: a figure is withheld when few organisations are behind it or one dominates. A hidden month is shown at the average of that link's published months, marked with a dashed line. Over a quarter of monthly figures belong to links never published at all, so those links are missing. Retail paying food manufacturing is one.</li>
+      <li><strong>Growth over time is partly coverage.</strong> The value captured rose 72% from 2019 to 2025 while the average payment stayed flat, which suggests more payments being captured. The page opens on each month's shares for that reason.</li>
+      <li><strong>The order is a gradient, not tiers.</strong> About 71% of the money runs down it. The UK's input-output tables show the same loose order.</li>
+      <li><strong>Payment groups are a statistical grouping,</strong> named by hand: industries that pay each other more than their sizes would predict, in most years. About two in five industries don't sit firmly in any group.</li>
+      <li><strong>Intermediaries</strong> (banking and finance, financial support services, information services, office and business support) are left out unless switched in. Card takings and platform payouts pass through them, so their links are partly money passing through.</li>
+      <li><strong>Nominal pounds, not seasonally adjusted.</strong> These are official statistics in development and are revised between editions. Values are rounded to £1,000 and numbers of payments to 100.</li>
+    </ul>
+    <p class="source">Source: Office for National Statistics, <a href="https://www.ons.gov.uk/economy/economicoutputandproductivity/output/datasets/industrytoindustrypaymentflowsbyregionuk">Industry-to-industry payment flows by region, UK</a>, from Pay.UK data (editions of 17 September and 22 October 2026). Contains public sector information licensed under the Open Government Licence v3.0. Industrial strategy sectors follow the UK Industrial Strategy sector definitions list, with jobs from the Business Register and Employment Survey 2024. <a href="https://github.com/DanOlner/industry_to_industrypayments_modular/tree/master/docs/chunks/paymentflowsviz_ynh">Method, tests and code</a>. <span id="built"></span></p>
+  </section>
+
+</main>
+<script src="lib/d3.v7.9.0.min.js"></script>
+<script src="ynh_flows_data.js"></script>
+<script src="flows.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+source,ynh_own,uk_own_pooled,uk_regional,uk_five_digit,io
+ynh_own,1,0.75,0.62,0.3,0.71
+uk_own_pooled,0.75,1,0.88,0.55,0.65
+uk_regional,0.62,0.88,1,0.68,0.57
+uk_five_digit,0.3,0.55,0.68,1,0.48
+io,0.71,0.65,0.57,0.48,1

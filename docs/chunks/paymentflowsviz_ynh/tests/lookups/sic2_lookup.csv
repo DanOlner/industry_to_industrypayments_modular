@@ -1,0 +1,89 @@
+sic2,short,name,section,section_short,section_name,role
+01,Farming,"Crop and animal production, hunting and related service activities",A,Agriculture,"Agriculture, forestry and fishing",industry
+02,Forestry,Forestry and logging,A,Agriculture,"Agriculture, forestry and fishing",industry
+03,Fishing,Fishing and aquaculture,A,Agriculture,"Agriculture, forestry and fishing",industry
+05,Coal mining,Mining of coal and lignite,B,Mining,Mining and quarrying,industry
+06,Oil & gas extraction,Extraction of crude petroleum and natural gas,B,Mining,Mining and quarrying,industry
+07,Metal ore mining,Mining of metal ores,B,Mining,Mining and quarrying,industry
+08,Quarrying,Other mining and quarrying,B,Mining,Mining and quarrying,industry
+09,Mining support,Mining support service activities,B,Mining,Mining and quarrying,industry
+10,Food manufacturing,Manufacture of food products,C,Manufacturing,Manufacturing,industry
+11,Drinks manufacturing,Manufacture of beverages,C,Manufacturing,Manufacturing,industry
+12,Tobacco,Manufacture of tobacco products,C,Manufacturing,Manufacturing,industry
+13,Textiles,Manufacture of textiles,C,Manufacturing,Manufacturing,industry
+14,Clothing,Manufacture of wearing apparel,C,Manufacturing,Manufacturing,industry
+15,Leather,Manufacture of leather and related products,C,Manufacturing,Manufacturing,industry
+16,Wood products,"Manufacture of wood and of products of wood and cork, except furniture;manufacture of articles of straw and plaiting materials",C,Manufacturing,Manufacturing,industry
+17,Paper,Manufacture of paper and paper products,C,Manufacturing,Manufacturing,industry
+18,Printing,Printing and reproduction of recorded media,C,Manufacturing,Manufacturing,industry
+19,Coke & refined petroleum,Manufacture of coke and refined petroleum products,C,Manufacturing,Manufacturing,industry
+20,Chemicals,Manufacture of chemicals and chemical products,C,Manufacturing,Manufacturing,industry
+21,Pharmaceuticals,Manufacture of basic pharmaceutical products and pharmaceutical preparations,C,Manufacturing,Manufacturing,industry
+22,Rubber & plastics,Manufacture of rubber and plastic products,C,Manufacturing,Manufacturing,industry
+23,"Glass, cement & ceramics",Manufacture of other non-metallic mineral products,C,Manufacturing,Manufacturing,industry
+24,Basic metals,Manufacture of basic metals,C,Manufacturing,Manufacturing,industry
+25,Fabricated metal,"Manufacture of fabricated metal products, except machinery and equipment",C,Manufacturing,Manufacturing,industry
+26,Electronics,"Manufacture of computer, electronic and optical products",C,Manufacturing,Manufacturing,industry
+27,Electrical equipment,Manufacture of electrical equipment,C,Manufacturing,Manufacturing,industry
+28,Machinery,Manufacture of machinery and equipment n.e.c.,C,Manufacturing,Manufacturing,industry
+29,Motor vehicles,"Manufacture of motor vehicles, trailers and semi-trailers",C,Manufacturing,Manufacturing,industry
+30,Other transport equipment,Manufacture of other transport equipment,C,Manufacturing,Manufacturing,industry
+31,Furniture,Manufacture of furniture,C,Manufacturing,Manufacturing,industry
+32,Other manufacturing,Other manufacturing,C,Manufacturing,Manufacturing,industry
+33,Machinery repair & install,Repair and installation of machinery and equipment,C,Manufacturing,Manufacturing,industry
+35,Energy supply,"Electricity, gas, steam and air conditioning supply",D,Energy,"Electricity, gas, steam and air conditioning supply",industry
+36,Water supply,"Water collection, treatment and supply",E,Water & waste,Water supply; sewerage and waste management,industry
+37,Sewerage,Sewerage,E,Water & waste,Water supply; sewerage and waste management,industry
+38,Waste,"Waste collection, treatment and disposal activities; materials recovery",E,Water & waste,Water supply; sewerage and waste management,industry
+39,Remediation,"Remediation activities and other waste management services. This division includes the provision of remediation services, i.e. the cleanup of contaminated buildings and sites, soil, surface or ground water.",E,Water & waste,Water supply; sewerage and waste management,industry
+41,Building construction,Construction of buildings,F,Construction,Construction,industry
+42,Civil engineering,Civil engineering,F,Construction,Construction,industry
+43,Building trades,Specialised construction activities,F,Construction,Construction,industry
+45,Motor trades,Wholesale and retail trade and repair of motor vehicles and motorcycles,G,Wholesale & retail,Wholesale and retail trade; repair of motor vehicles,industry
+46,Wholesale,"Wholesale trade, except of motor vehicles and motorcycles",G,Wholesale & retail,Wholesale and retail trade; repair of motor vehicles,industry
+47,Retail,"Retail trade, except of motor vehicles and motorcycles",G,Wholesale & retail,Wholesale and retail trade; repair of motor vehicles,industry
+49,Land transport,Land transport and transport via pipelines,H,Transport & storage,Transportation and storage,industry
+50,Water transport,Water transport,H,Transport & storage,Transportation and storage,industry
+51,Air transport,Air transport,H,Transport & storage,Transportation and storage,industry
+52,Warehousing & transport support,Warehousing and support activities for transportation,H,Transport & storage,Transportation and storage,industry
+53,Post & courier,Postal and courier activities,H,Transport & storage,Transportation and storage,industry
+55,Accommodation,Accommodation,I,Hospitality,Accommodation and food service activities,industry
+56,Food & drink service,Food and beverage service activities,I,Hospitality,Accommodation and food service activities,industry
+58,Publishing,Publishing activities,J,Information & comms,Information and communication,industry
+59,"Film, TV & music","Motion picture, video and television programme production, sound recording and music publishing activities",J,Information & comms,Information and communication,industry
+60,Broadcasting,Programming and broadcasting activities,J,Information & comms,Information and communication,industry
+61,Telecoms,Telecommunications,J,Information & comms,Information and communication,industry
+62,IT & software,"Computer programming, consultancy and related activities",J,Information & comms,Information and communication,industry
+63,Information services,Information service activities,J,Information & comms,Information and communication,intermediary
+64,Banking & finance,"Financial service activities, except insurance and pension funding",K,Finance & insurance,Financial and insurance activities,intermediary
+65,Insurance & pensions,"Insurance, reinsurance and pension funding, except compulsory social security",K,Finance & insurance,Financial and insurance activities,industry
+66,Financial support services,Activities auxiliary to financial services and insurance activities,K,Finance & insurance,Financial and insurance activities,intermediary
+68,Real estate,Real estate activities,L,Real estate,Real estate activities,industry
+69,Legal & accounting,Legal and accounting activities,M,Professional services,"Professional, scientific and technical activities",industry
+70,Head offices & consultancy,Activities of head offices; management consultancy activities,M,Professional services,"Professional, scientific and technical activities",industry
+71,Architecture & engineering,Architectural and engineering activities; technical testing and analysis,M,Professional services,"Professional, scientific and technical activities",industry
+72,Scientific R&D,Scientific research and development,M,Professional services,"Professional, scientific and technical activities",industry
+73,Advertising & market research,Advertising and market research,M,Professional services,"Professional, scientific and technical activities",industry
+74,Other professional,"Other professional, scientific and technical activities",M,Professional services,"Professional, scientific and technical activities",industry
+75,Veterinary,Veterinary activities,M,Professional services,"Professional, scientific and technical activities",industry
+77,Rental & leasing,Rental and leasing activities,N,Admin & support,Administrative and support service activities,industry
+78,Employment agencies,Employment activities,N,Admin & support,Administrative and support service activities,industry
+79,Travel agencies,"Travel agency, tour operator and other reservation service and related activities",N,Admin & support,Administrative and support service activities,industry
+80,Security,Security and investigation activities,N,Admin & support,Administrative and support service activities,industry
+81,Building services & landscaping,Services to buildings and landscape activities,N,Admin & support,Administrative and support service activities,industry
+82,Office & business support,"Office administrative, office support and other business support activities",N,Admin & support,Administrative and support service activities,intermediary
+84,Public administration,Public administration and defence; compulsory social security,O,Public administration,Public administration and defence,industry
+85,Education,Education,P,Education,Education,industry
+86,Health,Human health activities,Q,Health & care,Human health and social work activities,industry
+87,Residential care,Residential care activities,Q,Health & care,Human health and social work activities,industry
+88,Social work,Social work activities without accommodation,Q,Health & care,Human health and social work activities,industry
+90,Arts & entertainment,"Creative, arts and entertainment activities",R,Arts & recreation,"Arts, entertainment and recreation",industry
+91,Libraries & museums,"Libraries, archives, museums and other cultural activities",R,Arts & recreation,"Arts, entertainment and recreation",industry
+92,Gambling,Gambling and betting activities,R,Arts & recreation,"Arts, entertainment and recreation",industry
+93,Sport & recreation,Sports activities and amusement and recreation activities,R,Arts & recreation,"Arts, entertainment and recreation",industry
+94,Membership organisations,Activities of membership organisations,S,Other services,Other service activities,industry
+95,Repair of goods,Repair of computers and personal and household goods,S,Other services,Other service activities,industry
+96,Personal services,Other personal service activities,S,Other services,Other service activities,industry
+97,Households as employers,Activities of households as employers of domestic personnel,T,Households,Activities of households,not_industry
+98,Households own use,Undifferentiated goods- and services-producing activities of private households for own use,T,Households,Activities of households,not_industry
+99,Extraterritorial,Activities of extraterritorial organisations and bodies,U,Extraterritorial,Activities of extraterritorial organisations and bodies,not_industry

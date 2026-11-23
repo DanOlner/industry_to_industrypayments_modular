@@ -1,0 +1,11 @@
+drawing,load,links,script_ms,frames_per_sec
+"canvas, one fill per link","top 500 net",500,1.7,61
+"canvas, one path per colour and opacity step","top 500 net",500,2.9,60
+"svg paths","top 500 net",500,5.2,60
+"canvas, one fill per link","all links, both directions",3152,3.1,60
+"canvas, one path per colour and opacity step","all links, both directions",3157,65.9,15
+"svg paths","all links, both directions",3157,23.6,35
+"canvas, one fill per link","all links, both directions, moving dots",3152,4.3,59
+"canvas, one fill per link","x5 (about 16,000 links)",15785,17.6,18
+"canvas, one fill per link","x15 (about 47,000 links)",47355,41.7,6
+"canvas, one fill per link","x35 (about 110,000 links)",110320,225.1,3

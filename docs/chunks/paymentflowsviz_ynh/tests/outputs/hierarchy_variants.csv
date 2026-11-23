@@ -1,0 +1,9 @@
+measure,hidden,intermediaries,divisions,F0,null_F0_mean,null_F0_p05,up_share,net_share,levels_span
+n,held,in,72,0.67,0.933,0.909,0.755,0.579,2.22
+n,held,out,68,0.638,0.925,0.898,0.767,0.605,2.27
+n,published,in,72,0.669,0.93,0.906,0.758,0.58,2.23
+n,published,out,68,0.639,0.923,0.893,0.765,0.606,2.28
+value,held,in,81,0.773,0.914,0.893,0.7,0.524,1.39
+value,held,out,77,0.743,0.898,0.875,0.712,0.552,1.51
+value,published,in,81,0.746,0.905,0.884,0.709,0.525,1.57
+value,published,out,77,0.716,0.887,0.859,0.731,0.557,1.64

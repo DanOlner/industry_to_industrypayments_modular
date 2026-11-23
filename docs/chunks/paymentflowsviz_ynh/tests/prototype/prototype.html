@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Y&amp;H payment flows: layout prototype</title>
+<!--
+  A rough test page, not the finished visualisation. It exists to try out, on the real data:
+    - three layouts (supplier order, hybrid, connections) and section-group columns
+    - one highlight "lens" at a time (a sector group or an industrial strategy sector)
+    - halos for payments to and from the rest of the UK
+    - stepping and playing through 93 months on a 2D canvas, with a draw-time read-out
+  Opens straight from disk. Every control can also be set in the address bar, for example
+    prototype.html?layout=order&cols=group&m=80&top=600&lens=is8:Advanced manufacturing&ext=halo
+-->
+<style>
+  :root { --surface:#fcfcfb; --plane:#f9f9f7; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7; --with:#2a78d6; --against:#eb6834; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--plane); }
+  header { padding: 10px 16px 0; }
+  h1 { font-size: 16px; margin: 0 0 2px; }
+  p.sub { margin: 0 0 8px; color: var(--ink2); }
+  .controls { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 6px 16px; }
+  .controls label { color: var(--ink2); display: inline-flex; align-items: center; gap: 4px; }
+  select, button, input { font: inherit; }
+  button { border: 1px solid var(--axis); background: var(--surface); border-radius: 4px; padding: 2px 9px; cursor: pointer; }
+  .time { display: flex; align-items: center; gap: 8px; padding: 2px 16px 6px; }
+  .time input[type=range] { flex: 1; }
+  #monthLabel { font-weight: 600; min-width: 9ch; font-variant-numeric: tabular-nums; }
+  #wrap { position: relative; margin: 0 16px 8px; background: var(--surface); border: 1px solid var(--grid); border-radius: 6px; overflow: hidden; }
+  canvas { display: block; width: 100%; }
+  #tip { position: absolute; pointer-events: none; background: #fff; border: 1px solid var(--axis); border-radius: 4px; padding: 6px 8px; max-width: 300px; font-size: 12px; line-height: 1.35; display: none; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  #tip b { font-weight: 600; } #tip .m { color: var(--ink2); }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 0 16px 10px; color: var(--ink2); }
+  .sw { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+  #perf { font-variant-numeric: tabular-nums; color: var(--muted); margin-left: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Payments between Yorkshire and the Humber's industries, month by month (prototype)</h1>
+  <p class="sub">Business-to-business payments where both sides are registered in the region. Buyers sit higher, suppliers lower. Hidden months are held at the cell's average published month.</p>
+</header>
+<div class="controls">
+  <label>Layout <select id="layout"><option value="order">Supplier order</option><option value="hybrid">Hybrid</option><option value="force">Connections</option></select></label>
+  <label>Columns <select id="cols"><option value="free">Free</option><option value="group">By sector group</option><option value="paygroup">By payment group</option></select></label>
+  <label>Measure <select id="measure"><option value="value">Value (£)</option><option value="count">Number of payments</option></select></label>
+  <label>Links <select id="net"><option value="net">Net per pair</option><option value="gross">Both directions</option></select></label>
+  <label>Show top <input id="top" type="number" min="50" max="3210" step="50" value="500" style="width:6ch"> links</label>
+  <label>Highlight <select id="lens"></select></label>
+  <label>Rest of UK <select id="ext"><option value="off">Off</option><option value="ring">Ring (share)</option><option value="halo">Halo (scale)</option></select></label>
+  <label><input id="smooth" type="checkbox" checked> 3-month average</label>
+  <label><input id="share" type="checkbox"> As share of the month</label>
+  <label><input id="dots" type="checkbox"> Dots (1 per 100 payments)</label>
+  <label><input id="inter" type="checkbox"> Include intermediaries</label>
+  <label><input id="hulls" type="checkbox"> Outline payment groups</label>
+  <span id="perf"></span>
+</div>
+<div class="time">
+  <button id="play">Play</button><button id="prev" aria-label="Previous month">&lsaquo;</button><button id="next" aria-label="Next month">&rsaquo;</button>
+  <span id="monthLabel"></span>
+  <input id="month" type="range" min="0" max="92" step="1" value="92" aria-label="Month">
+</div>
+<div id="wrap"><canvas id="c"></canvas><div id="tip"></div></div>
+<div class="legend">
+  <span><span class="sw" style="background:var(--with)"></span>Money runs down the order, buyer to supplier</span>
+  <span><span class="sw" style="background:var(--against)"></span>Money runs up the order</span>
+  <span>Link is widest at the paying end; its width is the amount. Each dot is 100 payments that month, so a wide link with few dots is a few large payments and a thin crowded one is many small ones. Dashed: this month is hidden and held at an average.</span>
+  <span>Circle area: payments made and received inside the region. Ring: the dark arc at the top is the share of the sector's income that comes from the rest of the UK, the arc at the bottom the share of its spending that goes there. Halo: the same two flows as areas, on the circle's scale.</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="ynh_flows.js"></script>
+<script>
+(() => {
+  const D = window.YNH_FLOWS, NM = D.months.length, NL = D.links.supplier.length;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const C = { surface: css('--surface'), ink: css('--ink'), ink2: css('--ink2'), muted: css('--muted'), grid: css('--grid'), axis: css('--axis'), withc: css('--with'), against: css('--against') };
+
+  // ---- Sector groups (columns and one of the highlight lenses) ----
+  const GROUPS = ['Primary & utilities', 'Manufacturing', 'Construction', 'Trade & transport', 'Business services', 'Public services', 'Hospitality, arts & other'];
+  const groupOf = s => 'ABDE'.includes(s) ? GROUPS[0] : s === 'C' ? GROUPS[1] : s === 'F' ? GROUPS[2] : 'GH'.includes(s) ? GROUPS[3]
+    : 'JKLMN'.includes(s) ? GROUPS[4] : 'OPQ'.includes(s) ? GROUPS[5] : GROUPS[6];
+  const NOGROUP = 'Not in a group', PAYGROUPS = [...D.pay_groups, NOGROUP];   // payment groups: core members only (12_consensus_groups.R)
+  const nodes = D.nodes.map((n, i) => ({ ...n, i, group: groupOf(n.section), paygroup: n.pay_group || NOGROUP }));
+  const IS8 = [...new Set(nodes.flatMap(n => n.is8.map(d => d.name)))].sort();
+
+  // ---- Controls, readable from the address bar ----
+  const q = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+  const lensSel = $('lens');
+  lensSel.innerHTML = '<option value="none">None</option><optgroup label="Sector group">' + GROUPS.map(g => `<option value="group:${g}">${g}</option>`).join('') +
+    '</optgroup><optgroup label="Payment group">' + D.pay_groups.map(g => `<option value="pay:${g}">${g}</option>`).join('') +
+    '</optgroup><optgroup label="Industrial strategy"><option value="is8:any">Any industrial strategy sector</option>' + IS8.map(g => `<option value="is8:${g}">${g}</option>`).join('') + '</optgroup>';
+  const S = { layout: q.get('layout') || 'order', cols: q.get('cols') || 'free', measure: q.get('measure') || 'value', net: q.get('net') || 'net',
+              top: +(q.get('top') || 500), lens: q.get('lens') || 'none', ext: q.get('ext') || 'off', smooth: q.get('smooth') !== '0',
+              share: q.get('share') === '1', dots: q.get('dots') === '1', t: q.has('m') ? +q.get('m') : NM - 1, mult: +(q.get('mult') || 1),
+              renderer: q.get('renderer') || 'canvas', batch: q.get('batch') === '1',
+              inter: q.get('inter') === '1', hulls: q.get('hulls') === '1', dotUnit: +(q.get('dotunit') || 100) };   // renderer: canvas | svg (links only); batch=1: one fill per colour and opacity step (tested, and slower)
+  for (const k of ['layout', 'cols', 'measure', 'net', 'top', 'lens', 'ext']) { $(k).value = S[k]; $(k).addEventListener('change', e => { S[k] = k === 'top' ? +e.target.value : e.target.value; if (k === 'layout' || k === 'cols') moveTo(); else draw(); }); }
+  for (const k of ['smooth', 'share', 'dots', 'inter', 'hulls']) { $(k).checked = S[k]; $(k).addEventListener('change', e => { S[k] = e.target.checked; if (k === 'dots') loop(); if (k === 'inter') { setActive(); moveTo(true); } else draw(); }); }
+
+  // ---- Data as flat arrays: [measure][smoothed? 1 : 0][link * NM + month] ----
+  const flat = (rows, smooth) => { const a = new Float32Array(NL * NM); rows.forEach((r, k) => { for (let m = 0; m < NM; m++) a[k * NM + m] = smooth ? (r[m] + r[Math.max(0, m - 1)] + r[Math.max(0, m - 2)]) / 3 : r[m]; }); return a; };
+  const M = { value: [flat(D.links.value, false), flat(D.links.value, true)], count: [flat(D.links.count, false), flat(D.links.count, true)] };
+  const sup = Int16Array.from(D.links.supplier), buy = Int16Array.from(D.links.buyer), basis = D.links.basis;
+  const key = (a, b) => a * 1000 + b, idx = new Map(); for (let k = 0; k < NL; k++) idx.set(key(sup[k], buy[k]), k);
+  const rev = Int32Array.from({ length: NL }, (_, k) => idx.has(key(buy[k], sup[k])) ? idx.get(key(buy[k], sup[k])) : -1);
+  // reference link size, fixed over time so widths can be compared between months
+  const ref = { value: d3.quantile(Array.from(M.value[1]).filter(v => v > 0).sort(d3.ascending), 0.9995), count: d3.quantile(Array.from(M.count[1]).filter(v => v > 0).sort(d3.ascending), 0.9995) };
+  // which divisions and links are switched in (the four intermediaries are optional), and the totals that follow
+  let act, lact, monthTotal, meanTotal, wholeTotal, nodeRef, lev;
+  const L = d => S.inter ? d.level_all : d.level;      // each view uses the levels worked out on its own set of divisions
+  function setActive() {
+    act = Uint8Array.from(nodes, d => (d.role === 'industry' || S.inter) ? 1 : 0);
+    lact = Uint8Array.from({ length: NL }, (_, k) => (act[sup[k]] && act[buy[k]]) ? 1 : 0);
+    const tot = a => Float64Array.from({ length: NM }, (_, m) => { let t = 0; for (let k = 0; k < NL; k++) if (lact[k]) t += a[k * NM + m]; return t; });
+    monthTotal = { value: [tot(M.value[0]), tot(M.value[1])], count: [tot(M.count[0]), tot(M.count[1])] };
+    meanTotal = { value: d3.mean(monthTotal.value[0]), count: d3.mean(monthTotal.count[0]) };
+    wholeTotal = new Float64Array(nodes.length);
+    for (let k = 0; k < NL; k++) if (lact[k]) { let t = 0; for (let m = 0; m < NM; m++) t += M.value[0][k * NM + m]; wholeTotal[sup[k]] += t; wholeTotal[buy[k]] += t; }
+    nodeRef = d3.max(wholeTotal) / NM;
+    lev = d3.extent(nodes.filter(d => act[d.i]), L);
+  }
+
+  // ---- Canvas ----
+  const canvas = $('c'), ctx = canvas.getContext('2d'), wrap = $('wrap');
+  let W = 1280, H = 800, dpr = 1;
+  const pad = { l: 64, r: 150, t: 46, b: 30 };
+  function resize() { W = wrap.clientWidth; H = Math.max(620, Math.min(900, Math.round(W * 0.62))); dpr = window.devicePixelRatio || 1; canvas.width = W * dpr; canvas.height = H * dpr; canvas.style.height = H + 'px'; }
+  const rNode = total => 3 + 30 * Math.sqrt(total / nodeRef);       // px radius for a monthly inside total (GBP thousands)
+
+  // ---- Layouts: computed once each, then held still while time moves ----
+  const layouts = {};
+  function computeLayout(mode, cols) {
+    const y = d3.scaleLinear().domain(lev).range([H - pad.b - 24, pad.t + 24]);
+    const banded = cols !== 'free', colOf = d => cols === 'paygroup' ? d.paygroup : d.group;
+    const gx = d3.scalePoint().domain(cols === 'paygroup' ? PAYGROUPS : GROUPS).range([pad.l, W - pad.r]).padding(0.55);
+    const rnd = d3.randomLcg(7);
+    const base = layouts[lkey('order', cols)];
+    const sn = nodes.filter(d => act[d.i]).map(d => ({ i: d.i, level: L(d), col: colOf(d), r: rNode(wholeTotal[d.i] / NM),
+      x: base ? base[d.i].x : (banded ? gx(colOf(d)) : pad.l + rnd() * (W - pad.l - pad.r)), y: base ? base[d.i].y : y(L(d)) }));
+    // pull strength. Supplier order: the pair's two-way total as a share of the smaller partner's flows.
+    // Hybrid and connections: affinity, the pair's payments over what the two sectors' sizes alone would
+    // predict, so the biggest sectors do not drag everything to the middle (see 08_clusters.R).
+    const pairs = new Map(), recvTot = new Float64Array(nodes.length), paidTot = new Float64Array(nodes.length); let grand = 0;
+    for (let k = 0; k < NL; k++) { if (!lact[k]) continue; const a = Math.min(sup[k], buy[k]), b = Math.max(sup[k], buy[k]); let t = 0; for (let m = 0; m < NM; m++) t += M.value[0][k * NM + m];
+      pairs.set(key(a, b), (pairs.get(key(a, b)) || 0) + t); recvTot[sup[k]] += t; paidTot[buy[k]] += t; grand += t; }
+    const sl = [];
+    for (const [kk, t] of pairs) { const a = Math.floor(kk / 1000), b = kk % 1000;
+      if (mode === 'order') { const s = t / Math.min(wholeTotal[a], wholeTotal[b]); if (s > 0.03) sl.push({ source: a, target: b, s }); }
+      else { const aff = t / ((recvTot[a] * paidTot[b] + recvTot[b] * paidTot[a]) / grand); if (t > 1000 && aff > 1.5) sl.push({ source: a, target: b, s: Math.min(1, (aff - 1) / 8) * 0.45 }); } }
+    const sim = d3.forceSimulation(sn).randomSource(rnd)
+      .force('link', d3.forceLink(sl).id(d => d.i).strength(l => Math.min(1, l.s * 2.2) * (mode === 'order' ? 0.25 : 0.7)).distance(l => 50 + 130 * (1 - Math.min(1, l.s * 2))))
+      .force('charge', d3.forceManyBody().strength(mode === 'order' ? (banded ? -60 : -420) : -260))
+      .force('collide', d3.forceCollide(d => d.r + (mode === 'order' ? 7 : 10)).iterations(3))
+      .force('x', d3.forceX(d => banded ? gx(d.col) : (pad.l + W - pad.r) / 2).strength(banded ? 0.6 : mode === 'force' ? 0.05 : 0.012))
+      .force('y', d3.forceY(d => mode === 'force' ? (pad.t + H - pad.b) / 2 : y(d.level)).strength(mode === 'order' ? 1 : mode === 'hybrid' ? 0.35 : 0.07))
+      .stop();
+    for (let i = 0; i < 600; i++) {
+      sim.tick();
+      for (const d of sn) { if (mode === 'order') { d.y = y(d.level); d.vy = 0; } d.x = Math.max(pad.l, Math.min(W - pad.r, d.x)); d.y = Math.max(pad.t, Math.min(H - pad.b, d.y)); }
+    }
+    if (!banded) {                                 // stretch the result to fill the frame (sideways only for the supplier order)
+      const ex = d3.extent(sn, d => d.x), ey = d3.extent(sn, d => d.y), fx = d3.scaleLinear().domain(ex).range([pad.l + 30, W - pad.r - 10]), fy = d3.scaleLinear().domain(ey).range([pad.t + 24, H - pad.b - 24]);
+      for (const d of sn) { d.x = fx(d.x); if (mode !== 'order') d.y = fy(d.y); }
+    }
+    const out = nodes.map(() => ({ x: -200, y: -200 })); for (const d of sn) out[d.i] = { x: d.x, y: d.y };   // switched-out divisions are parked off screen
+    return out;
+  }
+  const lkey = (mode, cols) => [mode, cols, S.inter ? 'all' : 'core'].join('|');
+  function layoutFor(mode, cols) { const k = lkey(mode, cols); if (!layouts[k]) { if (mode !== 'order' && !layouts[lkey('order', cols)]) layouts[lkey('order', cols)] = computeLayout('order', cols); layouts[k] = computeLayout(mode, cols); } return layouts[k]; }
+  let pos = null, tween = null;
+  function moveTo(instant) {
+    const target = layoutFor(S.layout, S.cols);
+    if (instant || !pos) { pos = target.map(p => ({ ...p })); geoDirty = true; draw(); return; }
+    const from = pos.map(p => ({ ...p })), t0 = performance.now(); tween = true;
+    (function step(now) { const u = Math.min(1, (now - t0) / 700), e = d3.easeCubicInOut(u); pos = from.map((p, i) => ({ x: p.x + (target[i].x - p.x) * e, y: p.y + (target[i].y - p.y) * e })); geoDirty = true; draw(); if (u < 1) requestAnimationFrame(step); else tween = false; })(t0);
+  }
+
+  // ---- Values at a (possibly fractional) month ----
+  const cur = new Float32Array(NL), shown = new Float32Array(NL), payNow = new Float32Array(NL), order = new Uint16Array(NL);
+  const paid = new Float64Array(nodes.length), recv = new Float64Array(nodes.length);
+  function valuesAt(t) {
+    const a = M[S.measure][S.smooth ? 1 : 0], m0 = Math.floor(t), m1 = Math.min(NM - 1, m0 + 1), f = t - m0;
+    let scale = 1; if (S.share) { const tt = monthTotal[S.measure][S.smooth ? 1 : 0]; scale = meanTotal[S.measure] / (tt[m0] * (1 - f) + tt[m1] * f); }
+    paid.fill(0); recv.fill(0);
+    const cnt = M.count[S.smooth ? 1 : 0];
+    for (let k = 0; k < NL; k++) { const on = lact[k], v = on ? (a[k * NM + m0] * (1 - f) + a[k * NM + m1] * f) * scale : 0; cur[k] = v; recv[sup[k]] += v; paid[buy[k]] += v;
+      payNow[k] = on ? cnt[k * NM + m0] * (1 - f) + cnt[k * NM + m1] * f : 0; }   // payments in this direction, for the dots
+    for (let k = 0; k < NL; k++) shown[k] = S.net === 'net' ? (rev[k] < 0 ? cur[k] : Math.max(0, cur[k] - cur[rev[k]])) : cur[k];
+    return scale;
+  }
+  const extAt = (arr, t) => { const m0 = Math.floor(t), m1 = Math.min(NM - 1, m0 + 1), f = t - m0; return arr[m0] * (1 - f) + arr[m1] * f; };
+
+  // ---- Lens ----
+  function lensShare(d) {                          // 0 = not in the lens, 0 to 1 = share of the division's jobs covered
+    if (S.lens === 'none') return null;
+    const [kind, name] = [S.lens.slice(0, S.lens.indexOf(':')), S.lens.slice(S.lens.indexOf(':') + 1)];
+    if (kind === 'group') return d.group === name ? 1 : 0;
+    if (kind === 'pay') return d.paygroup === name ? 1 : 0;
+    const hit = d.is8.filter(e => name === 'any' || e.name === name);
+    return hit.length ? Math.min(1, Math.max(...hit.map(e => e.share))) : 0;
+  }
+
+  // ---- Link geometry: fixed while the layout is still, so it is worked out once per layout ----
+  const NSEG = 8, geo = new Float32Array(NL * (NSEG + 1) * 4), ctrl = new Float32Array(NL * 3);   // geo: x, y, normal x, normal y; ctrl: control x, y, length
+  let geoDirty = true;
+  function buildGeo() {
+    for (let k = 0; k < NL; k++) {
+      const a = pos[buy[k]], z = pos[sup[k]], dx = z.x - a.x, dy = z.y - a.y, len = Math.hypot(dx, dy) || 1;
+      const cx = (a.x + z.x) / 2 - dy / len * 0.16 * len, cy = (a.y + z.y) / 2 + dx / len * 0.16 * len;
+      ctrl[k * 3] = cx; ctrl[k * 3 + 1] = cy; ctrl[k * 3 + 2] = len;
+      for (let i = 0; i <= NSEG; i++) {
+        const u = i / NSEG, v = 1 - u, o = (k * (NSEG + 1) + i) * 4;
+        const tx = 2 * v * (cx - a.x) + 2 * u * (z.x - cx), ty = 2 * v * (cy - a.y) + 2 * u * (z.y - cy), tl = Math.hypot(tx, ty) || 1;
+        geo[o] = v * v * a.x + 2 * v * u * cx + u * u * z.x; geo[o + 1] = v * v * a.y + 2 * v * u * cy + u * u * z.y; geo[o + 2] = -ty / tl; geo[o + 3] = tx / tl;
+      }
+    }
+    geoDirty = false;
+  }
+  // a tapered ribbon: full width at the paying end, a quarter of it at the receiving end
+  function ribbon(c, k, w) {
+    const o = k * (NSEG + 1) * 4;
+    for (let i = 0; i <= NSEG; i++) { const p = o + i * 4, hw = w * (1 - 0.75 * i / NSEG) / 2; if (i) c.lineTo(geo[p] + geo[p + 2] * hw, geo[p + 1] + geo[p + 3] * hw); else c.moveTo(geo[p] + geo[p + 2] * hw, geo[p + 1] + geo[p + 3] * hw); }
+    for (let i = NSEG; i >= 0; i--) { const p = o + i * 4, hw = w * (1 - 0.75 * i / NSEG) / 2; c.lineTo(geo[p] - geo[p + 2] * hw, geo[p + 1] - geo[p + 3] * hw); }
+    c.closePath();
+  }
+  // the same ribbons as SVG paths, to compare the two ways of drawing
+  let svgEl = null, svgPaths = null;
+  function drawSvg(list) {
+    if (!svgEl) { svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svgEl.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none'; wrap.appendChild(svgEl);
+      svgPaths = Array.from({ length: NL }, () => svgEl.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path'))); }
+    svgEl.style.display = ''; svgEl.setAttribute('width', W); svgEl.setAttribute('height', H);
+    const used = new Uint8Array(NL), path = { d: '', moveTo(x, y) { this.d += `M${x.toFixed(1)},${y.toFixed(1)}`; }, lineTo(x, y) { this.d += `L${x.toFixed(1)},${y.toFixed(1)}`; }, closePath() { this.d += 'Z'; } };
+    for (const [k, w, down, alpha] of list) { path.d = ''; ribbon(path, k, w); const el = svgPaths[k]; el.setAttribute('d', path.d); el.setAttribute('fill', down ? C.withc : C.against); el.setAttribute('fill-opacity', alpha); el.style.display = ''; used[k] = 1; svgEl.appendChild(el); }
+    for (let k = 0; k < NL; k++) if (!used[k]) svgPaths[k].style.display = 'none';
+  }
+
+  // ---- Draw ----
+  let hover = -1, phase = 0, lastMs = 0;
+  const fmt = v => S.measure === 'count' ? d3.format(',.0f')(v) : v >= 1e6 ? '£' + d3.format('.2f')(v / 1e6) + 'bn' : v >= 1e3 ? '£' + d3.format('.1f')(v / 1e3) + 'm' : '£' + d3.format(',.0f')(v) + 'k';
+  function draw() {
+    const t0 = performance.now(), t = S.t;
+    const scale = valuesAt(t);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineCap = 'butt';
+    const P = pos, m0 = Math.round(t);
+    const share = nodes.map(lensShare), lensOn = S.lens !== 'none';
+    const live = nodes.filter(n => act[n.i]);
+    const toValue = S.measure === 'value' ? 1 : meanTotal.value / meanTotal.count;   // counts are sized on the value scale
+    const rad = nodes.map(d => rNode((paid[d.i] + recv[d.i]) * toValue));
+
+    // axis cues
+    ctx.font = '11px system-ui, sans-serif'; ctx.fillStyle = C.muted; ctx.textBaseline = 'middle';
+    if (S.layout !== 'force') {
+      ctx.save(); ctx.translate(16, H / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText('more of a supplier   ←   position in the order   →   more of a buyer', 0, 0); ctx.restore();
+    }
+    if (S.cols !== 'free') { const names = S.cols === 'paygroup' ? PAYGROUPS : GROUPS, gx = d3.scalePoint().domain(names).range([pad.l, W - pad.r]).padding(0.55); ctx.textAlign = 'center'; ctx.fillStyle = C.ink2; names.forEach(g => ctx.fillText(g, gx(g), 16)); }
+
+    // payment groups as soft outlines round their core members
+    if (S.hulls) for (const gname of D.pay_groups) {
+      const pts = live.filter(n => n.pay_group === gname).map(n => [P[n.i].x, P[n.i].y]); if (pts.length < 3) continue;
+      const hull = d3.polygonHull(pts);
+      ctx.beginPath(); hull.forEach((p, i) => ctx[i ? 'lineTo' : 'moveTo'](p[0], p[1])); ctx.closePath();
+      ctx.lineJoin = 'round'; ctx.lineWidth = 50; ctx.strokeStyle = ctx.fillStyle = '#efeee8'; ctx.fill(); ctx.stroke(); ctx.lineJoin = 'miter';
+      const top = hull.reduce((p, c) => c[1] < p[1] ? c : p);
+      ctx.font = '600 12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = C.ink2; ctx.fillText(gname, top[0], Math.max(12, top[1] - 34)); ctx.font = '11px system-ui, sans-serif';
+    }
+
+    // halos for the rest of the UK (area on the same scale as the node)
+    if (S.ext === 'halo' && S.measure === 'value') {
+      const c = Math.PI * 30 * 30 / nodeRef;       // px^2 per GBP thousand (matches rNode without its 3px floor)
+      for (const d of live) {
+        const p = P[d.i], r = rad[d.i], on = !lensOn || share[d.i] > 0;
+        const rs = Math.sqrt(r * r + 2 * c * extAt(d.ext_sell, t) * scale / Math.PI), rb = Math.sqrt(r * r + 2 * c * extAt(d.ext_buy, t) * scale / Math.PI);
+        ctx.fillStyle = on ? 'rgba(82,81,78,0.10)' : 'rgba(82,81,78,0.04)'; ctx.strokeStyle = on ? 'rgba(82,81,78,0.28)' : 'rgba(82,81,78,0.10)'; ctx.lineWidth = 0.75;
+        ctx.beginPath(); ctx.arc(p.x, p.y, rs, Math.PI, 2 * Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke();   // upper half: received from outside
+        ctx.beginPath(); ctx.arc(p.x, p.y, rb, 0, Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke();             // lower half: paid to outside
+      }
+    }
+
+    // links: the top N this month, smallest first so the big ones sit on top
+    for (let k = 0; k < NL; k++) order[k] = k;
+    const ord = Array.from(order).sort((a, b) => shown[b] - shown[a]).slice(0, Math.min(S.top, NL)).filter(k => shown[k] > 0).reverse();
+    const refv = ref[S.measure];
+    if (geoDirty) buildGeo();
+    const ALPHAS = [0.04, 0.06, 0.2, 0.32, 0.45, 0.6, 0.85], step = a => { let j = 0; while (j < ALPHAS.length - 1 && ALPHAS[j + 1] <= a + 1e-9) j++; return j; };
+    const buckets = Array.from({ length: 2 * ALPHAS.length }, () => []);
+    const svgD = S.renderer === 'svg' ? [] : null;
+    for (let rep = 0; rep < S.mult; rep++) for (const k of ord) {
+      const s = sup[k], b = buy[k];                                 // money runs from the buyer (b) to the supplier (s)
+      const w = 0.5 + 13 * Math.sqrt(shown[k] / refv);
+      const down = L(nodes[b]) > L(nodes[s]);
+      const touches = hover < 0 ? (!lensOn || share[s] > 0 || share[b] > 0) : (s === hover || b === hover);
+      const alpha = hover >= 0 ? (touches ? 0.85 : 0.04) : lensOn ? (touches ? 0.6 : 0.06) : 0.2 + 0.4 * Math.min(1, w / 8);
+      if (svgD) { svgD.push([k, w, down, alpha]); continue; }
+      if (S.batch) { buckets[(down ? 0 : 1) * ALPHAS.length + step(alpha)].push(k, w); continue; }
+      ctx.beginPath(); ribbon(ctx, k, w); ctx.globalAlpha = alpha; ctx.fillStyle = down ? C.withc : C.against; ctx.fill();
+    }
+    if (S.batch && !svgD) for (let j = 0; j < ALPHAS.length; j++) for (let c = 0; c < 2; c++) {     // faint first, both colours at each step
+      const bk = buckets[c * ALPHAS.length + j]; if (!bk.length) continue;
+      ctx.beginPath(); for (let i = 0; i < bk.length; i += 2) ribbon(ctx, bk[i], bk[i + 1]);
+      ctx.globalAlpha = ALPHAS[j]; ctx.fillStyle = c ? C.against : C.withc; ctx.fill();
+    }
+    if (svgD) drawSvg(svgD); else if (svgEl) svgEl.style.display = 'none';
+    for (const k of ord) {                                          // overlays
+      const w = 0.5 + 13 * Math.sqrt(shown[k] / refv);
+      const s = sup[k], b = buy[k], a = P[b], z = P[s], g = k * 3, down = L(nodes[b]) > L(nodes[s]);
+      const touches = hover < 0 ? (!lensOn || share[s] > 0 || share[b] > 0) : (s === hover || b === hover); if (!touches) continue;
+      if (basis[k][m0] === 'h' && w > 1.2) {                        // held month: a dashed surface-coloured line down the middle
+        ctx.globalAlpha = 0.9; ctx.setLineDash([3, 4]); ctx.strokeStyle = C.surface; ctx.lineWidth = Math.max(0.8, w * 0.3);
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo(ctrl[g], ctrl[g + 1], z.x, z.y); ctx.stroke(); ctx.setLineDash([]);
+      }
+      const nd = S.dots ? Math.round(payNow[k] / S.dotUnit) : 0;   // one dot per so many payments, travelling with the money
+      if (nd > 0) {
+        ctx.globalAlpha = 0.95; ctx.fillStyle = down ? '#184f95' : '#a8431a';
+        const len = ctrl[g + 2], cx = ctrl[g], cy = ctrl[g + 1], r = 1.6;
+        ctx.beginPath();
+        for (let j = 0; j < nd; j++) { const u = ((phase * 30 / len) + j / nd) % 1, v = 1 - u, x = v * v * a.x + 2 * v * u * cx + u * u * z.x, y = v * v * a.y + 2 * v * u * cy + u * u * z.y;
+          ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832); }
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // nodes
+    for (const d of live) {
+      const p = P[d.i], r = rad[d.i], sh = share[d.i];
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832);
+      ctx.fillStyle = !lensOn ? '#d9d7ce' : sh > 0 ? '#eceae3' : '#f1f0ea'; ctx.fill();
+      if (lensOn && sh > 0) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.arc(p.x, p.y, r, -Math.PI / 2, -Math.PI / 2 + 6.2832 * sh); ctx.closePath(); ctx.fillStyle = C.ink; ctx.fill(); }
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.lineWidth = d.i === hover ? 2 : 1; ctx.strokeStyle = lensOn && sh === 0 ? C.axis : C.ink2; ctx.stroke();
+    }
+    // ring gauge: how much of this sector's money crosses the regional border (upper half: income; lower half: spending)
+    if (S.ext === 'ring' && S.measure === 'value') {
+      for (const d of live) {
+        const p = P[d.i], r = rad[d.i] + 3.5, on = !lensOn || share[d.i] > 0, es = extAt(d.ext_sell, t) * scale, eb = extAt(d.ext_buy, t) * scale;
+        const fs = es / (es + recv[d.i] || 1), fb = eb / (eb + paid[d.i] || 1);
+        ctx.lineWidth = 2.5; ctx.globalAlpha = on ? 1 : 0.35;
+        ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.stroke();
+        ctx.strokeStyle = C.ink2;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, -Math.PI / 2 - Math.PI * fs / 2, -Math.PI / 2 + Math.PI * fs / 2); ctx.stroke();   // centred on the top
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, Math.PI / 2 - Math.PI * fb / 2, Math.PI / 2 + Math.PI * fb / 2); ctx.stroke();     // centred on the bottom
+        ctx.globalAlpha = 1;
+      }
+    }
+    // labels: biggest first, skipped where they would collide
+    ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const boxes = [], byR = live.slice().sort((a, b) => (share[b.i] > 0) - (share[a.i] > 0) || rad[b.i] - rad[a.i]);
+    for (const d of byR) {
+      const p = P[d.i], r = rad[d.i] + (S.ext === 'ring' ? 4 : 0), w = ctx.measureText(d.short).width, bx = { x0: p.x + r + 3, y0: p.y - 7, x1: p.x + r + 3 + w, y1: p.y + 7 };
+      if (d.i !== hover && boxes.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0)) continue;
+      boxes.push(bx); ctx.lineWidth = 3; ctx.strokeStyle = C.surface; ctx.strokeText(d.short, bx.x0, p.y);
+      ctx.fillStyle = lensOn && share[d.i] === 0 && d.i !== hover ? C.muted : C.ink; ctx.fillText(d.short, bx.x0, p.y);
+    }
+    $('monthLabel').textContent = d3.timeFormat('%b %Y')(d3.timeParse('%Y-%m')(D.months[Math.round(t)]));
+    lastMs = performance.now() - t0; $('perf').textContent = `${ord.length * S.mult} links drawn in ${lastMs.toFixed(1)} ms`;
+  }
+
+  // ---- Hover ----
+  canvas.addEventListener('mousemove', e => {
+    const b = canvas.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top; let best = -1, bd = 1e9;
+    nodes.forEach(d => { if (!act[d.i]) return; const dd = Math.hypot(pos[d.i].x - x, pos[d.i].y - y); if (dd < bd && dd < 28) { bd = dd; best = d.i; } });
+    if (best !== hover) { hover = best; draw(); }
+    const tip = $('tip'); if (hover < 0) { tip.style.display = 'none'; return; }
+    const d = nodes[hover], m = Math.round(S.t), mult = S.measure === 'value' ? 1 : 0;
+    const partners = dir => { const a = []; for (let k = 0; k < NL; k++) if ((dir === 'sup' ? buy[k] : sup[k]) === hover && cur[k] > 0) a.push([nodes[dir === 'sup' ? sup[k] : buy[k]].short, cur[k]]); return a.sort((p, q2) => q2[1] - p[1]).slice(0, 3).map(p => `${p[0]} ${fmt(p[1])}`).join('; ') || 'none shown'; };
+    tip.innerHTML = `<b>${d.short}</b> <span class="m">SIC ${d.id}, ${d.section_short}</span><br><span class="m">${d.name}</span><br>` +
+      `Inside the region: pays ${fmt(paid[hover])}, is paid ${fmt(recv[hover])}<br>` +
+      (mult ? `Rest of UK: pays ${fmt(d.ext_buy[m])}, is paid ${fmt(d.ext_sell[m])}<br>` : '') +
+      `<span class="m">Pays most to:</span> ${partners('sup')}<br><span class="m">Is paid most by:</span> ${partners('buy')}` +
+      (d.is8.length ? `<br><span class="m">Industrial strategy:</span> ${d.is8.map(e => e.name + (e.whole ? '' : ` (${Math.round(e.share * 100)}% of jobs)`)).join('; ')}` : '');
+    tip.style.display = 'block'; tip.style.left = Math.min(W - 310, x + 14) + 'px'; tip.style.top = Math.min(H - 150, y + 14) + 'px';
+  });
+  canvas.addEventListener('mouseleave', () => { hover = -1; $('tip').style.display = 'none'; draw(); });
+
+  // ---- Time: step, scrub, play ----
+  const slider = $('month'); slider.max = NM - 1; slider.value = S.t;
+  slider.addEventListener('input', e => { S.t = +e.target.value; draw(); });
+  $('prev').onclick = () => { S.t = Math.max(0, Math.round(S.t) - 1); slider.value = S.t; draw(); };
+  $('next').onclick = () => { S.t = Math.min(NM - 1, Math.round(S.t) + 1); slider.value = S.t; draw(); };
+  let playing = false, raf = 0, lastNow = 0;
+  const MONTHS_PER_SEC = 3;
+  function loop() {
+    cancelAnimationFrame(raf); if (!playing && !S.dots) return;
+    lastNow = performance.now();
+    (function frame(now) { const dt = (now - lastNow) / 1000; lastNow = now; phase += dt;
+      if (playing) { S.t = Math.min(NM - 1, S.t + dt * MONTHS_PER_SEC); slider.value = Math.round(S.t); if (S.t >= NM - 1) { playing = false; $('play').textContent = 'Play'; } }
+      if (!tween) draw(); if (playing || S.dots) raf = requestAnimationFrame(frame); })(lastNow);
+  }
+  $('play').onclick = () => { playing = !playing; if (playing && S.t >= NM - 1) S.t = 0; $('play').textContent = playing ? 'Pause' : 'Play'; loop(); };
+
+  // ---- A hook for the timing script: draw `frames` frames across the whole period, return ms per frame ----
+  window.benchDraw = (frames = 120) => { const ms = []; for (let i = 0; i < frames; i++) { S.t = i / (frames - 1) * (NM - 1); phase += 1 / 60; const t0 = performance.now(); draw(); ms.push(performance.now() - t0); }
+    ms.sort(d3.ascending); return { median: d3.quantile(ms, 0.5), p95: d3.quantile(ms, 0.95), links: +$('perf').textContent.split(' ')[0] }; };
+  window.setState = o => { Object.assign(S, o); if ('inter' in o) setActive(); for (const k of Object.keys(o)) if ($(k)) { if ($(k).type === 'checkbox') $(k).checked = o[k]; else $(k).value = o[k]; } moveTo(true); };
+
+  setActive(); resize(); moveTo(true); if (S.dots) loop();
+  window.addEventListener('resize', () => { resize(); for (const k in layouts) delete layouts[k]; moveTo(true); });
+  document.title += ' ';   // signal to the timing script that the first draw is done
+})();
+</script>
+</body>
+</html>

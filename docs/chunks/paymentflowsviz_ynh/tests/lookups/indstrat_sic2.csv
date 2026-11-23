@@ -1,0 +1,58 @@
+sic2,is8,jobs_in_is8,whole_division,listed_codes,div_jobs,share_of_division_jobs,short,section
+20,Advanced manufacturing,9995,TRUE,20,9995,1,Chemicals,C
+26,Advanced manufacturing,5025,TRUE,26,5025,1,Electronics,C
+27,Advanced manufacturing,6190,TRUE,27 272,6190,1,Electrical equipment,C
+28,Advanced manufacturing,16295,TRUE,28 283,16295,1,Machinery,C
+29,Advanced manufacturing,11185,TRUE,29,11185,1,Motor vehicles,C
+30,Advanced manufacturing,1850,TRUE,30 303,1850,1,Other transport equipment,C
+33,Advanced manufacturing,155,FALSE,3316,9990,0.016,Machinery repair & install,C
+32,Creative,310,FALSE,3212,7975,0.039,Other manufacturing,C
+58,Creative,3025,TRUE,58 5821,3025,1,Publishing,J
+59,Creative,4745,TRUE,59 591 592,4745,1,"Film, TV & music",J
+60,Creative,1150,TRUE,60 602,1150,1,Broadcasting,J
+62,Creative,35300,FALSE,6201 62011 6202,41570,0.849,IT & software,J
+70,Creative,775,FALSE,7021,57495,0.013,Head offices & consultancy,M
+71,Creative,6355,FALSE,7111,49480,0.128,Architecture & engineering,M
+73,Creative,4390,FALSE,731,5735,0.765,Advertising & market research,M
+74,Creative,5990,FALSE,741 742 743,15475,0.387,Other professional,M
+85,Creative,515,FALSE,8552,223080,0.002,Education,P
+90,Creative,8435,TRUE,90,8435,1,Arts & entertainment,R
+91,Creative,4420,FALSE,9101 9102,7630,0.579,Libraries & museums,R
+25,Defence,60,FALSE,254,30305,0.002,Fabricated metal,C
+30,Defence,150,FALSE,304,1850,0.081,Other transport equipment,C
+26,Digital & tech,4865,FALSE,261 262 263 264 26511 26512 26513 26701 268,5025,0.968,Electronics,C
+27,Digital & tech,1715,FALSE,2731 2732 279,6190,0.277,Electrical equipment,C
+46,Digital & tech,3790,FALSE,465,105850,0.036,Wholesale,G
+58,Digital & tech,3025,TRUE,58,3025,1,Publishing,J
+59,Digital & tech,4745,TRUE,59,4745,1,"Film, TV & music",J
+60,Digital & tech,1150,TRUE,60,1150,1,Broadcasting,J
+61,Digital & tech,11240,TRUE,61,11240,1,Telecoms,J
+62,Digital & tech,41570,TRUE,62,41570,1,IT & software,J
+63,Digital & tech,1990,TRUE,63,1990,1,Information services,J
+71,Digital & tech,43125,FALSE,7112 712,49480,0.872,Architecture & engineering,M
+72,Digital & tech,6155,FALSE,721,6310,0.975,Scientific R&D,M
+95,Digital & tech,1840,FALSE,951,3100,0.594,Repair of goods,S
+64,Financial services,33810,TRUE,64 64191 642 643 64301 6499,33810,1,Banking & finance,K
+65,Financial services,8890,TRUE,65 6512 65202,8890,1,Insurance & pensions,K
+66,Financial services,24375,TRUE,66 6611 6612 6621 6622 663,24375,1,Financial support services,K
+20,Foundational industries,9995,TRUE,20,9995,1,Chemicals,C
+23,Foundational industries,9830,FALSE,231 2319 232 233 234 235 236 2399,10835,0.907,"Glass, cement & ceramics",C
+24,Foundational industries,8985,FALSE,241 242 243,10635,0.845,Basic metals,C
+35,Foundational industries,2375,FALSE,3512 3513,7730,0.307,Energy supply,D
+41,Foundational industries,37675,TRUE,41,37675,1,Building construction,F
+42,Foundational industries,17230,TRUE,42,17230,1,Civil engineering,F
+43,Foundational industries,87695,TRUE,43,87695,1,Building trades,F
+52,Foundational industries,3560,FALSE,52101 5222 52241,70485,0.051,Warehousing & transport support,H
+21,Life sciences,3760,TRUE,21,3760,1,Pharmaceuticals,C
+26,Life sciences,50,FALSE,266,5025,0.01,Electronics,C
+32,Life sciences,4695,FALSE,325,7975,0.589,Other manufacturing,C
+72,Life sciences,505,FALSE,7211,6310,0.08,Scientific R&D,M
+69,Professional & business services,54560,TRUE,69 691 692,54560,1,Legal & accounting,M
+70,Professional & business services,57495,TRUE,70 702,57495,1,Head offices & consultancy,M
+71,Professional & business services,49480,TRUE,71,49480,1,Architecture & engineering,M
+72,Professional & business services,6310,TRUE,72,6310,1,Scientific R&D,M
+73,Professional & business services,5735,TRUE,73,5735,1,Advertising & market research,M
+74,Professional & business services,15475,TRUE,74,15475,1,Other professional,M
+77,Professional & business services,12910,TRUE,77,12910,1,Rental & leasing,N
+78,Professional & business services,76800,TRUE,78,76800,1,Employment agencies,N
+82,Professional & business services,40480,TRUE,82,40480,1,Office & business support,N

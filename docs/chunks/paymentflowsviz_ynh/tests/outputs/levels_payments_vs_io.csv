@@ -1,0 +1,77 @@
+g,io,pay_value,pay_count,short,section,diff
+01,0.7,0.65,1.3,Farming,A,-0.05
+02,0.42,0.38,1.54,Forestry,A,-0.03
+03,0.69,0.37,0.37,Fishing,A,-0.31
+05,1.36,,,Coal mining,B,
+06,0.92,,,Oil & gas extraction,B,
+08,0.26,0.34,0.08,Quarrying,B,0.08
+09,0.27,0.54,,Mining support,B,0.27
+10,0.91,1.05,1.19,Food manufacturing,C,0.14
+11,0.98,0.88,0.5,Drinks manufacturing,C,-0.09
+13,0.83,0.63,0.79,Textiles,C,-0.2
+14,1.35,0.66,0.33,Clothing,C,-0.69
+15,1.06,0.94,,Leather,C,-0.11
+16,0.24,0.4,0.94,Wood products,C,0.15
+17,0.47,0.48,0.3,Paper,C,0.02
+18,0.34,0.27,0.47,Printing,C,-0.07
+19,0,0.71,,Coke & refined petroleum,C,0.71
+20,0.47,0.68,1.1,Chemicals,C,0.2
+21,0.94,1.37,2.27,Pharmaceuticals,C,0.43
+22,0.36,0.35,0.92,Rubber & plastics,C,0
+23,0.33,0.64,0.86,"Glass, cement & ceramics",C,0.31
+24,0.32,0.85,1.02,Basic metals,C,0.54
+25,0.34,0.47,1.02,Fabricated metal,C,0.13
+26,0.57,0.99,1.55,Electronics,C,0.42
+27,0.42,0.49,0.63,Electrical equipment,C,0.07
+28,0.63,0.66,1.17,Machinery,C,0.03
+29,0.84,1.23,1.39,Motor vehicles,C,0.38
+30,0.85,0.75,1.54,Other transport equipment,C,-0.1
+31,0.99,0.8,1.14,Furniture,C,-0.19
+32,0.89,0.67,0.91,Other manufacturing,C,-0.22
+33,0.21,0.36,0.68,Machinery repair & install,C,0.15
+35,0.46,0.6,0.17,Energy supply,D,0.14
+36,0.31,0.29,0.1,Water supply,E,-0.01
+37,0.18,0.32,,Sewerage,E,0.13
+38,0.67,0.45,0.56,Waste,E,-0.22
+39,0.32,0.43,0.73,Remediation,E,0.12
+41,0.84,0.64,1.14,Building construction,F,-0.2
+45,0.56,0.52,0.81,Motor trades,G,-0.04
+46,0.49,0.37,0.54,Wholesale,G,-0.12
+47,0.91,1.14,0.97,Retail,G,0.23
+49,0.43,0.34,0.78,Land transport,H,-0.1
+50,1.1,0.58,,Water transport,H,-0.52
+51,0.62,0.87,,Air transport,H,0.25
+52,0.28,0.3,0.7,Warehousing & transport support,H,0.02
+53,0.25,0.37,0.97,Post & courier,H,0.12
+55,0.94,1.19,1.6,Accommodation,I,0.25
+56,1.28,1.24,1.5,Food & drink service,I,-0.04
+58,1.26,0.51,0.43,Publishing,J,-0.75
+59,1.14,0.53,1.28,"Film, TV & music",J,-0.61
+61,0.4,0.28,0.05,Telecoms,J,-0.12
+62,0.35,0.28,0.29,IT & software,J,-0.07
+65,0.32,0,0,Insurance & pensions,K,-0.32
+68,0.84,0.58,0.93,Real estate,L,-0.26
+69,0.09,0.3,0.28,Legal & accounting,M,0.2
+70,0.71,0.83,0.67,Head offices & consultancy,M,0.12
+71,0.48,0.26,0.88,Architecture & engineering,M,-0.22
+72,1.2,1.31,,Scientific R&D,M,0.11
+73,0.35,0.26,0.62,Advertising & market research,M,-0.1
+74,0.33,0.31,0.66,Other professional,M,-0.02
+75,1.15,0.9,0.3,Veterinary,M,-0.24
+77,0.3,0.31,0.46,Rental & leasing,N,0.01
+78,0.03,0.46,1.18,Employment agencies,N,0.43
+79,1.19,0.66,1.29,Travel agencies,N,-0.53
+80,0.33,0.26,0.44,Security,N,-0.06
+81,0.25,0.36,0.59,Building services & landscaping,N,0.11
+84,1.19,0.48,0.03,Public administration,O,-0.7
+85,0.98,1.41,1.62,Education,P,0.43
+86,1.54,1.3,1.27,Health,Q,-0.24
+87,1.45,1.01,1.54,Residential care,Q,-0.44
+90,0.97,0.84,1.31,Arts & entertainment,R,-0.13
+91,1.28,1.31,1.11,Libraries & museums,R,0.03
+92,1.44,1.53,,Gambling,R,0.09
+93,1.4,1.09,1.12,Sport & recreation,R,-0.31
+94,1.11,0.97,1.18,Membership organisations,S,-0.14
+95,0.66,0.41,0.46,Repair of goods,S,-0.25
+96,1.06,0.42,0.93,Personal services,S,-0.64
+97,,,,Households as employers,T,

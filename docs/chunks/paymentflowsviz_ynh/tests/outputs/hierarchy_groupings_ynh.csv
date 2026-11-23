@@ -1,0 +1,4 @@
+grouping,groups,F0,null_F0_mean,up_share,net_share,levels_span
+divisions (84),77,0.743,0.897,0.712,0.552,1.51
+"mixed: divisions in C, F, G, H, M, N; sections elsewhere",59,0.744,0.9,0.712,0.547,1.4
+sections,19,0.881,0.958,0.63,0.333,1.4

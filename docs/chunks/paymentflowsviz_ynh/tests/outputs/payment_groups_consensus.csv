@@ -1,0 +1,78 @@
+sic2,short,section,group,status,firmness,years_with_group,level_value,per_month_m
+46,Wholesale,G,A,core,0.61,7,0.36,188.5
+47,Retail,G,A,core,0.63,8,1.135,133.9
+49,Land transport,H,A,core,0.64,8,0.332,41.8
+62,IT & software,J,A,floating,0.19,1,0.281,25
+52,Warehousing & transport support,H,A,core,0.66,8,0.293,18.1
+31,Furniture,C,A,core,0.67,8,0.799,12.7
+13,Textiles,C,A,core,0.67,8,0.622,8.9
+65,Insurance & pensions,K,A,floating,0.15,0,0,5.8
+61,Telecoms,J,A,floating,0.19,1,0.274,4
+53,Post & courier,H,A,core,0.66,8,0.363,1.2
+95,Repair of goods,S,A,floating,0.46,5,0.402,1.1
+14,Clothing,C,A,core,0.67,8,0.647,0.7
+03,Fishing,A,A,core,0.66,8,0.367,0.6
+50,Water transport,H,A,too small,0.67,8,0.567,0.5
+19,Coke & refined petroleum,C,A,too small,0.61,7,0.702,0.2
+15,Leather,C,A,too small,0.4,4,0.937,0.1
+45,Motor trades,G,B,floating,0.35,4,0.508,34.5
+32,Other manufacturing,C,B,floating,0.59,6,0.668,33.6
+25,Fabricated metal,C,B,core,0.7,8,0.448,32.4
+74,Other professional,M,B,floating,0.42,4,0.308,19.7
+20,Chemicals,C,B,floating,0.51,5,0.665,17.3
+33,Machinery repair & install,C,B,core,0.7,8,0.344,12.9
+71,Architecture & engineering,M,B,core,0.64,7,0.259,12.7
+22,Rubber & plastics,C,B,floating,0.57,5,0.349,12.2
+28,Machinery,C,B,core,0.7,8,0.643,12.2
+29,Motor vehicles,C,B,floating,0.53,6,1.221,11.2
+35,Energy supply,D,B,floating,0.46,6,0.587,7.8
+16,Wood products,C,B,floating,0.53,6,0.393,7.7
+24,Basic metals,C,B,core,0.7,8,0.828,7.2
+27,Electrical equipment,C,B,core,0.65,7,0.465,4.1
+26,Electronics,C,B,core,0.67,7,0.953,1.5
+21,Pharmaceuticals,C,B,floating,0.41,4,1.348,0.6
+30,Other transport equipment,C,B,too small,0.54,6,0.716,0.5
+72,Scientific R&D,M,B,too small,0.52,5,1.3,0.4
+43,Building trades,F,C,core,0.84,8,0.44,80.1
+41,Building construction,F,C,core,0.89,8,0.886,69.3
+77,Rental & leasing,N,C,core,0.72,6,0.308,20.4
+42,Civil engineering,F,C,core,0.89,8,0.65,15.3
+38,Waste,E,C,core,0.87,8,0.444,14.7
+23,"Glass, cement & ceramics",C,C,core,0.87,8,0.638,11.2
+81,Building services & landscaping,N,C,floating,0.52,4,0.37,10.2
+39,Remediation,E,C,core,0.87,8,0.427,3.1
+08,Quarrying,B,C,core,0.88,8,0.34,2.5
+02,Forestry,A,C,too small,0.88,8,0.386,0.5
+37,Sewerage,E,C,too small,0.89,8,0.326,0.3
+68,Real estate,L,D,core,0.67,6,0.585,45.8
+86,Health,Q,D,core,0.75,8,1.296,27.6
+96,Personal services,S,D,core,0.63,7,0.418,24.8
+56,Food & drink service,I,D,floating,0.53,4,1.239,24.6
+85,Education,P,D,core,0.75,8,1.403,21.6
+69,Legal & accounting,M,D,core,0.67,6,0.299,19.3
+87,Residential care,Q,D,core,0.75,8,0.977,8.4
+93,Sport & recreation,R,D,core,0.76,8,1.081,7.9
+55,Accommodation,I,D,core,0.68,6,1.185,6.7
+73,Advertising & market research,M,D,floating,0.54,5,0.254,5
+11,Drinks manufacturing,C,D,floating,0.41,4,0.876,3.8
+80,Security,N,D,floating,0.6,6,0.253,3.5
+88,Social work,Q,D,core,0.75,8,1.104,2.6
+90,Arts & entertainment,R,D,core,0.74,7,0.841,2
+94,Membership organisations,S,D,core,0.75,8,0.958,2
+59,"Film, TV & music",J,D,core,0.64,6,0.544,1.2
+79,Travel agencies,N,D,core,0.68,6,0.656,0.8
+51,Air transport,H,D,core,0.66,7,0.854,0.7
+91,Libraries & museums,R,D,core,0.76,8,1.299,0.6
+84,Public administration,O,D,core,0.62,7,0.484,0.5
+36,Water supply,E,D,too small,0.48,3,0.279,0.3
+92,Gambling,R,D,too small,0.7,7,1.511,0.1
+70,Head offices & consultancy,M,E,floating,0.74,5,0.86,74.9
+10,Food manufacturing,C,E,core,0.91,6,1.042,68
+01,Farming,A,E,core,0.91,6,0.64,27.6
+75,Veterinary,M,E,core,0.91,6,0.893,0.5
+78,Employment agencies,N,F,floating,0.97,2,0.454,15
+09,Mining support,B,F,too small,0.97,2,0.531,0.1
+18,Printing,C,G,floating,0.92,0,0.26,7.8
+17,Paper,C,G,floating,0.87,0,0.478,4.5
+58,Publishing,J,G,floating,0.9,0,0.5,2.1
+60,Broadcasting,J,H,too small,,0,0.233,0.1
