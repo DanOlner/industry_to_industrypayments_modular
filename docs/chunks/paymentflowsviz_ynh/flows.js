@@ -33,12 +33,13 @@
   const q = new URLSearchParams(location.search);
   const pick = (v, allowed, dflt) => allowed.includes(v) ? v : dflt;
   const monthFromParam = v => { if (v == null) return NM - 1; const i = D.months.indexOf(v); return i >= 0 ? i : Math.max(0, Math.min(NM - 1, +v || 0)); };
-  const DEFAULTS = { layout: 'order', cols: 'group', lens: 'none', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
+  const DEFAULTS = { layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
                      smooth: true, dots: true, inter: false, halo: false, pubonly: false, speed: '3' };
   const S = { layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
+              show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir),
               smooth: q.get('smooth') !== '0', dots: q.get('dots') !== '0', inter: q.get('inter') === '1', halo: q.get('halo') === '1',
               pubonly: q.get('pubonly') === '1', t: monthFromParam(q.get('m')), sel: nodes.findIndex(n => n.id === q.get('sel')) };
 
@@ -48,7 +49,7 @@
     const cs = getComputedStyle(document.documentElement), v = n => cs.getPropertyValue(n).trim();
     C = { surface: v('--surface'), ink: v('--ink'), ink2: v('--ink2'), muted: v('--muted'), grid: v('--grid'), axis: v('--axis'),
           withc: v('--with'), against: v('--against'), dotWith: v('--dot-with'), dotAgainst: v('--dot-against'),
-          node: v('--node'), nodeDim: v('--node-dim'), nodeLine: v('--node-line'), nodeOn: v('--node-on'), halo: v('--halo'), haloLine: v('--halo-line') };
+          node: v('--node'), nodeDim: v('--node-dim'), nodeLine: v('--node-line'), nodeOn: v('--node-on'), haloIn: v('--halo-in'), haloOut: v('--halo-out') };
   }
 
   // ---------------------------------------------------------------- link series
@@ -105,6 +106,13 @@
     lev = d3.extent(nodes.filter(d => act[d.i] && !d.small), L);
     if (S.sel >= 0 && !act[S.sel]) S.sel = -1;
   }
+
+  // ---------------------------------------------------------------- money, or goods and services
+  // The data are payments. "Money" draws each link from the industry paying to the industry paid, with buyers at the top.
+  // "Goods and services" turns every link round, on the assumption that a payment bought something that travelled the
+  // other way, and turns the order upside down so that suppliers are at the top and things still mostly run down the page.
+  const goods = () => S.show === 'goods';
+  const from = k => goods() ? sup[k] : buy[k], to = k => goods() ? buy[k] : sup[k];
 
   // ---------------------------------------------------------------- canvas and sizes
   const canvas = $('chart'), ctx = canvas.getContext('2d'), wrap = $('chartwrap');
@@ -179,9 +187,15 @@
     return out;
   }
   function layoutFor(mode, cols) { const k = layoutKey(mode, cols); return layouts[k] || (layouts[k] = computeLayout(mode, cols)); }
+  function targetLayout() {
+    const base = layoutFor(S.layout, S.cols);
+    if (!goods() || S.layout === 'force') return base;
+    const k = layoutKey(S.layout, S.cols) + '|flipped', mid = (pad.t + 22 * K) + (H - pad.b - 22 * K);
+    return layouts[k] || (layouts[k] = base.map(p => (p.y < -100 ? p : { x: p.x, y: mid - p.y })));
+  }
   let pos = null, tween = null;
   function moveTo(instant) {
-    const target = layoutFor(S.layout, S.cols);
+    const target = targetLayout();
     if (instant || !pos || reduceMotion) { pos = target.map(p => ({ ...p })); tween = null; geoDirty = true; requestDraw(); return; }
     tween = { from: pos.map((p, i) => (p.x < -100 ? { ...target[i] } : { ...p })), to: target, t0: performance.now() };   // industries coming in appear in place
     requestDraw();
@@ -221,7 +235,7 @@
   let geoDirty = true;
   function buildGeo() {
     for (let k = 0; k < NL; k++) {
-      const a = pos[buy[k]], z = pos[sup[k]], dx = z.x - a.x, dy = z.y - a.y, len = Math.hypot(dx, dy) || 1;
+      const a = pos[from(k)], z = pos[to(k)], dx = z.x - a.x, dy = z.y - a.y, len = Math.hypot(dx, dy) || 1;
       const cx = (a.x + z.x) / 2 - dy * 0.16, cy = (a.y + z.y) / 2 + dx * 0.16;         // bowed to one side, so the two directions of a pair separate
       ctrl[k * 3] = cx; ctrl[k * 3 + 1] = cy; ctrl[k * 3 + 2] = len;
       for (let i = 0; i <= NSEG; i++) {
@@ -232,7 +246,8 @@
     }
     geoDirty = false;
   }
-  const TAPER = 0.75;                                     // a link narrows to a quarter of its width at the receiving end
+  const THIN = 2.4;                                       // px: below this a held link is drawn dashed; above it, with a dashed centre line
+  const TAPER = 0.75;                                     // a link narrows to a quarter of its width at the end it runs to
   function ribbon(c, k, w) {
     const o = k * (NSEG + 1) * 4;
     for (let i = 0; i <= NSEG; i++) { const p = o + i * 4, hw = w * (1 - TAPER * i / NSEG) / 2; if (i) c.lineTo(geo[p] + geo[p + 2] * hw, geo[p + 1] + geo[p + 3] * hw); else c.moveTo(geo[p] + geo[p + 2] * hw, geo[p + 1] + geo[p + 3] * hw); }
@@ -262,7 +277,8 @@
     ctx.font = font(fs); ctx.textBaseline = 'middle'; ctx.fillStyle = C.muted;
     if (S.layout !== 'force') {
       ctx.save(); ctx.translate(pad.l * 0.42, H / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center';
-      ctx.fillText(W < 620 ? 'suppliers  ←    →  buyers' : 'more of a supplier   ←   position in the order   →   more of a buyer', 0, 0); ctx.restore();
+      const lo = goods() ? 'buyer' : 'supplier', hi = goods() ? 'supplier' : 'buyer';
+      ctx.fillText(W < 620 ? `${lo}s  ←    →  ${hi}s` : `more of a ${lo}   ←   position in the order   →   more of a ${hi}`, 0, 0); ctx.restore();
     }
     if (S.layout === 'order' && S.cols !== 'free') {
       const cc = columns(S.cols);
@@ -273,23 +289,29 @@
       cc.names.slice(1).forEach(g => { const x = Math.round(cc.centre[g] - cc.width[g] / 2) + 0.5; ctx.moveTo(x, pad.t - 6); ctx.lineTo(x, H - pad.b + 6); }); ctx.stroke();
     }
 
-    // ---- halos: payments to and from the rest of the UK, as areas on the circle's own scale
+    // ---- halos: payments to and from the rest of the UK, as areas on the circle's own scale.
+    // Each flow keeps its colour. Money: what an industry is paid from outside sits above it (buyers are above) and what it
+    // pays out sits below. Goods: what it buys from outside sits above (suppliers are above) and what it sells sits below.
     if (S.halo && isVal) {
       const c = K * K * 900 / nodeRef;                   // px^2 of radius-squared per GBP thousand, matching rNode without its floor
-      ctx.lineWidth = 0.75;
+      const upper = goods() ? 'buy' : 'sell', lower = goods() ? 'sell' : 'buy', colOf = name => name === 'sell' ? C.haloIn : C.haloOut;
       for (const d of live) {
-        const p = P[d.i], r = radNow[d.i], dim = lensOn && share[d.i] === 0 && d.i !== focus;
-        const rs = Math.sqrt(r * r + 2 * c * xAt(d, 'sell', t) * scaleNow), rb = Math.sqrt(r * r + 2 * c * xAt(d, 'buy', t) * scaleNow);
-        ctx.globalAlpha = dim ? 0.35 : 1; ctx.fillStyle = C.halo; ctx.strokeStyle = C.haloLine;
-        ctx.beginPath(); ctx.arc(p.x, p.y, rs, Math.PI, 2 * Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke();   // above: received from outside
-        ctx.beginPath(); ctx.arc(p.x, p.y, rb, 0, Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke();             // below: paid to outside
+        const p = P[d.i], r = radNow[d.i], dim = lensOn && share[d.i] === 0 && d.i !== focus, f = dim ? 0.4 : 1;
+        for (const [name, a0, a1] of [[upper, Math.PI, 2 * Math.PI], [lower, 0, Math.PI]]) {
+          const R = Math.sqrt(r * r + 2 * c * xAt(d, name, t) * scaleNow);
+          ctx.beginPath(); ctx.arc(p.x, p.y, R, a0, a1); ctx.closePath(); ctx.fillStyle = ctx.strokeStyle = colOf(name);
+          ctx.globalAlpha = 0.3 * f; ctx.fill(); ctx.globalAlpha = 0.85 * f; ctx.lineWidth = 1.1; ctx.stroke();
+        }
       }
       ctx.globalAlpha = 1;
     }
 
     // ---- which links: the largest, until they carry the chosen share of the month's total
     const cand = []; let total = 0;
-    for (let k = 0; k < NL; k++) if (shown[k] > 0) { cand.push(k); total += shown[k]; }
+    // Direction: both, or only the links that run down the order (blue), or only those that run up it (orange).
+    // The share-of-the-month cut-off below is then taken within what is left.
+    const want = S.dir === 'both' ? -1 : S.dir === 'down' ? 1 : 0;
+    for (let k = 0; k < NL; k++) if (shown[k] > 0 && (want < 0 || (L(nodes[buy[k]]) > L(nodes[sup[k]]) ? 1 : 0) === want)) { cand.push(k); total += shown[k]; }
     cand.sort((i, j) => shown[j] - shown[i]);
     const cover = +S.cover; let n = cand.length;
     if (cover < 1) { let acc = 0; n = 0; while (n < cand.length && acc < cover * total) acc += shown[cand[n++]]; }
@@ -300,14 +322,19 @@
     for (let i = drawn.length - 1; i >= 0; i--) {
       const k = drawn[i], w = wLink(shown[k], S.measure), down = L(nodes[buy[k]]) > L(nodes[sup[k]]); widthNow[k] = w;
       const alpha = hoverLink >= 0 ? (k === hoverLink ? 0.92 : 0.07) : focus >= 0 ? (touching(k) ? 0.85 : 0.05) : lensOn ? (touching(k) ? 0.62 : 0.06) : 0.22 + 0.4 * Math.min(1, w / (8 * K));
-      ctx.beginPath(); ribbon(ctx, k, w); ctx.globalAlpha = alpha; ctx.fillStyle = down ? C.withc : C.against; ctx.fill();
+      ctx.globalAlpha = alpha;
+      if (w <= THIN * K && !S.pubonly && basis[k][m0] === 'h') {    // a thin link in a hidden month: drawn dashed, as there is no room for a centre line
+        const g = k * 3, a = P[from(k)], z = P[to(k)];
+        ctx.setLineDash([4, 3]); ctx.lineWidth = Math.max(0.8, w * 0.7); ctx.strokeStyle = down ? C.withc : C.against;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo(ctrl[g], ctrl[g + 1], z.x, z.y); ctx.stroke(); ctx.setLineDash([]);
+      } else { ctx.beginPath(); ribbon(ctx, k, w); ctx.fillStyle = down ? C.withc : C.against; ctx.fill(); }
     }
     // ---- on top of the links: a dashed centre line where the month is hidden and held, and the payment dots
     for (let i = drawn.length - 1; i >= 0; i--) {
       const k = drawn[i], w = widthNow[k];
       if (hoverLink >= 0 ? k !== hoverLink : !touching(k)) continue;
-      const a = P[buy[k]], z = P[sup[k]], g = k * 3, cx = ctrl[g], cy = ctrl[g + 1], len = ctrl[g + 2], down = L(nodes[buy[k]]) > L(nodes[sup[k]]);
-      if (!S.pubonly && basis[k][m0] === 'h' && w > 1.2) {
+      const a = P[from(k)], z = P[to(k)], g = k * 3, cx = ctrl[g], cy = ctrl[g + 1], len = ctrl[g + 2], down = L(nodes[buy[k]]) > L(nodes[sup[k]]);
+      if (!S.pubonly && basis[k][m0] === 'h' && w > THIN * K) {
         ctx.globalAlpha = 0.9; ctx.setLineDash([3, 4]); ctx.strokeStyle = C.surface; ctx.lineWidth = Math.max(0.8, w * 0.28);
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo(cx, cy, z.x, z.y); ctx.stroke(); ctx.setLineDash([]);
       }
@@ -364,6 +391,8 @@
   }
   function schedule() { if (!raf) { if (!playing && !tween && !dotsMoving()) lastNow = performance.now(); raf = requestAnimationFrame(frame); } }
   function requestDraw() { dirty = true; if (!raf) lastNow = performance.now(); schedule(); }
+  // The side panel and table read the values the last draw worked out, so a change of state draws first, then refreshes them
+  function refresh() { if (!pos) return; draw(); dirty = false; updateReadouts(); schedule(); }
 
   // ---------------------------------------------------------------- read-outs outside the canvas
   const lowerFirst = t => t.startsWith('Three') ? 't' + t.slice(1) : t;
@@ -382,7 +411,9 @@
     const slider = $('month'); if (+slider.value !== m) slider.value = m; slider.setAttribute('aria-valuetext', fmtMonth(monthDate[m]));
     const s = stripTotals(m);
     for (const [id, v] of [['inside', s.inside], ['out', s.out], ['in', s.inn]]) { $('t-' + id).textContent = fmtMoney(v); $('b-' + id).style.width = (100 * v / stripMax).toFixed(1) + '%'; }
-    $('strip-note').textContent = `${periodText(m)}, a month, with hidden months held at their average. For every £1 paid inside the region, £${(s.out / s.inside).toFixed(2)} goes out to the rest of the UK and £${(s.inn / s.inside).toFixed(2)} comes in.${S.inter ? '' : ' Intermediaries are left out.'}`;
+    $('strip-note').textContent = `${periodText(m)}, a month, with hidden months held at their average. ` + (goods()
+      ? `For every £1 of buying and selling inside the region, £${(s.out / s.inside).toFixed(2)} is bought from the rest of the UK and £${(s.inn / s.inside).toFixed(2)} is sold to it.`
+      : `For every £1 paid inside the region, £${(s.out / s.inside).toFixed(2)} goes out to the rest of the UK and £${(s.inn / s.inside).toFixed(2)} comes in.`) + (S.inter ? '' : ' Intermediaries are left out.');
     sparkMarker(m);
     canvas.setAttribute('aria-label', `Network of payments between ${nodes.filter(n => act[n.i]).length} industries in Yorkshire and the Humber, ${lowerFirst(periodText(m))}. ${drawn.length} links are drawn. The table below the chart lists them.`);
     if ($('tablebox').open) renderTable();
@@ -413,16 +444,17 @@
     const add = (s, tag, attrs) => { const e = document.createElementNS(svgNS, tag); for (const a in attrs) e.setAttribute(a, attrs[a]); s.appendChild(e); return e; };
     const rib = (s, y, w, fill, x0 = 3, x1 = 63) => add(s, 'path', { d: `M${x0},${y - w / 2}L${x1},${y - w * (1 - TAPER) / 2}L${x1},${y + w * (1 - TAPER) / 2}L${x0},${y + w / 2}Z`, fill, 'fill-opacity': 0.75 });
     const row = (graphic, html) => { const r = el('div', 'k-row'); r.appendChild(graphic); const t = el('div'); t.innerHTML = html; r.appendChild(t); key.appendChild(r); };
-    let s = svg(66, 16); rib(s, 8, 7, 'var(--with)'); row(s, '<b>Blue:</b> money runs down the order, from a buyer to a supplier below it.');
-    s = svg(66, 16); rib(s, 8, 7, 'var(--against)'); row(s, '<b>Orange:</b> money runs up the order.');
+    let s = svg(66, 16); rib(s, 8, 7, 'var(--with)'); row(s, goods() ? '<b>Blue:</b> goods and services run down the page, from a supplier to a buyer below it.' : '<b>Blue:</b> money runs down the order, from a buyer to a supplier below it.');
+    s = svg(66, 16); rib(s, 8, 7, 'var(--against)'); row(s, goods() ? '<b>Orange:</b> goods and services run up the page.' : '<b>Orange:</b> money runs up the order.');
     const tot = monthTotals(S.measure, S.smooth, S.pubonly).mean, isVal = S.measure === 'value';
     const samples = S.scale === 'share' ? [[0.005, '0.5%'], [0.02, '2%'], [0.05, '5%']].map(([f, lab]) => [f * tot, lab]) : isVal ? [[1e3, '£1m'], [1e4, '£10m'], [5e4, '£50m']] : [[500, '500'], [2000, '2,000'], [10000, '10,000']];
     s = svg(66, 44); samples.forEach(([v], i) => rib(s, 6 + i * 15 + (i ? i * 2 : 0), Math.min(18, wLink(v, S.measure)), 'var(--muted)'));
-    row(s, `<b>Width:</b> ${samples.map(x => x[1]).join(', ')} ${S.scale === 'share' ? `of the month's ${isVal ? 'payments' : 'number of payments'}` : isVal ? 'a month' : 'payments a month'}. A link is widest at the paying end${S.net === 'net' ? ' and shows what is left after the two directions are set against each other' : ''}.`);
+    row(s, `<b>Width:</b> ${samples.map(x => x[1]).join(', ')} ${S.scale === 'share' ? `of the month's ${isVal ? 'payments' : 'number of payments'}` : isVal ? 'a month' : 'payments a month'}. A link is widest at the ${goods() ? 'supplying' : 'paying'} end${S.net === 'net' ? ' and shows what is left after the two directions are set against each other' : ''}.`);
     s = svg(66, 16); rib(s, 8, 9, 'var(--with)'); [14, 30, 46].forEach(x => add(s, 'circle', { cx: x, cy: 8, r: 1.9, fill: 'var(--surface)' }));
-    row(s, '<b>Dots:</b> each is 100 payments that month. A wide link with few dots is a few large payments; a thin crowded one is many small ones.');
-    s = svg(66, 16); rib(s, 8, 9, 'var(--with)'); add(s, 'line', { x1: 5, x2: 61, y1: 8, y2: 8, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': '3 4' });
-    row(s, '<b>Dashed:</b> this month is hidden by ONS and shown at the link’s average published month.');
+    row(s, `<b>Dots:</b> each is 100 payments that month${goods() ? ', drawn moving with what was paid for' : ''}. A wide link with few dots is a few large payments; a thin crowded one is many small ones. No dots means under 50 payments.`);
+    s = svg(66, 24); rib(s, 7, 9, 'var(--with)'); add(s, 'line', { x1: 5, x2: 61, y1: 7, y2: 7, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': '3 4' });
+    add(s, 'line', { x1: 3, x2: 63, y1: 20, y2: 20, stroke: 'var(--with)', 'stroke-width': 1.2, 'stroke-dasharray': '4 3' });
+    row(s, '<b>Dashed:</b> this month is hidden by ONS and shown at the average of the link’s published months.');
     const cs = S.scale === 'share' ? [[0.02 * monthTotals('value', S.smooth, S.pubonly).mean, '2%'], [0.2 * monthTotals('value', S.smooth, S.pubonly).mean, '20%']] : [[5e3, '£5m'], [1e5, '£100m']];
     s = svg(66, 2 * rNode(cs[1][0]) + 4); const R = rNode(cs[1][0]); cs.slice().reverse().forEach(([v]) => add(s, 'circle', { cx: 33, cy: 2 * R + 2 - rNode(v), r: rNode(v), fill: 'var(--node)', stroke: 'var(--node-line)' }));
     row(s, isVal ? `<b>Circle:</b> an industry. Area is what it pays plus what it is paid by other industries here: ${cs[0][1]} and ${cs[1][1]} ${S.scale === 'share' ? 'of the month’s payments' : 'a month'}.`
@@ -432,9 +464,12 @@
     row(s, '<b>Highlight:</b> a filled circle is in the chosen set. A wedge is the share of the industry’s jobs that is.');
     s = svg(66, 20); add(s, 'circle', { cx: 33, cy: 10, r: 5, fill: 'var(--surface)', stroke: 'var(--muted)' });
     row(s, '<b>Hollow:</b> under £0.5m a month, too little to place reliably.');
-    if (S.halo) { s = svg(66, 40); add(s, 'path', { d: 'M13,20A20,20 0 0 1 53,20Z', fill: 'var(--halo)', stroke: 'var(--halo-line)' }); add(s, 'path', { d: 'M19,20A14,14 0 0 0 47,20Z', fill: 'var(--halo)', stroke: 'var(--halo-line)' });
-      add(s, 'circle', { cx: 33, cy: 20, r: 8, fill: 'var(--node)', stroke: 'var(--node-line)' });
-      row(s, '<b>Halo:</b> above, received from the rest of the UK; below, paid to it. Areas are on the circle’s scale.'); }
+    if (S.halo) { s = svg(66, 44); const up = goods() ? 'out' : 'in', dn = goods() ? 'in' : 'out';
+      add(s, 'path', { d: 'M13,22A20,20 0 0 1 53,22Z', fill: `var(--halo-${up})`, 'fill-opacity': 0.3, stroke: `var(--halo-${up})`, 'stroke-opacity': 0.85 });
+      add(s, 'path', { d: 'M19,22A14,14 0 0 0 47,22Z', fill: `var(--halo-${dn})`, 'fill-opacity': 0.3, stroke: `var(--halo-${dn})`, 'stroke-opacity': 0.85 });
+      add(s, 'circle', { cx: 33, cy: 22, r: 8, fill: 'var(--node)', stroke: 'var(--node-line)' });
+      row(s, goods() ? '<b>Halo:</b> above, bought from the rest of the UK; below, sold to it. Areas are on the circle’s scale.' : '<b>Halo:</b> above, received from the rest of the UK; below, paid to it. Areas are on the circle’s scale.'); }
+    if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought, and rent, insurance and rates are in here too.'); key.appendChild(note); }
   }
 
   // ---- detail panel for the pinned industry
@@ -464,11 +499,11 @@
       for (const [cls, v] of [['s-inside', inside], ['s-london', lon], ['s-rest', rest]]) { if (v <= 0) continue; const sgm = el('span', cls); sgm.style.flex = `${v / tot} 1 0`; b.append(sgm); }
       r.append(b, el('div', 'd-small', `${fmtMoney(inside)} inside (${fmtPct(inside / tot)}), ${fmtMoney(lon)} London, ${fmtMoney(rest)} elsewhere`)); return r; };
     const self = xAt(d, 'self', m), bl = xAt(d, 'buyLon', m), sl = xAt(d, 'sellLon', m);
-    box.append(bar('It pays', paidV[i], bl, xAt(d, 'buy', m) - bl), bar('It is paid', recvV[i], sl, xAt(d, 'sell', m) - sl));
+    box.append(bar(goods() ? 'It buys' : 'It pays', paidV[i], bl, xAt(d, 'buy', m) - bl), bar(goods() ? 'It sells' : 'It is paid', recvV[i], sl, xAt(d, 'sell', m) - sl));
     const keyRow = el('div', 'bar3-key'); for (const [c, tx] of [['var(--seg-inside)', 'Other industries here'], ['var(--seg-london)', 'London'], ['var(--seg-rest)', 'Rest of the UK']]) { const sp = el('span'); const sw = el('i'); sw.style.background = c; sp.append(sw, document.createTextNode(tx)); keyRow.append(sp); }
-    box.append(keyRow, el('p', 'd-small', `Firms in this industry also pay each other ${fmtMoney(self)} a month inside the region.`));
+    box.append(keyRow, el('p', 'd-small', `Firms in this industry also ${goods() ? 'buy from' : 'pay'} each other ${fmtMoney(self)} a month inside the region.`));
 
-    for (const [title, asPayer] of [['It pays most to', true], ['It is paid most by', false]]) {
+    for (const [title, asPayer] of [[goods() ? 'It buys most from' : 'It pays most to', true], [goods() ? 'It sells most to' : 'It is paid most by', false]]) {
       box.append(el('h3', null, title)); const list = partners(i, asPayer);
       if (!list.length) box.append(el('p', 'd-small', 'Nothing published.'));
       for (const p of list) { const r = el('div', 'd-row'); r.append(el('span', 'n', p.name + (p.held ? ' (held)' : '')), el('span', 'v', `${fmtMoney(p.v)}, ${p.n >= 50 ? d3.format(',')(Math.round(p.n / 100) * 100) : 'under 50'} payments`)); box.append(r); }
@@ -477,16 +512,16 @@
     // its place in the order over time
     const roll = S.inter ? d.level_all_rolling : d.level_rolling, lvl = L(d);
     box.append(el('h3', null, 'Place in the order, 12 months to each month'));
-    const w = 290, h = 64, sx = d3.scaleLinear().domain([0, NM - 1]).range([2, w - 44]), sy = d3.scaleLinear().domain(lev).range([h - 6, 6]).clamp(true);
+    const w = 290, h = 64, sx = d3.scaleLinear().domain([0, NM - 1]).range([2, w - 44]), sy = d3.scaleLinear().domain(lev).range(goods() ? [6, h - 6] : [h - 6, 6]).clamp(true);   // the same way up as the chart
     const svg = d3.create('svg').attr('id', 'levelspark').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img').attr('aria-label', 'Its level in the supplier-to-buyer order over time');
     svg.append('line').attr('x1', 2).attr('x2', w - 44).attr('y1', sy(0)).attr('y2', sy(0)).attr('stroke', 'var(--grid)');
     svg.append('text').attr('x', w - 40).attr('y', sy(0) + 3).attr('font-size', 10).attr('fill', 'var(--muted)').text('average');
-    svg.append('text').attr('x', w - 40).attr('y', 10).attr('font-size', 10).attr('fill', 'var(--muted)').text('buyer');
-    svg.append('text').attr('x', w - 40).attr('y', h - 3).attr('font-size', 10).attr('fill', 'var(--muted)').text('supplier');
+    svg.append('text').attr('x', w - 40).attr('y', 10).attr('font-size', 10).attr('fill', 'var(--muted)').text(goods() ? 'supplier' : 'buyer');
+    svg.append('text').attr('x', w - 40).attr('y', h - 3).attr('font-size', 10).attr('fill', 'var(--muted)').text(goods() ? 'buyer' : 'supplier');
     svg.append('path').attr('fill', 'none').attr('stroke', 'var(--ink2)').attr('stroke-width', 2).attr('stroke-linejoin', 'round')
       .attr('d', d3.line().defined(v => v != null).x((_, j) => sx(j)).y(v => sy(v))(roll));
     if (roll[m] != null) svg.append('circle').attr('cx', sx(m)).attr('cy', sy(roll[m])).attr('r', 4).attr('fill', 'var(--ink)').attr('stroke', 'var(--surface)').attr('stroke-width', 2);
-    box.append(svg.node(), el('p', 'd-small', `Over the whole period it sits ${Math.abs(lvl) < 0.05 ? 'at about the average' : `${Math.abs(lvl).toFixed(2)} levels ${lvl > 0 ? 'above' : 'below'} the average industry`}${d.small ? ', but it is too small for that to be reliable' : ''}.`));
+    box.append(svg.node(), el('p', 'd-small', `Over the whole period it sits ${Math.abs(lvl) < 0.05 ? 'at about the average' : `${Math.abs(lvl).toFixed(2)} levels to the ${lvl > 0 ? 'buyer' : 'supplier'} side of the average industry`}${d.small ? ', but it is too small for that to be reliable' : ''}.`));
 
     // what is hidden
     const never = S.inter ? d.never_all : d.never_core, cells = S.inter ? d.cells_all : d.cells_core;
@@ -502,7 +537,7 @@
   }
   function renderTable() {
     const m = Math.round(S.t), rows = tableRows(), head = $('linktable').tHead, body = $('linktable').tBodies[0];
-    $('tablecap').textContent = `${rows.length} links, ${lowerFirst(periodText(m))}, a month. Amounts are what the payer paid; the other direction is in its own column.`;
+    $('tablecap').textContent = `${rows.length} links, ${lowerFirst(periodText(m))}, a month. Amounts are what the payer paid; the other direction is in its own column.${goods() ? ' The chart draws each payment the other way round, as goods and services.' : ''}${S.dir === 'both' ? '' : ` Only links running ${S.dir} the order are listed.`}`;
     const cols = [['Payer', ''], ['Paid to', ''], ['Amount', 'num'], ['Share of the month', 'num'], ['Payments', 'num'], ['Average payment', 'num'], ['Paid the other way', 'num'], ['Data', '']];
     const hr = el('tr'); for (const [c, cls] of cols) hr.append(el('th', cls, c)); head.replaceChildren(hr);
     const frag = document.createDocumentFragment();
@@ -536,15 +571,17 @@
     const m = Math.round(S.t), tot = monthTotals('value', S.smooth, S.pubonly).byMonth[m] || 1;
     if (hoverNode >= 0) { const d = nodes[hoverNode];
       tip.append(el('div', 't-title', d.short), el('div', 't-sub', `SIC ${d.id}, ${d.group}`));
-      const r1 = el('div'); r1.append(document.createTextNode('Pays other industries here '), el('span', 't-val', fmtMoney(paidV[d.i]))); const r2 = el('div'); r2.append(document.createTextNode('Is paid by them '), el('span', 't-val', fmtMoney(recvV[d.i])));
+      const r1 = el('div'); r1.append(document.createTextNode(goods() ? 'Buys from other industries here ' : 'Pays other industries here '), el('span', 't-val', fmtMoney(paidV[d.i]))); const r2 = el('div'); r2.append(document.createTextNode(goods() ? 'Sells to them ' : 'Is paid by them '), el('span', 't-val', fmtMoney(recvV[d.i])));
       tip.append(r1, r2, el('div', 't-note', d.small ? 'Too small to place reliably. Click to pin.' : 'Click to pin and see more.'));
     } else if (hoverLink >= 0) { const k = hoverLink, r = rev[k], payer = nodes[buy[k]].short, payee = nodes[sup[k]].short;
-      tip.append(el('div', 't-title', `${payer} pays ${payee}`));
-      const r1 = el('div'); r1.append(el('span', 't-val', fmtMoney(curV[k])), document.createTextNode(` a month, ${fmtPct(curV[k] / tot)} of the month`)); tip.append(r1);
+      const said = (x, y) => goods() ? `${y} supplies ${x}` : `${x} pays ${y}`;       // x pays y, or the same thing turned round
+      tip.append(el('div', 't-title', said(payer, payee)));
+      const r1 = el('div'); r1.append(el('span', 't-val', fmtMoney(curV[k])), document.createTextNode(` a month${goods() ? ' paid for it' : ''}, ${fmtPct(curV[k] / tot)} of the month`)); tip.append(r1);
       tip.append(el('div', null, `${fmtCount(curN[k])} payments${curN[k] >= 50 ? ', averaging ' + fmtAvg(curV[k], curN[k]) : ''}`));
-      if (r >= 0 && lact[r] && curV[r] > 0) { tip.append(el('div', 't-sub', `${payee} pays ${payer} ${fmtMoney(curV[r])} (${fmtCount(curN[r])} payments)`));
+      if (r >= 0 && lact[r] && curV[r] > 0) { tip.append(el('div', 't-sub', `${said(payee, payer)} ${fmtMoney(curV[r])} (${fmtCount(curN[r])} payments)`));
         if (S.net === 'net') tip.append(el('div', 't-sub', `The link shows the difference: ${fmtMoney(curV[k] - curV[r])}`)); }
-      tip.append(el('div', 't-note', basis[k][m] === 'h' && !S.pubonly ? 'Hidden this month: shown at its average published month.' : basis[k][m] === 'p' ? 'Published this month.' : ''));
+      const np = (basis[k].match(/p/g) || []).length;
+      tip.append(el('div', 't-note', basis[k][m] === 'h' && !S.pubonly ? `Hidden this month: shown at the average of its published months. It was published in ${np} of ${NM}.` : basis[k][m] === 'p' ? `Published this month, and in ${np} of ${NM} months in all.` : ''));
     } else { tip.style.display = 'none'; return; }
     tip.style.display = 'block';
     const tw = tip.offsetWidth, th = tip.offsetHeight;
@@ -572,11 +609,20 @@
   { const none = el('option', null, 'None'); none.value = ''; pickSel.append(none);
     for (const d of nodes.slice().sort((a, b) => a.short.localeCompare(b.short))) { const o = el('option', null, d.short); o.value = d.id; pickSel.append(o); }
     pickSel.addEventListener('change', e => select(nodes.findIndex(n => n.id === e.target.value))); }
-  const selects = ['cols', 'lens', 'measure', 'scale', 'net', 'cover', 'speed'], checks = ['smooth', 'dots', 'inter', 'halo', 'pubonly'];
+  const selects = ['cols', 'lens', 'show', 'measure', 'scale', 'net', 'cover', 'speed'], checks = ['smooth', 'dots', 'inter', 'halo', 'pubonly'];
+  function wording() {                                     // the fixed text that depends on money or goods
+    const g = goods();
+    $('l-inside').textContent = g ? 'Bought and sold inside the region' : 'Paid inside the region';
+    $('l-out').textContent = g ? 'Bought from the rest of the UK' : 'Paid to the rest of the UK';
+    $('l-in').textContent = g ? 'Sold to the rest of the UK' : 'Received from the rest of the UK';
+    $('lede-order').textContent = g ? 'Here each payment is turned round and drawn as the goods or services it paid for: suppliers sit higher and buyers lower, so these mostly run down the page.'
+      : 'Industries that mostly buy sit higher and those that mostly supply sit lower, so money mostly runs down the page.';
+  }
   function reflect() {                                     // put the state into the controls
     for (const k of selects) $(k).value = S[k];
     for (const k of checks) $(k).checked = S[k];
     document.querySelectorAll('input[name=layout]').forEach(r => { r.checked = r.value === S.layout; });
+    document.querySelectorAll('input[name=dir]').forEach(r => { r.checked = r.value === S.dir; });
     $('cols').disabled = S.layout !== 'order'; $('halo').disabled = S.measure !== 'value';
     for (const o of pickSel.options) { const n = nodes.find(d => d.id === o.value); o.hidden = o.disabled = !!n && !act[n.i]; }
     pickSel.value = S.sel >= 0 ? nodes[S.sel].id : '';
@@ -585,18 +631,20 @@
   function changed(k) {                                    // what each control has to refresh
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
     if (k === 'layout' || k === 'cols') moveTo(false);
-    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly'].includes(k)) buildKey();
+    if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
+    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show'].includes(k)) buildKey();
     if (k === 'smooth') updateStripMax();
-    reflect(); updateReadouts(); requestDraw(); syncUrl();
+    reflect(); refresh(); syncUrl();
   }
   for (const k of selects) $(k).addEventListener('change', e => { S[k] = e.target.value; changed(k); });
   for (const k of checks) $(k).addEventListener('change', e => { S[k] = e.target.checked; changed(k); });
   document.querySelectorAll('input[name=layout]').forEach(r => r.addEventListener('change', () => { if (r.checked) { S.layout = r.value; changed('layout'); } }));
+  document.querySelectorAll('input[name=dir]').forEach(r => r.addEventListener('change', () => { if (r.checked) { S.dir = r.value; changed('dir'); } }));
 
   // ---- time: step, scrub, play
   const slider = $('month'); slider.max = NM - 1;
-  function setMonth(m) { S.t = Math.max(0, Math.min(NM - 1, m)); updateReadouts(); requestDraw(); syncUrl(); }
-  function setPlaying(on) { playing = on; if (on && S.t >= NM - 1) S.t = 0; $('play').textContent = on ? 'Pause' : 'Play'; if (on) schedule(); else { S.t = Math.round(S.t); updateReadouts(); requestDraw(); syncUrl(); } }
+  function setMonth(m) { S.t = Math.max(0, Math.min(NM - 1, m)); refresh(); syncUrl(); }
+  function setPlaying(on) { playing = on; if (on && S.t >= NM - 1) S.t = 0; $('play').textContent = on ? 'Pause' : 'Play'; if (on) schedule(); else { S.t = Math.round(S.t); refresh(); syncUrl(); } }
   slider.addEventListener('input', e => { if (playing) setPlaying(false); setMonth(+e.target.value); });
   $('prev').addEventListener('click', () => { if (playing) setPlaying(false); setMonth(Math.round(S.t) - 1); });
   $('next').addEventListener('click', () => { if (playing) setPlaying(false); setMonth(Math.round(S.t) + 1); });
@@ -609,12 +657,15 @@
   });
   $('tablebox').addEventListener('toggle', () => { if ($('tablebox').open) renderTable(); });
   $('csv').addEventListener('click', downloadCsv);
+  const openNote = () => { if (location.hash === '#order-note') $('order-note').open = true; };
+  window.addEventListener('hashchange', openNote); openNote();
+  $('order-link').addEventListener('click', () => { $('order-note').open = true; });
 
   // ---- keep the address bar in step, so a view can be shared
   let urlTimer = 0;
   function syncUrl() { clearTimeout(urlTimer); urlTimer = setTimeout(() => {
     const p = new URLSearchParams();
-    for (const k of [...selects, 'layout']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k]);
+    for (const k of [...selects, 'layout', 'dir']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k]);
     for (const k of checks) if (S[k] !== DEFAULTS[k]) p.set(k, S[k] ? '1' : '0');
     if (Math.round(S.t) !== NM - 1) p.set('m', D.months[Math.round(S.t)]);
     if (S.sel >= 0) p.set('sel', nodes[S.sel].id);
@@ -622,13 +673,13 @@
   }, 250); }
 
   // ---------------------------------------------------------------- start
-  function relayout() { resize(); for (const k in layouts) delete layouts[k]; pos = null; moveTo(true); buildSpark(); buildKey(); updateReadouts(); }
-  readTheme(); setActive(); updateStripMax(); reflect(); relayout();
+  function relayout() { resize(); for (const k in layouts) delete layouts[k]; pos = null; moveTo(true); buildSpark(); buildKey(); refresh(); }
+  readTheme(); setActive(); updateStripMax(); reflect(); wording(); relayout();
   $('built').textContent = `Data built ${D.built}.`;
   let lastW = wrap.clientWidth;
   new ResizeObserver(() => { if (Math.abs(wrap.clientWidth - lastW) > 1) { lastW = wrap.clientWidth; relayout(); } }).observe(wrap);
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readTheme(); requestDraw(); });
   // for the checks in tests/: set state from outside, and read how long a draw takes
   window.ynhFlows = { state: S, set(o) { const inter = 'inter' in o && o.inter !== S.inter; Object.assign(S, o); if (inter) { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); }
-      pos = null; moveTo(true); buildKey(); reflect(); updateReadouts(); draw(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, play: setPlaying };
+      geoDirty = true; pos = null; moveTo(true); buildKey(); reflect(); wording(); refresh(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, play: setPlaying };
 })();

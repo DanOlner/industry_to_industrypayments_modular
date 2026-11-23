@@ -30,6 +30,8 @@ The second takes about a minute the first time and half that afterwards. It read
 
 Payment group names are set by hand at the top of `build_data.R`.
 
+The figures quoted on the page, in "How the order is worked out" and "What this shows", are typed into `index.html`. They come from `tests/02`, `03`, `09`, `11` and `12`. After a rebuild on new data, re-run those and update the text.
+
 ## Checking the page
 
 `tests/13_page_checks.cjs` loads the page in headless Chrome, works every control, saves screenshots to `tests/outputs/page/` and times it playing. How to run it is in `tests/README.md`.

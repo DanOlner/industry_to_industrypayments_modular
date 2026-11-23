@@ -272,7 +272,7 @@ So the switch is cheap. With it on, the four appear at their own levels and the 
 | Dots on a link | Each is 100 payments that month, moving the way the money went. |
 | Dashed centre line | That month is hidden and held at an average. |
 | Dark fill, or pie wedge | The industry is in the highlighted set; a wedge shows the share of its jobs that is. |
-| Pale half-discs (halo, optional) | Above: income from the rest of the UK. Below: spending there. Same area scale as the circle. |
+| Half-discs (halo, optional) | Above: income from the rest of the UK, in teal. Below: spending there, in green. Same area scale as the circle. In the goods and services view the two swap places, each keeping its colour. |
 
 ### 3.3 Controls and their starting values
 
@@ -284,6 +284,8 @@ So the switch is cheap. With it on, the four appear at their own levels and the 
 | Links | Net per pair, both directions | Net per pair |
 | How many links | Enough for 50%, 80% or 90% of the month's value, or all | 80% (about 430) |
 | Highlight | None, one sector group, one payment group, any or one industrial strategy sector | None |
+| Flows of | Money, goods and services | Money |
+| Direction | Both, down the order only, up the order only | Both |
 | Rest of UK | Off, halo | Off |
 | Smoothing | Single month, three-month average | Three-month average |
 | Width scale | Share of the month's total, pounds | Share |
@@ -293,7 +295,8 @@ So the switch is cheap. With it on, the four appear at their own levels and the 
 
 ### 3.4 Behaviour
 
-- **Links point the way the money went,** from payer to payee, so they run down the page from buyers to suppliers. The data are payments and nothing else. Pointing them the other way, as goods and services moving up the chain, would be an inference, and a wrong one for rent, insurance premiums, rates and refunds.
+- **Links point the way the money went,** from payer to payee, so they run down the page from buyers to suppliers. The data are payments and nothing else.
+- **A switch shows goods and services instead.** It turns each link round (widest at the supplying end, dots moving with what was paid for) and flips the vertical order, so suppliers are at the top and things still mostly run down the page. Blue still means "down the page". This is an inference, and a wrong one for rent, insurance premiums, rates and refunds; the key and the notes say so whenever it's on.
 - **Positions don't move with time.** Levels are stable enough (section 2.2) that fixing them costs little, and then everything that moves on screen is a change in payments. The detail panel shows how an industry's level drifted.
 - **Changing layout** slides circles to their new places over about 0.7 seconds.
 - **Switching the intermediaries in** adds four circles; the others shift slightly to the levels worked out with all 81.
@@ -365,7 +368,7 @@ Settled with Dan on 23 November 2026.
 
 | Question | Decision |
 |----|----|
-| What links show | Money, payer to payee. The data are payments and nothing else. |
+| What links show | Money, payer to payee, by default. A "Flows of" switch (added 23 November, after the first build) turns every link round and the order upside down, to read the page as goods and services running down from suppliers to buyers. That view is an inference and the page says so. |
 | Width scale | Opens on each month's share, with a switch to pounds. |
 | Cadence | Shown, simply: moving dots, one per 100 payments (section 2.8). |
 | Intermediaries | A switch in the first version, starting off. They're part of the region's economy and should be showable. |
@@ -384,6 +387,11 @@ Settled with Dan on 23 November 2026.
 
 - **Payment groups have 43 core divisions, not 44.** The build runs the grouping 2,000 times a year, which made it repeatable and moved security to floating (section 2.7).
 - **Columns hold their industries.** Each column's width follows what it has to hold, hairlines separate them, and a circle can't leave its column. To make that possible a circle's height is its level give or take 14 pixels, which is under half the month-to-month wobble in a level.
+- **Thin links in a hidden month are drawn dashed,** since there's no room on them for a dashed centre line, and a link's tooltip says in how many of the 93 months it was published. 473 links were published in fewer than 6 months; they stay in, visibly dashed.
+- **The halo is stronger and two-coloured:** 30% fill with a firm outline, teal for what's received from the rest of the UK and green for what's paid to it. The pair was chosen with the validator to be alike but separable, and clear of the blue and orange used for links.
+- **A "Flows of" switch** shows goods and services (section 3.4).
+- **A "Direction" switch** shows both directions, only the links running down the order (blue), or only those running up it (orange). The "links carrying 80%" cut-off is then taken within the direction chosen, so the up-only view brings out more of the orange links than the combined view does.
+- **An expandable note, "How the order is worked out, and how far to trust it",** sits under the chart and is linked from the opening paragraph. It gives the calculation, the test results from section 2.2, and the caveats.
 - **A "Pin an industry" list was added,** so an industry can be found and pinned without a pointer.
 - **Hovering a link** shows both directions and, when links are netted, the difference drawn.
 - **D3 is kept in `lib/`,** so the page loads nothing from outside.

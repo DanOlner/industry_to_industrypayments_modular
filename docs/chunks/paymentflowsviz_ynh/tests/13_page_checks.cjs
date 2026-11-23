@@ -38,9 +38,16 @@ const problems = [];
   await set(page, { layout: 'force' }); await shot(page, '08_connections', '#chartwrap');
   await set(page, { layout: 'order', inter: true }); await shot(page, '09_intermediaries_in', '#chartwrap');
   await set(page, { inter: false, halo: true, cover: '0.5' }); await shot(page, '10_halo_fewer_links', '.stage');
+  await set(page, { show: 'goods' }); await shot(page, '10b_goods_halo', '.stage');
+  await set(page, { halo: false, cover: '0.8' }); await shot(page, '10c_goods_full');
+  await set(page, { layout: 'hybrid', sel: 39 }); await shot(page, '10d_goods_hybrid_pinned', '.stage');
+  await set(page, { layout: 'order', sel: -1, show: 'money', halo: true, cover: '0.5' });
   await set(page, { halo: false, cover: '0.8', scale: 'amount', t: 3 }); await shot(page, '11_amounts_2019', '.stage');
   await set(page, { scale: 'share', t: 92, pubonly: true }); await shot(page, '12_published_only', '#chartwrap');
   await set(page, { pubonly: false, measure: 'count' }); await shot(page, '13_number_of_payments', '.stage');
+  await set(page, { measure: 'value', dir: 'up' }); await shot(page, '13b_up_the_order_only', '#chartwrap');
+  await set(page, { dir: 'down' }); await shot(page, '13c_down_the_order_only', '#chartwrap'); await set(page, { dir: 'both' });
+  await page.evaluate(() => { document.getElementById('order-note').open = true; }); await shot(page, '13d_order_note', '#order-note'); await page.evaluate(() => { document.getElementById('order-note').open = false; });
   await set(page, { measure: 'value' });
   await page.evaluate(() => { document.getElementById('tablebox').open = true; }); await new Promise(r => setTimeout(r, 200));
   await shot(page, '14_table', '#tablebox');
@@ -49,7 +56,7 @@ const problems = [];
   await page.mouse.move(box.x + box.width * 0.46, box.y + box.height * 0.55); await new Promise(r => setTimeout(r, 200)); await shot(page, '15_tooltip_a', '#chartwrap');
   await page.close();
 
-  page = await open(1440, 1000, 'dark'); await shot(page, '16_open_dark_full'); await set(page, { sel: 39, lens: 'group:Manufacturing' }); await shot(page, '17_dark_pinned_highlight', '.stage'); await page.close();
+  page = await open(1440, 1000, 'dark'); await shot(page, '16_open_dark_full'); await set(page, { halo: true, cover: '0.5', show: 'goods' }); await shot(page, '16b_dark_goods_halo', '#chartwrap'); await set(page, { halo: false, cover: '0.8', show: 'money' }); await set(page, { sel: 39, lens: 'group:Manufacturing' }); await shot(page, '17_dark_pinned_highlight', '.stage'); await page.close();
   page = await open(390, 844, 'light', '', 2); await shot(page, '18_phone_full'); await shot(page, '18b_phone_chart', '#chartwrap'); await page.close();
   page = await open(900, 1100, 'light'); await shot(page, '19_tablet_full'); await page.close();
 
@@ -61,6 +68,8 @@ const problems = [];
     for (let j = 0; j < n; j++) { await page.evaluate((i, jj) => { const s = document.getElementById(i); s.selectedIndex = jj; s.dispatchEvent(new Event('change')); }, id, j); await new Promise(r => setTimeout(r, 30)); }
     await page.evaluate(i => { const s = document.getElementById(i); s.selectedIndex = 0; s.dispatchEvent(new Event('change')); }, id); results.push(`${id}: ${n} options`); }
   for (const id of ['smooth', 'dots', 'inter', 'halo', 'pubonly']) { for (let j = 0; j < 2; j++) { await page.click('#' + id); await new Promise(r => setTimeout(r, 60)); } results.push(id + ': toggled'); }
+  for (const v of ['down', 'up', 'both']) { await page.evaluate(val => { const r = document.querySelector(`input[name=dir][value=${val}]`); r.checked = true; r.dispatchEvent(new Event('change')); }, v); await new Promise(r => setTimeout(r, 60));
+    results.push(`dir ${v}: ${await page.evaluate(() => window.ynhFlows.drawnLinks())} links`); }
   for (const v of ['hybrid', 'force', 'order']) { await page.evaluate(val => { const r = document.querySelector(`input[name=layout][value=${val}]`); r.checked = true; r.dispatchEvent(new Event('change')); }, v); await new Promise(r => setTimeout(r, 800)); }
   await page.click('#prev'); await page.click('#prev'); await page.click('#next');
   await page.keyboard.press('ArrowLeft'); await page.keyboard.press('Escape');
