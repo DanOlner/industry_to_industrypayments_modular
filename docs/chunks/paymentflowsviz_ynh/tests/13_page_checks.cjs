@@ -32,6 +32,7 @@ const problems = [];
   await shot(page, '02_open_light_stage', '.stage');
   await set(page, { sel: 39 }); await shot(page, '03_pinned_industry', '.stage');
   await set(page, { sel: -1, cols: 'paygroup' }); await shot(page, '04_payment_group_columns', '#chartwrap');
+  await set(page, { cols: 'shift' }); await shot(page, '04b_columns_by_shift', '.stage'); await set(page, { cols: 'shift', sel: 39 }); await shot(page, '04c_columns_by_shift_pinned', '.stage'); await set(page, { sel: -1 });
   await set(page, { cols: 'group', lens: 'is8:any' }); await shot(page, '05_highlight_industrial_strategy', '#chartwrap');
   await set(page, { lens: 'pay:Construction' }); await shot(page, '06_highlight_payment_group', '#chartwrap');
   await set(page, { lens: 'none', layout: 'hybrid' }); await shot(page, '07_hybrid', '#chartwrap');

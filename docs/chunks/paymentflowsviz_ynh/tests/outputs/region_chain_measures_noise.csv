@@ -1,0 +1,8 @@
+measure,lowest,highest,spread_between_regions,year_to_year_within_a_region,ratio,cor_with_hidden_share,cor_with_size
+down_share,SE 0.669,NI 0.777,0.031,0.0095,3.2,0.7,-0.8
+incoherence,NI 0.619,SE 0.843,0.059,0.015,3.9,-0.58,0.68
+one_way,SE 0.482,NI 0.663,0.053,0.018,3,0.74,-0.8
+suppliers_per_buyer,NI 10.4,SE 21.4,2.7,0.42,6.4,-0.7,0.71
+customers_per_supplier,NI 12.1,SE 23.4,2.7,0.57,4.7,-0.39,0.35
+links_for_80pct,NI 214,SE 561,84,11,7.6,-0.59,0.46
+effective_links,NI 158,SE 730,140,22,6.2,-0.46,0.43

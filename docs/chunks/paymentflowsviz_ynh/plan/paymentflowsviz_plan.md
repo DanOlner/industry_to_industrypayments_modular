@@ -1,6 +1,6 @@
 # Yorkshire and the Humber payment flows: plan for a single-page visualisation
 
-*Written 23 November 2026 by Claude Code, and updated the same day with Dan's decisions (section 6) and three follow-up tests (sections 2.7 to 2.9). Builds on [`llm_output/payment_flows_handover.md`](../../../../llm_output/payment_flows_handover.md): read its sections 1 to 3 first for what the data is and what's hidden in it. Every number below comes from the scripts in [`../tests/`](../tests/README.md), run on the September and October 2026 editions.*
+*Written 23 November 2026 by Claude Code, and updated the same day with Dan's decisions (section 6) and three follow-up tests (sections 2.7 to 2.9). Section 10, added later that day, scopes three further changes that are not built. Builds on [`llm_output/payment_flows_handover.md`](../../../../llm_output/payment_flows_handover.md): read its sections 1 to 3 first for what the data is and what's hidden in it. Every number below comes from the scripts in [`../tests/`](../tests/README.md), run on the September and October 2026 editions.*
 
 ## 1. Summary
 
@@ -279,7 +279,7 @@ So the switch is cheap. With it on, the four appear at their own levels and the 
 | Control | Options | Starts at |
 |----|----|----|
 | Layout | Supplier order, hybrid, connections | Supplier order |
-| Columns (supplier order only) | By sector group, by payment group, free | By sector group |
+| Columns (supplier order only) | By sector group, by payment group, by how much its place shifts, free | By sector group |
 | Measure | Value, number of payments | Value |
 | Links | Net per pair, both directions | Net per pair |
 | How many links | Enough for 50%, 80% or 90% of the month's value, or all | 80% (about 430) |
@@ -391,6 +391,8 @@ Settled with Dan on 23 November 2026.
 - **The halo is stronger and two-coloured:** 30% fill with a firm outline, teal for what's received from the rest of the UK and green for what's paid to it. The pair was chosen with the validator to be alike but separable, and clear of the blue and orange used for links.
 - **A "Flows of" switch** shows goods and services (section 3.4).
 - **A "Direction" switch** shows both directions, only the links running down the order (blue), or only those running up it (orange). The "links carrying 80%" cut-off is then taken within the direction chosen, so the up-only view brings out more of the orange links than the combined view does.
+- **A line for the average industry** runs across the chart in the supplier-order layout, and the same line in the side panel's level chart is drawn more strongly.
+- **A fourth Columns option, "By how much its place shifts",** lines industries up from the steadiest to the one whose place in the order moves most. The measure is the standard deviation of the level worked out on the 12 months to each month, the same series the side panel draws. Industries are evenly spaced in rank order, with the standard deviation marked along the top; the 11 small industries sit in a strip of their own, since their levels are mostly noise. Among the rest it runs from 0.009 (retail) to 0.160 (head offices and consultancy), with a median of 0.042, and it tracks drift more than jitter: it correlates 0.80 with the size of the change between the first and last 12 months.
 - **An expandable note, "How the order is worked out, and how far to trust it",** sits under the chart and is linked from the opening paragraph. It gives the calculation, the test results from section 2.2, and the caveats.
 - **A "Pin an industry" list was added,** so an industry can be found and pinned without a pointer.
 - **Hovering a link** shows both directions and, when links are netted, the difference drawn.
@@ -436,7 +438,177 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/README.md` | What each test script does and how to run it |
 | `tests/00` to `12`, `functions_hierarchy.R` | The tests |
 | `tests/13_page_checks.cjs` | Checks on the finished page; screenshots in `tests/outputs/page/` |
+| `tests/14` to `16` | Scoping tests for section 10: all regions' data, links, and how alike regions are |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
 | `local/paymentflowsviz_ynh/` (ignored by git) | Extracted monthly data, held values, and the scripts' printed logs |
+
+## 10. Scoped, not built: links, all twelve regions, and how alike regions are
+
+*Scoped on 23 November 2026. Nothing in this section has been applied to the page. The tests are `tests/14_all_regions_extract.R`, `tests/15_url_roundtrip.cjs` and `tests/16_region_similarity.R`.*
+
+**In short.**
+
+- **Links:** nearly done already. Every control on the page already writes itself to the address and comes back from it. What's left is small.
+- **All regions:** feasible, and the data work is modest (one three-minute pass over the files, about 32 MB of data files). The real work is on the page, which was written for one region. Three regions have much thinner data than Yorkshire and the Humber.
+- **Similarity:** the overall measure works and the differences between regions are real, about three times the size of a region's difference from its own earlier self. The chain-or-web measure separates the extremes but not the middle, and it lines up closely with how big a region is and how much of its data is hidden. The page should say so.
+
+### 10.1 A link for every view
+
+**What's there.** `tests/15` set every value of every control through the page itself, read the address, loaded that address afresh and compared.
+
+| Control | In the address as | Values tried | Came back |
+|----|----|----|----|
+| Layout | `layout` = `order`, `hybrid`, `force` | 3 | 3 |
+| Columns | `cols` = `group`, `paygroup`, `shift`, `free` | 4 | 4 |
+| Highlight | `lens` = `group:…`, `pay:…`, `is8:…` | 22 | 22 |
+| Pin an industry | `sel` = its SIC code | 78 | 78 |
+| Flows of | `show` = `money`, `goods` | 2 | 2 |
+| Direction | `dir` = `both`, `down`, `up` | 3 | 3 |
+| Measure, Widths, Links | `measure`, `scale`, `net` | 6 | 6 |
+| Show | `cover` = `0.5`, `0.8`, `0.9`, `1` | 4 | 4 |
+| Speed | `speed` | 4 | 4 |
+| Five tick boxes | `smooth`, `dots`, `inter`, `halo`, `pubonly` = `1` or `0` | 10 | 10 |
+| Month | `m` = `2021-06` | 1 | 1 |
+
+All 17 settings together also came back from one address of 190 characters. A mangled address falls back to the opening view without an error. `#order-note` on the end opens the note.
+
+**What's missing.**
+
+- **Opening the table or the note** isn't written to the address. The note opens from a link only if `#order-note` is typed in.
+- **Playing** isn't in the address, so there's no link that starts the animation.
+- **The address lists only settings that differ from the opening view.** If an opening setting changes later, old links silently change with it.
+- **Highlight values are full names** (`pay:Local and public services`). Rename a payment group and its links break.
+- **A bad month** falls back to January 2019, not the latest month. Small bug.
+- **Opened from disk,** some browsers refuse to update the address. The page already ignores that, but then there's nothing to copy.
+- **The region** (section 10.2) will need its own entry.
+
+**Work.** All small.
+
+1. A "Copy link" button that writes every setting explicitly, with a version number, so a copied link means the same thing later.
+2. `table=1`, `note=1` and `play=1`.
+3. Short stable codes for highlight sets, in place of names.
+4. Fix the bad-month fallback.
+5. A table of the settings in the folder's README.
+6. Keep `tests/15` as a check, failing if any control stops coming back.
+
+### 10.2 All twelve regions, loaded on demand
+
+**The data.** One pass over the three ONS files (51.7 million rows) took three minutes. Each region's inside flows, between different industries, with intermediaries out and hidden months held:
+
+| Region | Inside payments, whole period | Monthly figures hidden | In links never published | Held values add | Industries under £0.5m a month | Order's agreement with input-output table |
+|----|----|----|----|----|----|----|
+| North East | £11bn | 71% | 42% | 26% | 25 | 0.52 |
+| North West | £96bn | 50% | 22% | 10% | 6 | 0.52 |
+| Yorkshire and the Humber | £61bn | 56% | 27% | 12% | 11 | 0.71 |
+| East Midlands | £42bn | 59% | 29% | 12% | 14 | 0.75 |
+| West Midlands | £64bn | 56% | 28% | 17% | 10 | 0.55 |
+| East of England | £69bn | 54% | 25% | 10% | 8 | 0.65 |
+| London | £401bn | 52% | 25% | 8% | 4 | 0.63 |
+| South East | £146bn | 48% | 21% | 12% | 4 | 0.46 |
+| South West | £40bn | 55% | 27% | 12% | 6 | 0.54 |
+| Wales | £12bn | 71% | 40% | 24% | 24 | 0.42 |
+| Scotland | £48bn | 59% | 29% | 10% | 7 | 0.51 |
+| Northern Ireland | £36bn | 68% | 38% | 11% | 17 | 0.29 |
+
+- **Three regions are much thinner:** the North East, Wales and Northern Ireland have around 70% of monthly figures hidden and about 40% in links never published. In the North East and Wales about a fifth of the value drawn would be held averages, and a third of industries are too small to place.
+- **Yorkshire and the Humber is one of the better cases.** Its order agrees with the input-output table more than any region's except the East Midlands. Northern Ireland's barely agrees (0.29).
+- **Size of the job:** each region's file would be about 2.7 MB (0.5 MB compressed), so about 32 MB in the repository for all twelve, added again to its history on every rebuild. A full build would be roughly half an hour as the script stands (twelve times the Yorkshire and the Humber build), less if it reads the files once.
+
+**What carries over unchanged.** Extraction, holding, levels, outside flows, the links and their flags, and every drawing routine.
+
+**What doesn't.**
+
+- **The page assumes one dataset loaded at the start.** Everything worked out from the data (series, totals, layouts, the key, the slider) needs gathering into one step that can run again when the region changes. That's the main piece of work. The data would load by adding a script for the chosen region, which still works from disk.
+- **Typed-in figures.** The notes quote Yorkshire and the Humber's numbers (71%, 0.74, 0.71 and so on). For twelve regions they must be worked out by the build, carried in each data file and dropped into the text.
+- **Payment groups don't travel.** Worked out region by region with the same method, the regions get 3 to 6 groups. Yorkshire and the Humber's five named groups stay separate only there. Its grouping agrees well with the North East, East Midlands and West Midlands (0.80 to 0.87 on a 0 to 1 scale) and only moderately with the rest (0.37 to 0.59). One grouping on all regions' flows added together fits no better (0.35 to 0.51 for eight of the twelve). So groups have to be worked out per region, and the hand-given names can't be reused.
+- **Industrial strategy shares** need jobs by region. The five-digit jobs file by ITL3 area covers the eleven regions of Great Britain for 2023. Northern Ireland isn't in it.
+- **London.** The side panel's "London" split means nothing there, and the registered-office caveat bites hardest: head offices make London's inside flows partly other regions' business.
+- **"Actual amounts" aren't comparable between regions** as the page stands, because each dataset sets its own reference width. Shares are.
+
+**Steps.**
+
+1. `build_data.R` takes a region; a wrapper builds all twelve and a small index file listing them with the quality figures above.
+2. The build writes each region's quoted figures into its file.
+3. The page gathers its start-up into one re-runnable step; adds a region picker, a `region` entry in the address, and a load-on-demand script.
+4. Text that names the region or quotes a figure reads from the data.
+5. A visible line on data quality for each region, and a stronger warning for the three thin ones.
+6. `tests/13` runs over every region.
+
+### 10.3 Which regions are alike
+
+Both measures use each region's inside flows over the whole period, between different industries, by value, with held values and intermediaries out.
+
+**A. Overall similarity, sector makeup included.**
+
+*The measure.* Write each region's flows as shares of its own total: one share for every pair of paying and paid industry. The distance between two regions is the share of one region's payments that would have to move to a different pair to match the other. 0 is identical; 1 is nothing in common.
+
+*What it gives.*
+
+| Region | Its two closest | Its furthest |
+|----|----|----|
+| North East | South West (0.38), Wales (0.39) | London (0.60) |
+| North West | South West (0.33), Yorkshire and the Humber (0.34) | London (0.49) |
+| Yorkshire and the Humber | North West (0.34), East of England (0.37) | London (0.56) |
+| East Midlands | Yorkshire and the Humber (0.39), East of England (0.39) | London (0.62) |
+| West Midlands | Yorkshire and the Humber (0.38), North West (0.39) | London (0.57) |
+| East of England | South West (0.35), North West (0.36) | London (0.55) |
+| London | North West (0.49), South East (0.52) | Northern Ireland (0.66) |
+| South East | South West (0.41), North West (0.42) | Northern Ireland (0.60) |
+| South West | North West (0.33), East of England (0.35) | London (0.54) |
+| Wales | South West (0.38), North East (0.39) | London (0.63) |
+| Scotland | South West (0.37), North East (0.39) | London (0.58) |
+| Northern Ireland | East of England (0.41), Yorkshire and the Humber (0.44) | London (0.66) |
+
+- **The differences are real.** Distances between regions run from 0.33 to 0.66. The same distance between a region's first half of the period and its second half runs from 0.11 to 0.17. No pair of regions is as close as a region is to its own earlier self.
+- **The ranking is steady.** The 66 distances worked out on the first half and on the second half correlate 0.98.
+- **Hiding doesn't drive it.** Restricting each comparison to links published in both regions gives nearly the same ranking (0.98), and a region's hidden share is only weakly related to how far it sits from the others (0.22).
+- **It's mostly sector makeup.** Comparing only each industry's share of payments gives almost the same ranking (0.97). Comparing who each industry pays, with makeup taken out, also agrees (0.95): regions with similar industries also wire them up similarly.
+- **London stands apart** from everything, with Northern Ireland next. The rest form a loose core around the North West, South West, East of England and Yorkshire and the Humber.
+- **Even the closest pair is 0.33 apart.** With about 6,000 possible pairs of industries, a third of payments sit in different places. "Most alike" is relative.
+
+**B. Chain or web.**
+
+*The measure.* Two numbers, because "chain-like" means two things.
+
+- **How one-way it is:** the share of money running down the order (section 2.2). Higher is more chain-like.
+- **How spread out it is:** for the typical pound spent, the number of supplier industries its buyer's spending is in effect spread across. Lower is more chain-like. (It's the usual "effective number": 1 if a buyer pays one industry, 20 if it pays twenty equally.)
+
+*What it gives,* most chain-like first:
+
+| Region | Money running down the order | Supplier industries per buyer, in effect | Monthly figures hidden |
+|----|----|----|----|
+| Northern Ireland | 78% | 10.4 | 68% |
+| North East | 75% | 16.6 | 71% |
+| East of England | 73% | 16.0 | 54% |
+| Wales | 73% | 15.7 | 71% |
+| East Midlands | 72% | 17.5 | 59% |
+| South West | 72% | 18.4 | 55% |
+| Yorkshire and the Humber | 71% | 17.7 | 56% |
+| Scotland | 71% | 18.5 | 59% |
+| North West | 70% | 19.3 | 50% |
+| West Midlands | 70% | 20.0 | 56% |
+| London | 68% | 19.1 | 52% |
+| South East | 67% | 21.4 | 48% |
+
+- **The ends differ; the middle doesn't.** The spread between regions is three times a region's own year-to-year movement for the first number and six times for the second. But the seven regions from the North West to the East of England sit within 3 points of each other on the first, and neighbours in that run differ by less than one year's wobble (about 1 point). Yorkshire and the Humber is in that run. Northern Ireland at one end, and the South East and London at the other, are clearly apart.
+- **It follows size and hiding.** Across the twelve regions the first number has a rank correlation of 0.70 with the share of figures hidden and of -0.80 with the region's total payments. Small regions with more hidden look more chain-like. That could be true (a smaller economy has fewer two-way links) or it could be that ONS hides the thin links that make a web. The data can't separate the two.
+- **A partial check.** Using only the 1,417 links published at some point in all twelve regions, which carry 76% to 88% of each region's value, keeps the ranking (0.90 for the first number, 0.76 for the second). So it isn't only which links are hidden. Size remains tangled in.
+- **One case stands out as not just size:** the East of England is large and not especially hidden, yet sits near the chain end on both numbers.
+
+**How to show them.**
+
+- **In the region picker:** "Most like this region: North West, East of England", from measure A.
+- **A small chart of the twelve regions** on the two chain-or-web numbers, each with a bar for its own year-to-year range, so overlaps are visible. Regions whose bars overlap are described as the same.
+- **A sentence that changes with the region:** for Yorkshire and the Humber, "about average: not distinguishable from six other regions". For Northern Ireland, "the most chain-like, though it is also among the most hidden".
+- **A standing caveat** that chain-or-web tracks size and hiding.
+- **Data:** both measures for all regions fit in one small file loaded at the start, so the picker works before any second region is fetched.
+
+### 10.4 Decisions for you
+
+1. **Payment groups in other regions.** I'd work them out per region and label each by its largest members, keeping hand-given names for Yorkshire and the Humber only. The alternative is to drop payment groups outside Yorkshire and the Humber.
+2. **The three thin regions.** I'd include them with a prominent warning. The alternative is to leave them out.
+3. **Northern Ireland's industrial strategy shares.** I'd leave the highlight off there unless you have a jobs source for it.
+4. **Chain or web.** I'd show it with its caveat, as above. If the caveat makes it not worth the space, measure A alone is on firmer ground.
+5. **Order of work.** I'd do 10.1 first, since 10.2 needs the region in the address anyway, then 10.2, then 10.3.

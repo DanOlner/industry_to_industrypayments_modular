@@ -35,7 +35,7 @@
   const monthFromParam = v => { if (v == null) return NM - 1; const i = D.months.indexOf(v); return i >= 0 ? i : Math.max(0, Math.min(NM - 1, +v || 0)); };
   const DEFAULTS = { layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
                      smooth: true, dots: true, inter: false, halo: false, pubonly: false, speed: '3' };
-  const S = { layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'free'], DEFAULTS.cols),
+  const S = { layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
@@ -137,14 +137,39 @@
     names.forEach((g, j) => { const w = (x1 - x0) * need[j] / total; centre[g] = x0 + acc + w / 2; width[g] = w; acc += w; });
     return { names, centre, width, colOf };
   }
+  // How much an industry's place in the order shifts: the standard deviation of its level, worked out on the 12 months
+  // to each month (the line in the side panel). Small industries are left out of the ranking: their levels are noise.
+  const shiftCache = {};
+  function shifts() {
+    const key = S.inter ? 'all' : 'core'; if (shiftCache[key]) return shiftCache[key];
+    const sd = new Float64Array(NN), rank = new Int16Array(NN).fill(-1);
+    for (const d of nodes) if (act[d.i]) sd[d.i] = d3.deviation((S.inter ? d.level_all_rolling : d.level_rolling).filter(v => v != null)) || 0;
+    const ranked = nodes.filter(d => act[d.i] && !d.small).sort((a, b) => sd[a.i] - sd[b.i]); ranked.forEach((d, j) => { rank[d.i] = j; });
+    return (shiftCache[key] = { sd, rank, n: ranked.length, sorted: ranked.map(d => sd[d.i]) });
+  }
+  // Columns "by how much its place shifts": industries in rank order, steadiest on the left, evenly spaced, with a
+  // strip at the far right for the small ones. xOfSd places a standard deviation on that rank axis, for the tick marks.
+  function shiftAxis() {
+    const st = shifts(), xa = pad.l + 30 * K, xEnd = W - pad.r + 24 * K, stripW = 62 * K, xb = xEnd - stripW - 16 * K, step = (xb - xa) / st.n;
+    const xOfRank = j => xa + (j + 0.5) * step;
+    const xOfSd = v => { const a = st.sorted, j = d3.bisectLeft(a, v); return j <= 0 ? xOfRank(0) : j >= a.length ? xOfRank(a.length - 1) : xOfRank(j - 1 + (v - a[j - 1]) / ((a[j] - a[j - 1]) || 1)); };
+    return { st, xa, xb, step, xOfRank, xOfSd, stripW, stripX: xEnd - stripW / 2, stripLeft: xb + 8 * K };
+  }
+  // Height on the canvas of a level, in the supplier-order layout (turned over in the goods view)
+  function yOfLevel(v) {
+    const y0 = pad.t + 22 * K, y1 = H - pad.b - 22 * K, y = d3.scaleLinear().domain(lev).range([y1, y0]).clamp(true)(v);
+    return goods() ? y0 + y1 - y : y;
+  }
   const layoutKey = (mode, cols) => [mode, mode === 'order' ? cols : '-', S.inter ? 'all' : 'core'].join('|');
   function computeLayout(mode, cols) {
-    const banded = mode === 'order' && cols !== 'free', cc = columns(cols), colOf = cc.colOf, gx = g => cc.centre[g];
+    const byShift = mode === 'order' && cols === 'shift', banded = mode === 'order' && (cols === 'group' || cols === 'paygroup');
+    const cc = columns(byShift ? 'group' : cols), colOf = cc.colOf, gx = g => cc.centre[g], ax = byShift ? shiftAxis() : null;
+    const txOf = d => d.small ? ax.stripX : ax.xOfRank(ax.st.rank[d.i]);       // by shift: where an industry belongs sideways
     const x0 = pad.l + 24 * K, x1 = W - pad.r, y0 = pad.t + 22 * K, y1 = H - pad.b - 22 * K;
     const y = d3.scaleLinear().domain(lev).range([y1, y0]).clamp(true);
     const rnd = d3.randomLcg(7), base = mode === 'order' ? null : layoutFor('order', 'free');
-    const sn = nodes.filter(d => act[d.i]).map(d => ({ i: d.i, level: L(d), col: colOf(d), r: rNode(wholeTotal[d.i] / NM),
-      x: base ? base[d.i].x : (banded ? gx(colOf(d)) : x0 + rnd() * (x1 - x0)), y: base ? base[d.i].y : y(L(d)) }));
+    const sn = nodes.filter(d => act[d.i]).map(d => ({ i: d.i, level: L(d), col: colOf(d), small: d.small, r: rNode(wholeTotal[d.i] / NM), tx0: byShift ? txOf(d) : 0,
+      x: base ? base[d.i].x : (byShift ? txOf(d) : banded ? gx(colOf(d)) : x0 + rnd() * (x1 - x0)), y: base ? base[d.i].y : y(L(d)) }));
     // Pull between industries. Supplier order: a pair's two-way total as a share of the smaller partner's payments.
     // Hybrid and connections: affinity, the pair's payments over what the two industries' sizes alone would predict,
     // so the biggest industries do not drag everything to the middle (tests/08_clusters.R).
@@ -154,13 +179,14 @@
       recvTot[sup[k]] += t; paidTot[buy[k]] += t; grand += t; }
     const sl = [];
     for (const [kk, t] of pairs) { const i = Math.floor(kk / 1000), j = kk % 1000;
+      if (byShift) continue;                             // by shift: position comes from the rank alone
       if (mode === 'order') { const s = t / Math.min(wholeTotal[i], wholeTotal[j]); if (s > 0.03) sl.push({ source: i, target: j, s }); }
       else { const aff = t / ((recvTot[i] * paidTot[j] + recvTot[j] * paidTot[i]) / grand); if (t > 1000 && aff > 1.5) sl.push({ source: i, target: j, s: Math.min(1, (aff - 1) / 8) * 0.45 }); } }
     const sim = d3.forceSimulation(sn).randomSource(rnd)
       .force('link', d3.forceLink(sl).id(d => d.i).strength(l => Math.min(1, l.s * 2.2) * (mode === 'order' ? 0.25 : 0.7)).distance(l => (50 + 130 * (1 - Math.min(1, l.s * 2))) * K))
-      .force('charge', d3.forceManyBody().strength((mode === 'order' ? (banded ? -60 : -420) : -260) * K))
+      .force('charge', d3.forceManyBody().strength((mode === 'order' ? (banded ? -60 : byShift ? -20 : -420) : -260) * K))
       .force('collide', d3.forceCollide(d => d.r + (mode === 'order' ? 7 : 10) * K).iterations(3))
-      .force('x', d3.forceX(d => banded ? gx(d.col) : (x0 + x1) / 2).strength(banded ? 0.8 : mode === 'force' ? 0.05 : 0.012))
+      .force('x', d3.forceX(d => byShift ? d.tx0 : banded ? gx(d.col) : (x0 + x1) / 2).strength(banded || byShift ? 0.8 : mode === 'force' ? 0.05 : 0.012))
       .force('y', d3.forceY(d => mode === 'force' ? (y0 + y1) / 2 : y(d.level)).strength(mode === 'order' ? 1 : mode === 'hybrid' ? 0.35 : 0.07))
       .stop();
     // Supplier order: height is the level, give or take a few pixels so circles at the same level can sit side by side
@@ -169,9 +195,10 @@
     const pin = () => { for (const d of sn) {
       if (mode === 'order') { const ty = y(d.level); d.y = Math.max(ty - slack, Math.min(ty + slack, d.y)); }
       if (banded) { const c = gx(d.col), hw = Math.max(0, cc.width[d.col] / 2 - Math.min(d.r, cc.width[d.col] / 2) - 1); d.x = Math.max(c - hw, Math.min(c + hw, d.x)); }
-      d.x = Math.max(x0, Math.min(x1 + (banded ? 24 * K : 0), d.x)); d.y = Math.max(y0, Math.min(y1, d.y)); } };
+      if (byShift) { const tol = d.small ? Math.max(0, ax.stripW / 2 - d.r) : 22 * K; d.x = Math.max(d.tx0 - tol, Math.min(d.tx0 + tol, d.x)); }   // stays near its rank
+      d.x = Math.max(x0, Math.min(x1 + (banded || byShift ? 24 * K : 0), d.x)); d.y = Math.max(y0, Math.min(y1, d.y)); } };
     for (let i = 0; i < 600; i++) { sim.tick(); pin(); }
-    if (!banded) {
+    if (!banded && !byShift) {
       // Stretch to fill the frame. For hybrid and connections the stretch ignores the outermost few industries,
       // which are barely connected and would otherwise squeeze everything else; they are held at the edge.
       const xs = sn.map(d => d.x).sort(d3.ascending), ys = sn.map(d => d.y).sort(d3.ascending), p = mode === 'order' ? 0 : 0.04;
@@ -280,7 +307,22 @@
       const lo = goods() ? 'buyer' : 'supplier', hi = goods() ? 'supplier' : 'buyer';
       ctx.fillText(W < 620 ? `${lo}s  ←    →  ${hi}s` : `more of a ${lo}   ←   position in the order   →   more of a ${hi}`, 0, 0); ctx.restore();
     }
-    if (S.layout === 'order' && S.cols !== 'free') {
+    if (S.layout === 'order') {                           // the average industry: buyers on one side of this line, suppliers on the other
+      const ya = Math.round(yOfLevel(0)) + 0.5;
+      ctx.strokeStyle = C.axis; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l - 4, ya); ctx.lineTo(W - 6, ya); ctx.stroke();
+      ctx.textAlign = 'right'; ctx.fillStyle = C.muted; ctx.fillText('average industry', W - 8, ya - fs * 0.75);
+    }
+    if (S.layout === 'order' && S.cols === 'shift') {
+      const ax = shiftAxis(), narrow = W < 620;
+      ctx.fillStyle = C.ink2; ctx.textAlign = 'left'; ctx.fillText(narrow ? 'steadier' : 'place in the order shifts least', ax.xa, 12);
+      ctx.textAlign = 'right'; ctx.fillText(narrow ? 'shifts more' : 'shifts most', ax.xb - 10 * K, 12);
+      ctx.textAlign = 'center'; (narrow ? ['Small'] : ['Too small', 'to say']).forEach((ln, i) => ctx.fillText(ln, ax.stripX + 4 * K, 12 + i * (fs + 3)));
+      ctx.fillStyle = C.muted; ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath();
+      for (const v of [0.02, 0.05, 0.1, 0.15]) { if (v < ax.st.sorted[0] || v > ax.st.sorted[ax.st.n - 1]) continue;       // ticks: the standard deviation at that point in the ranking
+        const x = Math.round(ax.xOfSd(v)) + 0.5; ctx.moveTo(x, pad.t - 8); ctx.lineTo(x, H - pad.b + 6); ctx.fillText(v.toFixed(2), x, 28); }
+      const xs = Math.round(ax.stripLeft) + 0.5; ctx.moveTo(xs, pad.t - 8); ctx.lineTo(xs, H - pad.b + 6); ctx.stroke();
+    }
+    if (S.layout === 'order' && (S.cols === 'group' || S.cols === 'paygroup')) {
       const cc = columns(S.cols);
       ctx.textAlign = 'center'; ctx.fillStyle = C.ink2;
       if (W < 620) cc.names.forEach((g, j) => ctx.fillText(SHORT_HEAD[g] || g, cc.centre[g], 11 + (j % 2) * (fs + 3)));      // narrow: short names on two staggered rows
@@ -469,6 +511,7 @@
       add(s, 'path', { d: 'M19,22A14,14 0 0 0 47,22Z', fill: `var(--halo-${dn})`, 'fill-opacity': 0.3, stroke: `var(--halo-${dn})`, 'stroke-opacity': 0.85 });
       add(s, 'circle', { cx: 33, cy: 22, r: 8, fill: 'var(--node)', stroke: 'var(--node-line)' });
       row(s, goods() ? '<b>Halo:</b> above, bought from the rest of the UK; below, sold to it. Areas are on the circle’s scale.' : '<b>Halo:</b> above, received from the rest of the UK; below, paid to it. Areas are on the circle’s scale.'); }
+    if (S.layout === 'order' && S.cols === 'shift') key.appendChild(el('p', 'd-small', 'Columns: left to right, from the industry whose place in the order shifts least to the one whose place shifts most. The measure is the standard deviation of its level, worked out on the 12 months to each month; the numbers along the top are that figure, in levels. Industries too small to place are kept apart on the right.'));
     if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought, and rent, insurance and rates are in here too.'); key.appendChild(note); }
   }
 
@@ -514,7 +557,7 @@
     box.append(el('h3', null, 'Place in the order, 12 months to each month'));
     const w = 290, h = 64, sx = d3.scaleLinear().domain([0, NM - 1]).range([2, w - 44]), sy = d3.scaleLinear().domain(lev).range(goods() ? [6, h - 6] : [h - 6, 6]).clamp(true);   // the same way up as the chart
     const svg = d3.create('svg').attr('id', 'levelspark').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img').attr('aria-label', 'Its level in the supplier-to-buyer order over time');
-    svg.append('line').attr('x1', 2).attr('x2', w - 44).attr('y1', sy(0)).attr('y2', sy(0)).attr('stroke', 'var(--grid)');
+    svg.append('line').attr('x1', 2).attr('x2', w - 44).attr('y1', sy(0)).attr('y2', sy(0)).attr('stroke', 'var(--muted)').attr('stroke-width', 1.25);
     svg.append('text').attr('x', w - 40).attr('y', sy(0) + 3).attr('font-size', 10).attr('fill', 'var(--muted)').text('average');
     svg.append('text').attr('x', w - 40).attr('y', 10).attr('font-size', 10).attr('fill', 'var(--muted)').text(goods() ? 'supplier' : 'buyer');
     svg.append('text').attr('x', w - 40).attr('y', h - 3).attr('font-size', 10).attr('fill', 'var(--muted)').text(goods() ? 'buyer' : 'supplier');
@@ -522,6 +565,9 @@
       .attr('d', d3.line().defined(v => v != null).x((_, j) => sx(j)).y(v => sy(v))(roll));
     if (roll[m] != null) svg.append('circle').attr('cx', sx(m)).attr('cy', sy(roll[m])).attr('r', 4).attr('fill', 'var(--ink)').attr('stroke', 'var(--surface)').attr('stroke-width', 2);
     box.append(svg.node(), el('p', 'd-small', `Over the whole period it sits ${Math.abs(lvl) < 0.05 ? 'at about the average' : `${Math.abs(lvl).toFixed(2)} levels to the ${lvl > 0 ? 'buyer' : 'supplier'} side of the average industry`}${d.small ? ', but it is too small for that to be reliable' : ''}.`));
+    { const st = shifts(), r = st.rank[i];
+      box.append(el('p', 'd-small', r < 0 ? `Its level moves about by ${st.sd[i].toFixed(3)} (standard deviation), but that is mostly noise in so small an industry.`
+        : `Its place shifts ${r < st.n / 3 ? 'less than most' : r >= 2 * st.n / 3 ? 'more than most' : 'about as much as most'}: a standard deviation of ${st.sd[i].toFixed(3)} levels, ${r + 1} of ${st.n} counting from the steadiest.`)); }
 
     // what is hidden
     const never = S.inter ? d.never_all : d.never_core, cells = S.inter ? d.cells_all : d.cells_core;
@@ -632,7 +678,7 @@
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
     if (k === 'layout' || k === 'cols') moveTo(false);
     if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
-    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show'].includes(k)) buildKey();
+    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show', 'layout', 'cols'].includes(k)) buildKey();
     if (k === 'smooth') updateStripMax();
     reflect(); refresh(); syncUrl();
   }

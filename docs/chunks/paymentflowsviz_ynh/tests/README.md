@@ -23,6 +23,9 @@ Run the R scripts from the repo root, for example `Rscript docs/chunks/paymentfl
 | `11_intermediaries.R` | What changes when the four intermediary divisions are switched in | `outputs/levels_sic2_with_intermediaries.csv` |
 | `12_consensus_groups.R` | Payment groups that hold across the years: 2,000 runs a year, core and floating members, and why per-year groups don't work | `outputs/payment_groups_consensus.csv`, `payment_groups_by_year.csv` |
 | `13_page_checks.cjs` | Checks on the finished page: loads without errors, every control works, screenshots in light, dark and narrow layouts, frames a second while playing | `outputs/page/` |
+| `14_all_regions_extract.R` | Scoping: one pass over the ONS files for every region's inside flows, and row counts for every pair of regions | `local/…/all_regions_own_monthly.rds`, `outputs/region_pair_row_counts.csv` |
+| `15_url_roundtrip.cjs` | Scoping: whether each control's setting survives a round trip through the address bar | `outputs/url_roundtrip.csv` |
+| `16_region_similarity.R` | Scoping: each region's data quality, how alike regions are overall, chain or web, and whether payment groups recur (about seven minutes) | `outputs/region_*.csv`, `payment_groups_uk_pooled.csv` |
 
 `functions_hierarchy.R` holds the shared pieces: held values for hidden months, the flow matrix, levels and the direction-shuffle check.
 
@@ -30,7 +33,7 @@ Run the R scripts from the repo root, for example `Rscript docs/chunks/paymentfl
 
 - **Data** from other project folders, as listed in the handover (`llm_output/payment_flows_handover.md`): the three ONS zips and the input-output workbook in `~/Code/claude/whole_economy_thinking/local/tradeable_jobs/`, and the five-digit file, SIC lookup, industrial strategy list and BRES file in `~/Code/RegionalEconomicTools/`.
 - **R packages:** `data.table`, `igraph`, `jsonlite`, `readxl`.
-- **For `07` and `13`:** Google Chrome and `puppeteer-core`. Install it anywhere outside this folder (`npm install puppeteer-core`) and run with `NODE_PATH=/path/to/node_modules node 07_screenshots_and_timing.cjs`. Add `--shots-only` or `--timing-only` to do half.
+- **For `07`, `13` and `15`:** Google Chrome and `puppeteer-core`. Install it anywhere outside this folder (`npm install puppeteer-core`) and run with `NODE_PATH=/path/to/node_modules node 07_screenshots_and_timing.cjs`. Add `--shots-only` or `--timing-only` to do half.
 
 Large intermediate files go to `local/paymentflowsviz_ynh/`, which git ignores.
 

@@ -1,0 +1,81 @@
+sic2,short,group,status,firmness,years_with_group
+10,Food manufacturing,1,floating,1,4
+01,Farming,1,floating,1,4
+03,Fishing,1,floating,1,4
+75,Veterinary,1,floating,0.99,4
+46,Wholesale,1,floating,0.98,4
+08,Quarrying,2,core,0.95,8
+23,"Glass, cement & ceramics",2,core,0.95,8
+36,Water supply,2,core,0.95,8
+37,Sewerage,2,too small,0.95,8
+38,Waste,2,core,0.95,8
+39,Remediation,2,core,0.95,8
+41,Building construction,2,core,0.95,8
+42,Civil engineering,2,core,0.95,8
+43,Building trades,2,core,0.95,8
+02,Forestry,2,core,0.9,7
+16,Wood products,2,core,0.9,7
+81,Building services & landscaping,2,floating,0.55,4
+26,Electronics,3,core,0.88,8
+27,Electrical equipment,3,core,0.88,8
+24,Basic metals,3,core,0.88,8
+25,Fabricated metal,3,core,0.88,8
+28,Machinery,3,core,0.88,8
+29,Motor vehicles,3,core,0.88,8
+30,Other transport equipment,3,core,0.88,8
+33,Machinery repair & install,3,core,0.88,8
+71,Architecture & engineering,3,core,0.87,8
+32,Other manufacturing,3,core,0.87,8
+22,Rubber & plastics,3,core,0.87,8
+09,Mining support,3,core,0.82,7
+72,Scientific R&D,3,core,0.81,8
+20,Chemicals,3,core,0.81,7
+21,Pharmaceuticals,3,core,0.81,8
+45,Motor trades,3,core,0.7,6
+77,Rental & leasing,3,core,0.7,6
+19,Coke & refined petroleum,3,floating,0.65,4
+35,Energy supply,3,floating,0.65,4
+06,Oil & gas extraction,3,floating,0.65,4
+74,Other professional,3,core,0.63,6
+62,IT & software,4,core,0.99,8
+58,Publishing,4,core,0.99,8
+96,Personal services,4,core,0.99,8
+07,Metal ore mining,4,too small,0.99,8
+70,Head offices & consultancy,4,core,0.99,8
+65,Insurance & pensions,4,core,0.99,8
+69,Legal & accounting,4,core,0.99,8
+85,Education,4,core,0.99,8
+86,Health,4,core,0.99,8
+87,Residential care,4,core,0.99,8
+88,Social work,4,core,0.99,8
+94,Membership organisations,4,core,0.99,8
+68,Real estate,4,core,0.99,8
+78,Employment agencies,4,core,0.99,8
+80,Security,4,core,0.99,8
+84,Public administration,4,core,0.99,8
+59,"Film, TV & music",4,core,0.99,8
+60,Broadcasting,4,core,0.99,8
+61,Telecoms,4,core,0.99,8
+73,Advertising & market research,4,core,0.99,8
+90,Arts & entertainment,4,core,0.99,8
+91,Libraries & museums,4,core,0.99,8
+93,Sport & recreation,4,core,0.99,8
+56,Food & drink service,4,core,0.99,8
+92,Gambling,4,core,0.99,8
+55,Accommodation,4,core,0.99,8
+11,Drinks manufacturing,4,core,0.91,7
+13,Textiles,5,core,0.81,6
+14,Clothing,5,core,0.81,6
+31,Furniture,5,core,0.81,6
+18,Printing,5,floating,0.79,5
+17,Paper,5,floating,0.79,5
+15,Leather,5,too small,0.79,5
+47,Retail,5,floating,0.7,4
+95,Repair of goods,5,floating,0.64,4
+12,Tobacco,5,too small,0.52,3
+49,Land transport,6,core,0.91,8
+50,Water transport,6,core,0.91,8
+51,Air transport,6,core,0.91,8
+52,Warehousing & transport support,6,core,0.91,8
+53,Post & courier,6,core,0.91,8
+79,Travel agencies,6,floating,0.53,5

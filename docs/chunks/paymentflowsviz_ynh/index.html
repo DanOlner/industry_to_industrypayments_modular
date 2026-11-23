@@ -29,7 +29,7 @@
       <label><input type="radio" name="layout" value="hybrid"><span>Hybrid</span></label>
       <label><input type="radio" name="layout" value="force"><span>Connections</span></label>
     </fieldset>
-    <label class="ctl">Columns <select id="cols"><option value="group">By sector group</option><option value="paygroup">By payment group</option><option value="free">Free</option></select></label>
+    <label class="ctl">Columns <select id="cols"><option value="group">By sector group</option><option value="paygroup">By payment group</option><option value="shift">By how much its place shifts</option><option value="free">Free</option></select></label>
     <label class="ctl">Highlight <select id="lens"></select></label>
     <label class="ctl">Pin an industry <select id="pick"></select></label>
     <label class="ctl">Flows of <select id="show"><option value="money">Money</option><option value="goods">Goods and services</option></select></label>
@@ -85,7 +85,7 @@
         <li><strong>What goes in.</strong> Every payment between two different industries where both sides are registered in the region, added up over the whole period, January 2019 to September 2026. It uses the value of payments, with hidden months held at their average. Payments to and from the rest of the UK play no part.</li>
         <li><strong>What comes out.</strong> Each industry gets a level. The levels are chosen so that, as far as the payments allow, a buyer sits one level above each of its suppliers, and big payments count for more than small ones. Precisely: they make the sum, over every link, of the payment times (buyer's level minus supplier's level minus one) squared as small as it can be. These are called trophic levels, after the food webs they were first used on.</li>
         <li><strong>Where zero is.</strong> Levels are measured from the average industry, weighted by size. Height on the chart is the level, give or take a few pixels so that circles at the same level can sit side by side.</li>
-        <li><strong>One order for the whole period.</strong> Circles don't move as time plays, so everything that moves is a change in payments. Pin an industry to see how its level drifts, worked out on the 12 months to each month.</li>
+        <li><strong>One order for the whole period.</strong> Circles don't move as time plays, so everything that moves is a change in payments. Pin an industry to see how its level drifts, worked out on the 12 months to each month. The Columns option "By how much its place shifts" lines industries up by the standard deviation of that drifting level, steadiest on the left.</li>
         <li><strong>A plainer way to think of it.</strong> The order is almost the same as ranking industries by the balance of their dealings with other industries here: how much of it is paying out, and how much is being paid (the two rankings correlate 0.96). The level adds one thing: who you buy from matters, not only how much.</li>
         <li><strong>Goods and services view.</strong> The same order, turned upside down.</li>
       </ul>
