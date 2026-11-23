@@ -1,6 +1,6 @@
 control,kind,values_tried,came_back,problems
 region,select,12,12,""
-cols,select,5,5,""
+cols,select,7,7,""
 lens,select,26,26,""
 pick,select,78,78,""
 show,select,2,2,""

@@ -15,11 +15,16 @@ for (const code of regions) {
   global.window = {}; require(path.join(dir, `flows_${code}.js`)); const D = window.FLOWS_DATA[code];
   const n = D.nodes, L = D.links, total = L.value.map(a => a.reduce((x, y) => x + y, 0)), core = n.map(d => d.role === 'industry');
   for (const [name, f] of Object.entries(sets)) {
-    const sh = n.map(d => f(d.fe || [0, 0, 0])), num = n.map(() => 0), den = n.map(() => 0);
+    const sh = n.map(d => f(d.fe || [0, 0, 0])), num = n.map(() => 0), den = n.map(() => 0), sn = n.map(() => 0), sd = n.map(() => 0), bn = n.map(() => 0), bd = n.map(() => 0);
     L.supplier.forEach((s, k) => { const b = L.buyer[k]; if (!core[s] || !core[b]) return;            // intermediaries left out, as the page opens
-      num[s] += total[k] * sh[b]; den[s] += total[k]; num[b] += total[k] * sh[s]; den[b] += total[k]; });
+      num[s] += total[k] * sh[b]; den[s] += total[k]; num[b] += total[k] * sh[s]; den[b] += total[k];
+      sn[s] += total[k] * sh[b]; sd[s] += total[k]; bn[b] += total[k] * sh[s]; bd[b] += total[k]; });   // sales to the set, and purchases from it
     const idx = n.map((d, i) => i).filter(i => core[i] && !n[i].small && den[i] > 0), t = idx.map(i => num[i] / den[i]);
     rows.push([code, name, idx.length, quantile(t, 0.1).toFixed(3), quantile(t, 0.5).toFixed(3), quantile(t, 0.9).toFixed(3)]);
+    for (const [way, nn, dd] of [['sells to', sn, sd], ['buys from', bn, bd]]) { const v = idx.filter(i => dd[i] > 0).map(i => nn[i] / dd[i]);
+      rows.push([code, `${name}, ${way}`, v.length, quantile(v, 0.1).toFixed(3), quantile(v, 0.5).toFixed(3), quantile(v, 0.9).toFixed(3)]);
+      if (name === 'both' || name === 'providential') { console.log(`${code} ${(name + ', ' + way).padEnd(24)} a tenth below ${pct(quantile(v, 0.1))}, middle ${pct(quantile(v, 0.5))}, a tenth above ${pct(quantile(v, 0.9))}`);
+        if (code === 'TLE') console.log('   most: ' + idx.filter(i => dd[i] > 0).map(i => [n[i].short + ' ' + pct(nn[i] / dd[i]) + (sh[i] >= 0.5 ? '*' : ''), nn[i] / dd[i]]).sort((a, b) => b[1] - a[1]).slice(0, 8).map(x => x[0]).join('; ')); } }
     console.log(`${code} ${name.padEnd(12)} ${idx.length} industries: a tenth below ${pct(quantile(t, 0.1))}, middle ${pct(quantile(t, 0.5))}, a tenth above ${pct(quantile(t, 0.9))}`);
     if (code === 'TLE' && (name === 'both' || name === 'providential')) {
       const ord = idx.map((i, j) => `${n[i].short} ${pct(t[j])}${sh[i] >= 0.5 ? '*' : ''}`).map((s, j) => [s, t[j]]).sort((a, b) => b[1] - a[1]).map(x => x[0]);

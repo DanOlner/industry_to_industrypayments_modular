@@ -1,49 +1,145 @@
 region,highlight,industries,p10,median,p90
 TLC,both,49,0.097,0.225,0.494
+TLC,both, sells to,49,0.050,0.257,0.624
+TLC,both, buys from,49,0.084,0.184,0.349
 TLC,material,49,0.063,0.126,0.264
+TLC,material, sells to,49,0.019,0.103,0.300
+TLC,material, buys from,49,0.067,0.125,0.290
 TLC,providential,49,0.004,0.056,0.198
+TLC,providential, sells to,49,0.004,0.088,0.346
+TLC,providential, buys from,49,0.003,0.019,0.116
 TLC,overlooked,49,0.148,0.269,0.453
+TLC,overlooked, sells to,49,0.113,0.265,0.437
+TLC,overlooked, buys from,49,0.165,0.259,0.485
 TLD,both,72,0.157,0.252,0.450
+TLD,both, sells to,72,0.177,0.298,0.544
+TLD,both, buys from,72,0.118,0.210,0.362
 TLD,material,72,0.083,0.166,0.347
+TLD,material, sells to,72,0.078,0.167,0.355
+TLD,material, buys from,72,0.084,0.164,0.325
 TLD,providential,72,0.018,0.052,0.150
+TLD,providential, sells to,72,0.023,0.090,0.257
+TLD,providential, buys from,72,0.009,0.022,0.073
 TLD,overlooked,72,0.165,0.253,0.370
+TLD,overlooked, sells to,72,0.148,0.282,0.385
+TLD,overlooked, buys from,72,0.142,0.224,0.366
 TLE,both,66,0.165,0.268,0.426
+TLE,both, sells to,66,0.183,0.311,0.541
+TLE,both, buys from,66,0.118,0.188,0.396
 TLE,material,66,0.098,0.189,0.381
+TLE,material, sells to,66,0.076,0.202,0.428
+TLE,material, buys from,66,0.090,0.155,0.384
 TLE,providential,66,0.007,0.041,0.149
+TLE,providential, sells to,66,0.007,0.071,0.267
+TLE,providential, buys from,66,0.004,0.014,0.057
 TLE,overlooked,66,0.187,0.257,0.342
+TLE,overlooked, sells to,66,0.165,0.251,0.335
+TLE,overlooked, buys from,66,0.169,0.250,0.350
 TLF,both,62,0.152,0.265,0.491
+TLF,both, sells to,62,0.159,0.332,0.525
+TLF,both, buys from,62,0.113,0.213,0.452
 TLF,material,62,0.105,0.192,0.466
+TLF,material, sells to,62,0.082,0.199,0.483
+TLF,material, buys from,62,0.079,0.165,0.419
 TLF,providential,62,0.008,0.041,0.147
+TLF,providential, sells to,62,0.009,0.057,0.295
+TLF,providential, buys from,62,0.005,0.016,0.068
 TLF,overlooked,62,0.158,0.269,0.395
+TLF,overlooked, sells to,62,0.140,0.282,0.425
+TLF,overlooked, buys from,62,0.130,0.247,0.361
 TLG,both,67,0.161,0.279,0.407
+TLG,both, sells to,67,0.141,0.288,0.493
+TLG,both, buys from,67,0.126,0.207,0.420
 TLG,material,67,0.093,0.180,0.363
+TLG,material, sells to,67,0.064,0.153,0.355
+TLG,material, buys from,67,0.092,0.187,0.392
 TLG,providential,67,0.007,0.044,0.158
+TLG,providential, sells to,67,0.009,0.065,0.258
+TLG,providential, buys from,67,0.002,0.013,0.084
 TLG,overlooked,67,0.135,0.210,0.315
+TLG,overlooked, sells to,67,0.121,0.210,0.336
+TLG,overlooked, buys from,67,0.115,0.202,0.346
 TLH,both,68,0.154,0.263,0.470
+TLH,both, sells to,68,0.155,0.319,0.466
+TLH,both, buys from,68,0.119,0.207,0.505
 TLH,material,68,0.082,0.182,0.416
+TLH,material, sells to,68,0.079,0.169,0.365
+TLH,material, buys from,68,0.076,0.176,0.486
 TLH,providential,68,0.009,0.048,0.163
+TLH,providential, sells to,68,0.009,0.070,0.250
+TLH,providential, buys from,68,0.004,0.011,0.073
 TLH,overlooked,68,0.146,0.261,0.379
+TLH,overlooked, sells to,68,0.155,0.267,0.428
+TLH,overlooked, buys from,68,0.142,0.235,0.327
 TLI,both,75,0.101,0.212,0.388
+TLI,both, sells to,75,0.103,0.233,0.391
+TLI,both, buys from,75,0.067,0.153,0.335
 TLI,material,75,0.062,0.152,0.361
+TLI,material, sells to,75,0.051,0.152,0.369
+TLI,material, buys from,75,0.045,0.122,0.319
 TLI,providential,75,0.011,0.030,0.074
+TLI,providential, sells to,75,0.012,0.045,0.100
+TLI,providential, buys from,75,0.003,0.012,0.050
 TLI,overlooked,75,0.135,0.214,0.329
+TLI,overlooked, sells to,75,0.145,0.249,0.424
+TLI,overlooked, buys from,75,0.106,0.173,0.250
 TLJ,both,74,0.151,0.242,0.344
+TLJ,both, sells to,73,0.157,0.270,0.449
+TLJ,both, buys from,74,0.125,0.200,0.394
 TLJ,material,74,0.088,0.162,0.292
+TLJ,material, sells to,73,0.074,0.154,0.300
+TLJ,material, buys from,74,0.082,0.167,0.352
 TLJ,providential,74,0.015,0.056,0.131
+TLJ,providential, sells to,73,0.019,0.085,0.235
+TLJ,providential, buys from,74,0.007,0.019,0.072
 TLJ,overlooked,74,0.124,0.218,0.351
+TLJ,overlooked, sells to,73,0.137,0.209,0.354
+TLJ,overlooked, buys from,74,0.109,0.206,0.314
 TLK,both,70,0.166,0.277,0.528
+TLK,both, sells to,70,0.199,0.310,0.639
+TLK,both, buys from,70,0.107,0.200,0.451
 TLK,material,70,0.084,0.165,0.410
+TLK,material, sells to,70,0.057,0.177,0.408
+TLK,material, buys from,70,0.063,0.165,0.420
 TLK,providential,70,0.013,0.055,0.192
+TLK,providential, sells to,70,0.012,0.090,0.349
+TLK,providential, buys from,70,0.005,0.020,0.071
 TLK,overlooked,70,0.158,0.250,0.366
+TLK,overlooked, sells to,70,0.127,0.264,0.381
+TLK,overlooked, buys from,70,0.133,0.228,0.365
 TLL,both,50,0.156,0.259,0.437
+TLL,both, sells to,50,0.114,0.314,0.495
+TLL,both, buys from,50,0.134,0.218,0.385
 TLL,material,50,0.083,0.154,0.313
+TLL,material, sells to,50,0.049,0.144,0.296
+TLL,material, buys from,50,0.074,0.162,0.356
 TLL,providential,50,0.012,0.072,0.291
+TLL,providential, sells to,50,0.009,0.133,0.408
+TLL,providential, buys from,50,0.008,0.024,0.159
 TLL,overlooked,50,0.188,0.289,0.411
+TLL,overlooked, sells to,50,0.121,0.306,0.439
+TLL,overlooked, buys from,50,0.215,0.277,0.377
 TLM,both,71,0.190,0.298,0.466
+TLM,both, sells to,71,0.199,0.358,0.573
+TLM,both, buys from,71,0.119,0.219,0.425
 TLM,material,71,0.118,0.224,0.452
+TLM,material, sells to,71,0.119,0.253,0.570
+TLM,material, buys from,71,0.074,0.175,0.417
 TLM,providential,71,0.005,0.029,0.126
+TLM,providential, sells to,71,0.004,0.039,0.169
+TLM,providential, buys from,71,0.005,0.013,0.058
 TLM,overlooked,71,0.149,0.258,0.426
+TLM,overlooked, sells to,71,0.131,0.279,0.431
+TLM,overlooked, buys from,71,0.147,0.238,0.414
 TLN,both,58,0.183,0.307,0.449
+TLN,both, sells to,57,0.172,0.317,0.451
+TLN,both, buys from,58,0.153,0.297,0.590
 TLN,material,58,0.150,0.265,0.438
+TLN,material, sells to,57,0.093,0.231,0.390
+TLN,material, buys from,58,0.140,0.278,0.558
 TLN,providential,58,0.003,0.012,0.106
+TLN,providential, sells to,57,0.003,0.019,0.214
+TLN,providential, buys from,58,0.002,0.005,0.032
 TLN,overlooked,58,0.142,0.263,0.381
+TLN,overlooked, sells to,57,0.137,0.278,0.416
+TLN,overlooked, buys from,58,0.109,0.239,0.353

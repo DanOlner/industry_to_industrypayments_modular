@@ -1057,3 +1057,14 @@ Results are in `tests/outputs/io_estimates_by_industry.csv` and `io_estimates_re
 
 **Not done.** Nobody has looked at the eleven other regions' pictures with these options on. The ticks along the top skip any that would overlap, so a bunched measure (providential alone) shows few of them.
 
+**Added afterwards: "sells to" and "buys from"** (23 November 2026).
+
+- **Why.** The ties measure adds payments in both directions, so it can't tell a supplier of the highlighted industries from a customer of them.
+- **Two more column choices** beside it: "By sales to what is highlighted" counts only what an industry is paid, and how much of that comes from the highlighted industries. "By purchases from what is highlighted" counts only what it pays, and how much of that goes to them.
+- **The axis wording** is now "least tied to the highlighted industries" to "most tied", "sells least to" to "sells most", and "buys least from" to "buys most". The key gives the full definition.
+- **The side panel** gives all three figures for a pinned industry whenever something is highlighted.
+- **Spread** (`tests/21_ties_columns.cjs`, Yorkshire and the Humber, material and providential): sales to, a tenth of industries below 18%, the middle 31%, a tenth above 54%; purchases from, 12%, 19% and 40%. Sales spread industries out more than purchases in ten of the twelve regions; the East of England and Northern Ireland are the other way round.
+- **What "sells to" shows for the public services:** after social work (69%) and residential care (46%), which sell to each other, come libraries and museums (39%), membership organisations (33%), sport and recreation (30%), publishing (27%) and other manufacturing (27%), which includes medical instruments.
+- **"Buys from" the public services says little:** the middle industry makes 1% of its purchases from them, because they sell so little to other businesses in this data.
+- **Checks:** all 7 column choices come back from the address; no page or console errors; 60 frames a second on the opening view and 54 with every link drawn. Screenshots `06f` and `06g`.
+
