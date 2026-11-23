@@ -1,0 +1,85 @@
+sic2,short,section,role,jobs,material,providential,overlooked,other,main,main_share,fit,largest_against
+01,Farming,A,industry,420645,0.995,0,0,0.005,Material,0.995,whole,"01700 Hunting, trapping and related service activit [Other]"
+02,Forestry,A,industry,23165,0,0,1,0,Overlooked,1,whole,
+03,Fishing,A,industry,14065,1,0,0,0,Material,1,whole,
+05,Coal mining,B,industry,380,1,0,0,0,Material,1,whole,
+06,Oil & gas extraction,B,industry,12360,1,0,0,0,Material,1,whole,
+08,Quarrying,B,industry,17460,0,0,1,0,Overlooked,1,whole,
+09,Mining support,B,industry,15375,0.959,0,0.041,0,Material,0.959,whole,09900 Support activities for other mining and quarr [Overlooked]
+10,Food manufacturing,C,industry,387860,1,0,0,0,Material,1,whole,
+11,Drinks manufacturing,C,industry,53320,1,0,0,0,Material,1,whole,
+12,Tobacco,C,industry,40,0,0,0,1,Other,1,whole,
+13,Textiles,C,industry,48580,0,0,1,0,Overlooked,1,whole,
+14,Clothing,C,industry,24065,0,0,1,0,Overlooked,1,whole,
+15,Leather,C,industry,6250,0,0,1,0,Overlooked,1,whole,
+16,Wood products,C,industry,77375,0,0,1,0,Overlooked,1,whole,
+17,Paper,C,industry,46435,0,0,1,0,Overlooked,1,whole,
+18,Printing,C,industry,71980,0,0,0.977,0.023,Overlooked,0.977,whole,18201 Reproduction of sound recording [Other]; 18203 Reproduction of computer media [Other]; 18202 Reproduction of video recording [Other]
+19,Coke & refined petroleum,C,industry,8255,0,0,0,1,Other,1,whole,
+20,Chemicals,C,industry,105585,0.021,0,0.283,0.696,Other,0.696,most,20420 Manufacture of perfumes and toilet preparatio [Overlooked]; 20412 Manufacture of cleaning and polishing prepara [Overlooked]; 20411 Manufacture of soap and detergents [Overlooked]
+21,Pharmaceuticals,C,industry,45620,0,0,0,1,Other,1,whole,
+22,Rubber & plastics,C,industry,153200,0,0,0,1,Other,1,whole,
+23,"Glass, cement & ceramics",C,industry,76090,0,0,0.508,0.492,Overlooked,0.508,split,"23120 Shaping and processing of flat glass [Other]; 23700 Cutting, shaping and finishing of stone [Other]; 23990 Manufacture of other non-metallic mineral pro [Other]"
+24,Basic metals,C,industry,73800,0,0,0,1,Other,1,whole,
+25,Fabricated metal,C,industry,278035,0,0,0.016,0.984,Other,0.984,whole,25210 Manufacture of central heating radiators and  [Overlooked]
+26,Electronics,C,industry,126080,0,0,0,1,Other,1,whole,
+27,Electrical equipment,C,industry,75880,0.189,0,0.121,0.69,Other,0.69,most,27120 Manufacture of electricity distribution and c [Material]; 27510 Manufacture of electric domestic appliances [Overlooked]; 27520 Manufacture of non-electric domestic applianc [Overlooked]
+28,Machinery,C,industry,158355,0,0,0,1,Other,1,whole,
+29,Motor vehicles,C,industry,136580,0,0,0,1,Other,1,whole,
+30,Other transport equipment,C,industry,127875,0.046,0,0,0.954,Other,0.954,whole,30200 Manufacture of railway locomotives and rollin [Material]
+31,Furniture,C,industry,72670,0,0,1,0,Overlooked,1,whole,
+32,Other manufacturing,C,industry,87900,0,0,0,1,Other,1,whole,
+33,Machinery repair & install,C,industry,130770,0.338,0,0.061,0.601,Other,0.601,split,33160 Repair and maintenance of aircraft and spacec [Material]; 33170 Repair and maintenance of other transport equ [Material]; 33150 Repair and maintenance of ships and boats [Material]
+35,Energy supply,D,industry,116900,1,0,0,0,Material,1,whole,
+36,Water supply,E,industry,48340,1,0,0,0,Material,1,whole,
+37,Sewerage,E,industry,25440,1,0,0,0,Material,1,whole,
+38,Waste,E,industry,144825,0.853,0,0,0.147,Material,0.853,most,38320 Recovery of sorted materials [Other]; 38310 Dismantling of wrecks [Other]
+39,Remediation,E,industry,8065,0,0,0,1,Other,1,whole,
+41,Building construction,F,industry,519350,0,0,0.546,0.454,Overlooked,0.546,split,41100 Development of building projects [Other]; 41201 Construction of commercial buildings [Other]
+42,Civil engineering,F,industry,206515,1,0,0,0,Material,1,whole,
+43,Building trades,F,industry,841535,0,0,0.964,0.036,Overlooked,0.964,whole,43120 Site preparation [Other]; 43110 Demolition [Other]; 43130 Test drilling and boring [Other]
+45,Motor trades,G,industry,561620,1,0,0,0,Material,1,whole,
+46,Wholesale,G,industry,1162755,0.084,0,0.302,0.614,Other,0.614,split,"46730 Wholesale of wood, construction materials and [Overlooked]; 46740 Wholesale of hardware, plumbing and heating e [Overlooked]; 46499 Wholesale of household goods (other than musi [Overlooked]"
+47,Retail,G,industry,2662805,0.431,0.059,0.232,0.278,Material,0.431,split,47710 Retail sale of clothing in specialised stores [Overlooked]; 47190 Other retail sale in non-specialised stores [Other]; 47910 Retail sale via mail order houses or via Inte [Other]
+49,Land transport,H,industry,562090,1,0,0,0,Material,1,whole,
+50,Water transport,H,industry,13440,0.441,0,0.559,0,Overlooked,0.559,split,50200 Sea and coastal freight water transport [Material]; 50300 Inland passenger water transport [Material]; 50400 Inland freight water transport [Material]
+51,Air transport,H,industry,76895,0.021,0,0.979,0,Overlooked,0.979,whole,51210 Freight air transport [Material]
+52,Warehousing & transport support,H,industry,666000,1,0,0,0,Material,1,whole,
+53,Post & courier,H,industry,278170,0.553,0,0,0.447,Material,0.553,split,53202 Unlicensed carrier [Other]; 53201 Licensed carriers [Other]
+55,Accommodation,I,industry,493645,0,0,1,0,Overlooked,1,whole,
+56,Food & drink service,I,industry,2058800,0,0,1,0,Overlooked,1,whole,
+58,Publishing,J,industry,123695,0,0,0,1,Other,1,whole,
+59,"Film, TV & music",J,industry,137395,0,0,0,1,Other,1,whole,
+60,Broadcasting,J,industry,50165,0,0,0,1,Other,1,whole,
+61,Telecoms,J,industry,215585,1,0,0,0,Material,1,whole,
+62,IT & software,J,industry,817550,0,0,0,1,Other,1,whole,
+63,Information services,J,intermediary,87030,0,0,0,1,Other,1,whole,
+64,Banking & finance,K,intermediary,490205,0.74,0,0,0.26,Material,0.74,most,64999 Financial intermediation not elsewhere classi [Other]; 64921 Credit granting by non-deposit taking finance [Other]; 64991 Security dealing on own account [Other]
+65,Insurance & pensions,K,industry,99280,0,0,0,1,Other,1,whole,
+66,Financial support services,K,intermediary,486325,0,0,0,1,Other,1,whole,
+68,Real estate,L,industry,640100,0,0,0.261,0.739,Other,0.739,most,68310 Real estate agencies [Overlooked]
+69,Legal & accounting,M,industry,834260,0,0,0,1,Other,1,whole,
+70,Head offices & consultancy,M,industry,939860,0,0,0,1,Other,1,whole,
+71,Architecture & engineering,M,industry,549180,0,0,0,1,Other,1,whole,
+72,Scientific R&D,M,industry,172575,0,0,0,1,Other,1,whole,
+73,Advertising & market research,M,industry,196135,0,0,0,1,Other,1,whole,
+74,Other professional,M,industry,212610,0,0,0,1,Other,1,whole,
+75,Veterinary,M,industry,84740,0,0,1,0,Overlooked,1,whole,
+77,Rental & leasing,N,industry,166190,0,0,0,1,Other,1,whole,
+78,Employment agencies,N,industry,967985,0,0,0,1,Other,1,whole,
+79,Travel agencies,N,industry,88925,0,0,0.931,0.069,Overlooked,0.931,whole,79909 Other reservation service activities n.e.c. [Other]
+80,Security,N,industry,218760,0,0,0,1,Other,1,whole,
+81,Building services & landscaping,N,industry,758975,0,0,0,1,Other,1,whole,
+82,Office & business support,N,intermediary,549030,0,0,0,1,Other,1,whole,
+84,Public administration,O,industry,1479725,0,1,0,0,Providential,1,whole,
+85,Education,P,industry,2676580,0,1,0,0,Providential,1,whole,
+86,Health,Q,industry,2669470,0,1,0,0,Providential,1,whole,
+87,Residential care,Q,industry,760855,0,1,0,0,Providential,1,whole,
+88,Social work,Q,industry,944755,0,1,0,0,Providential,1,whole,
+90,Arts & entertainment,R,industry,110850,0,0,0,1,Other,1,whole,
+91,Libraries & museums,R,industry,111125,0,0,0.958,0.042,Overlooked,0.958,whole,91012 Archives activities [Other]
+92,Gambling,R,industry,77935,0,0,0,1,Other,1,whole,
+93,Sport & recreation,R,industry,532615,0,0,0.995,0.005,Overlooked,0.995,whole,93191 Activities of racehorse owners [Other]
+94,Membership organisations,S,industry,248120,0,0,0,1,Other,1,whole,
+95,Repair of goods,S,industry,52640,0,0,0.346,0.654,Other,0.654,split,95220 Repair of household appliances and home and g [Overlooked]; 95240 Repair of furniture and home furnishings [Overlooked]; 95290 Repair of personal and household goods n.e.c. [Overlooked]
+96,Personal services,S,industry,336015,0,0,0.678,0.322,Overlooked,0.678,most,96090 Other service activities n.e.c. [Other]; 96040 Physical well-being activities [Other]

@@ -355,6 +355,7 @@ Short, near the chart, not buried:
 - **Payments, not trade.** Bacs and Faster Payments between businesses. Read a link as a sign of connection.
 - **Registered offices, not activity.** A firm headquartered elsewhere pays from elsewhere. This is why the page is about flows inside the region, the more trustworthy half.
 - **Households aren't in it,** so consumer-facing and publicly funded industries appear mainly as buyers.
+- **Most of what the industries are paid isn't drawn, and public money is mostly left out** (added 23 November 2026, from section 11.10). The page shows payments where both sides have a known industry and region, which is about a third of what a region's industries were paid. Rows with an unknown industry or an unknown region are dropped, and public administration almost never has a region. There is no category for abroad. Each region's note quotes its own figures, worked out by the build (`left_out()` in `build_data.R`).
 - **Over half the monthly cells are hidden,** and hidden doesn't mean small. Held values are averages of the months that were published. Over a quarter of cell-months have nothing to hold: those links are simply absent. Retail paying food manufacturing is one.
 - **Growth over time is partly coverage.** More payments are captured in later years.
 - **Nominal pounds, not seasonally adjusted, experimental statistics** that are revised between editions. The page opens on each month's shares, which sidesteps price changes.
@@ -425,6 +426,8 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 - **Missing rows** in the regional files are treated as zero. Nobody has checked that with ONS (handover, section 7).
 - **`[-]` in the five-digit file** is unexplained. It only matters if the national panel is ever built.
 - **Revisions.** When ONS issues the next edition, re-run and compare the levels before updating the page.
+- **Bringing public administration's payments in.** They have no region, so they can't go in the inside or outside totals as they stand. See section 11.11.
+- **Who the payers of unknown industry are.** They account for about half of what a region's industries are paid. Nothing here says who they are; ONS's own notes on the data would be the place to look.
 
 ## 9. Files
 
@@ -439,7 +442,8 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/00` to `12`, `functions_hierarchy.R` | The tests |
 | `tests/13_page_checks.cjs` | Checks on the finished page; screenshots in `tests/outputs/page/` |
 | `tests/14` to `16` | Scoping tests for section 10: all regions' data, links, and how alike regions are |
-| `tests/lookups/` | Division names and sections; industrial strategy shares by division |
+| `tests/17` to `19` | Scoping tests for section 11: the foundational economy list, how it fits divisions, and how it sits against tradeable |
+| `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
 | `local/paymentflowsviz_ynh/` (ignored by git) | Extracted monthly data, held values, and the scripts' printed logs |
@@ -650,12 +654,14 @@ Yorkshire and the Humber's build still matches all 14 test checks after the rewo
 
 **Not done.**
 
-- **The other nine regions on the site.** Their data are built and staged, not added: see 10.6.
+- **The other nine regions** were built and staged, then added to the site: see 10.6.
 - **Section 10.1,** the link work, apart from the region entry and the month fix.
 - **"Actual amounts" still aren't comparable between regions.** Each region sets its own reference width.
 - **The payment groups outside Yorkshire and the Humber** haven't been looked over.
 
-### 10.6 The other nine: built and staged, not on the site
+### 10.6 The other nine: built, staged, then added to the site
+
+**Added to the site on 23 November 2026,** at Dan's request, by copying the staged folder over `data/`. All twelve regions are now offered. `tests/13` on the site itself: all twelve load with no errors and no unfilled text. The points under "To settle" below are still open.
 
 **Built on 23 November 2026** with `Rscript build_data.R stage …`, which writes to `local/paymentflowsviz_ynh/staged_data/` and leaves the site's `data/` alone. All nine built without error in 21 minutes. The staged folder holds all twelve regions and its own index, 30 MB in all, so putting them on the site is a matter of copying it over `data/`.
 
@@ -681,14 +687,276 @@ Yorkshire and the Humber's build still matches all 14 test checks after the rewo
 **What turned up.**
 
 - **The East Midlands barely has payment groups.** Only 18 of its 76 industries sit firmly in one. Its first build gave two "groups" of a single industry each; the build now needs three core industries before it calls something a group, which doesn't change any region already on the site.
-- **Northern Ireland is a different kind of case, not only a thin one.** More is paid inside it (£648m a month) than to the rest of the UK (£522m) or from it (£402m). Every other region sends and receives three to four times its inside total. Its order is also the most one-way (78%) and agrees least with the input-output table (0.29). It has no industrial strategy highlight, as expected, and the page says why.
+- **Northern Ireland is a different kind of case, not only a thin one.** It is the only region where more is paid inside than to or from the rest of the UK: for every £1 inside, 87p goes out and 68p comes in. London (£1.29 out) and Scotland (£1.93) come nearest; the other nine run from £2.36 (South East) to £4.30 (North East). An earlier version of this note said every other region sent out three to four times its inside total, which was wrong. Northern Ireland's order is also the most one-way (78%) and agrees least with the input-output table (0.29). It has no industrial strategy highlight, as expected, and the page says why.
 - **London works as built.** The partner shown separately in its side panel is the South East. It is the least hidden on payment counts (4%).
 - **Wales behaves like the North East:** 38% of its value has no usable payment count, so the build drops payment counts from its text too.
 - **Agreement with the input-output table varies more than anything else,** from 0.29 to 0.75, and not with how thin the data are: the South East, the best published region, is second lowest at 0.46.
 
 **To settle before these go on the site.**
 
-- **Whether Northern Ireland needs its own wording.** Its inside-heavy balance and low agreement suggest its payments are being recorded differently, or that its economy really is that self-contained within the UK. Cross-border trade with Ireland isn't in the data at all. I'd add a sentence saying so.
+- **Whether Northern Ireland needs its own wording.** Its inside-heavy balance and low agreement suggest its payments are being recorded differently, or that its economy really is that self-contained within the UK. Cross-border trade with Ireland isn't in the data at all. I'd add a sentence saying so. Not yet added.
+- **London and Scotland are also inside-heavy** compared with the English regions outside London. For London that fits head offices registering other regions' business there. Worth a line on those two pages as well.
 - **Whether a region with almost no payment groups should offer them.** For the East Midlands I'd keep the option but say on the page that few industries group there.
 - **Repository size.** 30 MB of data files, added to the history again on each rebuild.
 - **A look at each region's picture by a person,** as Yorkshire and the Humber had. The checks show the pages work, not that they read sensibly.
+
+## 11. Scoped, not built: a foundational economy mapping
+
+*Scoped on 23 November 2026, with tests `tests/17_foundational_read_list.py`, `tests/18_foundational_divisions.R` and `tests/19_foundational_tradeable.R`. The decisions in 11.9 are taken. Nothing here is on the page yet.*
+
+**In short.**
+
+- **Use the Foundational Economy Collective's own list.** It is the only definition I found that goes down to codes: 731 five-digit SIC codes, each placed in one of four zones. Counted on 2023 jobs it gives back the Collective's published totals, so it has been read correctly.
+- **It fits two-digit divisions far better than the industrial strategy list does.** 70 of 84 divisions sit almost wholly in one zone. Eight are split, and two of those are big: retail and wholesale.
+- **So carry shares, as the industrial strategy highlight already does,** and offer the zones as separate highlights. Keep "overlooked" apart from the foundational economy proper.
+- **The payments show the foundational economy as a buyer, not at its real size.** In Yorkshire and the Humber the public-service industries hold 30% of jobs but receive 2% of the payments between industries. Their income comes from the state and from households, which this data doesn't see.
+
+### 11.1 What existing research offers
+
+| Source | What it gives | Codes |
+|----|----|----|
+| Foundational Economy Collective, [activity classification](https://foundationaleconomy.com/activity-classification/) (spreadsheet uploaded January 2019) | Every five-digit SIC 2007 code placed in a zone: material, providential, overlooked or other | 731 five-digit codes |
+| The Collective, "Wales through a foundational lens" (2018 slides, linked from the same page) | Each zone's share of jobs, GVA and pay in Wales, Scotland and the UK, 2007 and 2016 | None, but totals to check against |
+| Welsh Government, [foundational economy mission statement](https://www.gov.wales/foundational-economy-mission-statement-html) (April 2025) | Seven named sectors: care and health; management of social housing; construction of buildings, energy and utilities; food; high street retail and services; tourism; public transport | None |
+| Bevan Foundation, "Fair work in the foundational economy: key data" (2021) | Six divisions, which it calls "a subset": 47, 55, 56, 86, 87, 88. 35% of Welsh employment | Two-digit |
+| This project's handover (the South Yorkshire deck) | A "foundational" segment: retail (47), transport (H), hospitality (I), public services (O, P, Q) | Sections |
+| `whole_economy_thinking`, tradeable jobs round 2 (`functions_io.R`) | Material foundational (farming, food and drink, utilities, construction, wholesale and motor trades, transport); everyday services (retail, hospitality, arts and personal); housing; providential (O, P, Q) | Sections and division ranges |
+
+**The Collective's zones,** in its words:
+
+- **Material:** "the pipe and cable utilities, supermarkets etc. which through networks and branches continuously connect households to daily essentials". Named: energy, water, telecoms, transport, food (growing, processing, distribution), retail banking, and car retailing and servicing but not car making.
+- **Providential:** "a subset of (mainly) public sector welfare activities providing the universal services available to all citizens". Named: health, education, care, police, public administration, and close private suppliers such as dispensing chemists "but not the whole chain".
+- **Overlooked:** "goods and services culturally defined as essential and requiring occasional purchase, for example, the sofa for your house, the holiday from work". Named: clothing, furniture, house maintenance, hairdressing, vets, tourism, hospitality.
+- **Other:** the rest. The Collective counts only material and providential as the foundational economy. Adding overlooked gives what it calls "FE+".
+
+**Two things about the spreadsheet.** It has no zone column: the zone is the colour of each row, with a key at the foot, so test 17 reads the colours. And the Collective says activities have "occasionally shifted in and out" since 2013 without changing the totals much. I found no later version.
+
+**Not read.** Three papers that apply the classification refused automated access (Sissons at Keele; Earle and others 2018 at Cardiff; Calafati and others 2019 in Renewal), and the Wales Centre for Public Policy's job progression annex has gone. The Collective's 43 to 44% figures below come from how those papers are cited, not from the papers. A Welsh Government spreadsheet of "business statistics for the foundational economy" is mentioned in a Federation of Small Businesses submission; I couldn't find it, and it would be the nearest thing to an official code list.
+
+### 11.2 Has the list been read correctly?
+
+Jobs are BRES employment for 2023 by five-digit code, Great Britain. Every code with jobs matched the list.
+
+| | This test, 2023 | The Collective's figure |
+|----|----|----|
+| Material | 16.3% | |
+| Providential | 27.0% | |
+| Material and providential | 43.3% | 43% of UK employment in 2016; 44% in a 2020 estimate |
+| Overlooked | 19.8% | |
+| All three | 63.2% | About 62% (UK, 2016) |
+| Wales, material and providential | 51.4% | 49% (2016) |
+| Wales, all three | 71.7% | 70% (2016) |
+
+They agree to within a couple of points, seven years apart. The colours have been read the right way round.
+
+### 11.3 How well it fits divisions
+
+Of the 84 divisions in the payments data that have jobs recorded (metal ore mining has none):
+
+| Fit | Divisions | Share of jobs |
+|----|----|----|
+| Whole: 90% or more of jobs in one zone | 70 | 79% |
+| Most: two thirds or more | 6 | 6% |
+| Split | 8 | 15% |
+
+Compare the industrial strategy list (section 2.5), where 11 of 40 divisions are covered only by a code inside them and coverage runs from 85% down to 0.2%.
+
+**The eight split divisions** (share of Great Britain jobs in each zone):
+
+| Division | Material | Providential | Overlooked | Other | What's inside |
+|----|----|----|----|----|----|
+| 47 Retail | 43% | 6% | 23% | 28% | Supermarkets, food shops and fuel are material; chemists and opticians providential; clothes, furniture and hardware overlooked; online, sports goods and general stores other |
+| 46 Wholesale | 8% | 0% | 30% | 61% | Food wholesale is material; building materials, plumbing and household goods overlooked |
+| 41 Building construction | 0% | 0% | 55% | 45% | House building is overlooked; commercial building and development other |
+| 53 Post and courier | 55% | 0% | 0% | 45% | The universal postal service is material; couriers other |
+| 33 Machinery repair and installation | 34% | 0% | 6% | 60% | Repair of aircraft, trains and ships is material |
+| 23 Glass, cement and ceramics | 0% | 0% | 51% | 49% | Bricks, tiles, ceramics, cement and concrete are overlooked; glass and stone cutting other |
+| 95 Repair of goods | 0% | 0% | 35% | 65% | Repair of household goods is overlooked; computer and phone repair other |
+| 50 Water transport | 44% | 0% | 56% | 0% | Freight and inland passenger boats are material; sea passenger transport overlooked |
+
+**What one label per division would lose.**
+
+- **Label every division by its main zone:** 91% of jobs get the right zone. But material is overstated, at 21% of jobs against a true 16%, because all of retail takes the label when 43% of it is material.
+- **Leave the eight split divisions unlabelled:** 85% of jobs sit in a labelled division, and 98% of those get the right zone.
+- **Carry shares:** nothing is lost. Each division's national shares, applied to a region's jobs by division, give that region's zone shares to within 0.8 of a point of the five-digit answer. So national shares can stand in where a region has no five-digit jobs data, which is Northern Ireland.
+
+### 11.4 The mapping
+
+Where a division is not whole, the share of its jobs in the zone is in brackets.
+
+| Zone | Divisions |
+|----|----|
+| **Material** (17) | 01 Farming, 03 Fishing, 05 Coal mining, 06 Oil and gas extraction, 09 Mining support, 10 Food manufacturing, 11 Drinks manufacturing, 35 Energy supply, 36 Water supply, 37 Sewerage, 38 Waste (85%), 42 Civil engineering, 45 Motor trades, 49 Land transport, 52 Warehousing and transport support, 61 Telecoms, 64 Banking and finance (74%) |
+| **Providential** (5) | 84 Public administration, 85 Education, 86 Health, 87 Residential care, 88 Social work |
+| **Overlooked** (18) | 02 Forestry, 08 Quarrying, 13 Textiles, 14 Clothing, 15 Leather, 16 Wood products, 17 Paper, 18 Printing, 31 Furniture, 43 Building trades, 51 Air transport, 55 Accommodation, 56 Food and drink service, 75 Veterinary, 79 Travel agencies, 91 Libraries and museums, 93 Sport and recreation, 96 Personal services (68%) |
+| **Split** (8) | 23, 33, 41, 46, 47, 50, 53, 95, as in the table above |
+| **Other, with a part in a zone** (3) | 20 Chemicals (28% overlooked: soap and toiletries), 27 Electrical equipment (19% material: electricity distribution gear; 12% overlooked: domestic appliances), 68 Real estate (26% overlooked: estate agents) |
+| **Other** (33, and metal ore mining) | 12, 19, 21, 22, 24, 25, 26, 28, 29, 30, 32, 39, 58, 59, 60, 62, 63, 65, 66, 69 to 74, 77, 78, 80, 81, 82, 90, 92, 94 |
+
+The full table, with every division's shares, is `tests/outputs/foundational_division_shares.csv`. The five-digit list is `tests/lookups/foundational_sic5.csv`.
+
+**Each region's jobs by zone** (five-digit, 2023):
+
+| Region | Material | Providential | Overlooked | Other |
+|----|----|----|----|----|
+| North East | 16% | 33% | 20% | 31% |
+| North West | 16% | 28% | 20% | 37% |
+| Yorkshire and the Humber | 19% | 28% | 20% | 32% |
+| East Midlands | 20% | 27% | 20% | 33% |
+| West Midlands | 18% | 27% | 19% | 37% |
+| East of England | 18% | 25% | 21% | 37% |
+| London | 12% | 22% | 17% | 49% |
+| South East | 15% | 27% | 21% | 37% |
+| South West | 17% | 27% | 23% | 33% |
+| Wales | 18% | 34% | 20% | 28% |
+| Scotland | 21% | 31% | 20% | 29% |
+
+### 11.5 Simpler mappings, measured against the list
+
+"Foundational" here means material plus providential.
+
+| Mapping | Divisions | Share of all jobs | Of its jobs, foundational on the list | Share of foundational jobs it catches |
+|----|----|----|----|----|
+| Handover segment: retail, transport, hospitality, public services | 13 | 48% | 73% | 81% |
+| Tradeable jobs typology: material foundational plus providential | 26 | 46% | 82% | 86% |
+| The same with everyday services | 36 | 66% | 62% | 95% |
+| Bevan Foundation subset | 6 | 30% | 59% | 41% |
+| The list by division, main zone material or providential | 24 | 48% | 89% | 99% |
+| The same, leaving out split divisions | 22 | 39% | 99% | 88% |
+
+- **The handover segment** misses a fifth of foundational jobs: utilities, food manufacturing, farming, telecoms, motor trades, civil engineering and banks. A quarter of what it does include is not foundational on the Collective's terms, mainly hospitality, which the Collective calls overlooked.
+- **The tradeable jobs typology** is closer. Its main differences are counting all construction and all wholesale as material, where the list has only civil engineering and food wholesale.
+- **Both get the providential zone almost exactly right:** it is sections O, P and Q, plus dispensing chemists and opticians inside retail. Those five divisions hold 98% of providential jobs.
+
+### 11.6 Where the list is odd, or needs a caution here
+
+- **Housing is mostly left out.** Housing associations and letting are "other"; house building and estate agents are overlooked. The Collective says housing was excluded from its original count, and the Welsh Government includes social housing management. Division 68 can't separate them anyway. I'd follow the list and say housing isn't covered.
+- **Overlooked includes whole manufacturing divisions** (textiles, paper, printing, wood, quarrying), because what they make ends up as everyday household goods. In a picture of payments between businesses these are suppliers to other firms. This is the list's weakest fit for this page, and the main reason to keep overlooked as its own highlight.
+- **Coal, oil and gas extraction are material** (energy supply), but refining is other. Small in most regions.
+- **Banking is 74% material** (banks and building societies), but here it is an intermediary whose payments are mostly money passing through. Show its share only when intermediaries are switched in.
+- **Non-specialised food wholesale is "other"** while every specialised food wholesaler is material. It looks like an oversight. I'd leave it and note it.
+- **Funerals** are providential in the Collective's text and overlooked in its spreadsheet. The test follows the spreadsheet; 28,000 jobs.
+- **Outsourced foundational work is counted as "other".** Agency staff, cleaning and facilities firms, and medical instrument makers work for hospitals, schools and care homes but are classed by their own industry. The Collective's rule is to include close suppliers "but not the whole chain". The chain is what this page can show.
+- **A clash of names.** The industrial strategy highlight already has a sector called "Foundational industries" (chemicals, steel, materials and energy inputs). It has nothing to do with the foundational economy. Two unrelated "foundationals" in one menu need a word of explanation.
+
+### 11.7 What the payments can and can't show
+
+Yorkshire and the Humber, 77 industries, payments between different industries inside the region over the 93 months. Each division's payments are split by its job shares.
+
+| Zone | Jobs | Payments made | Payments received |
+|----|----|----|----|
+| Material | 19% | 26% | 22% |
+| Providential | 30% | 8% | 2% |
+| Overlooked | 21% | 25% | 26% |
+| Other | 31% | 40% | 51% |
+
+- **The providential zone is nearly invisible as a seller, because of what the page leaves out.** Checked in test 19. Yorkshire and the Humber's education, health and care divisions received £82 billion over the period (published values). 4% came from industries in the region and 10% from industries in other regions. 69% came from payers whose industry isn't known and 15% from public administration with no region, and the page drops both. What does show is the zone's buying from other industries.
+- **Public administration barely appears at all:** about £21 million paid to other industries in the region over the whole period, against about £2.1 billion by health. That is because it almost never has a region in the data. With no region it paid the region's 77 industries £49 billion; with a region, £0.05 billion.
+- **So it sits at the buying end of the order.** On the page's scale, where the average industry is at zero and buyers are positive, and taking each division by its largest zone: providential +0.61 (education +0.74, health +0.63), material +0.15, overlooked +0.03, other −0.17. Material is spread out: telecoms, warehousing and land transport are on the supplier side (around −0.35), food manufacturing on the buyer side (+0.38).
+- **Every zone buys about half its supplies from "other".** That holds for all four, from 48% (material) to 54% (providential).
+- **Who the five public-service divisions pay.** 8% of what they pay inside the region goes to each other. Of the rest, the largest shares go to wholesale (14%), retail (10%), other manufacturing, which includes medical and dental instruments (10%), building trades (10%), IT and software (8%) and building construction (8%). Employment agencies and building services take 3% each.
+
+That is what a foundational highlight would add to the page. It can't show how big the foundational economy is. It can show who supplies it, and how much of that supply is local.
+
+### 11.8 Recommended use on the page
+
+- **The lookup.** `tests/lookups/foundational_sic5.csv`, as read from the Collective's spreadsheet, unchanged.
+- **The build.** For each region, the share of each division's jobs in each zone, from that region's five-digit jobs, as the industrial strategy shares are worked out now. Northern Ireland takes the national shares. Three numbers on each industry in the data file.
+- **Highlight.** A new group in the Highlight menu with four choices: material; providential; material and providential; overlooked. A division is filled like a pie to its share, which the page already does for the industrial strategy.
+- **Columns** could take the zones as a fifth option, with a split division placed by its largest share. Worth trying once the highlight is in; I haven't tested how it looks.
+- **Side panel.** For a pinned industry, a line giving its share in each zone.
+- **A note on the page** saying: whose list it is and its date; that it was made to count jobs; that payments here are between businesses, so public services show as buyers; that public administration is almost absent; and that this "foundational" is not the industrial strategy's.
+- **If a single label per division is ever needed** (for text, or for grouping), use the table in 11.4 and leave the eight split divisions unlabelled.
+
+### 11.9 Decisions (taken 23 November 2026)
+
+All four went with the recommendation.
+
+- **Zones are kept apart.** Four highlight choices: material; providential; material and providential; overlooked. The Collective keeps them apart, and overlooked is the weakest fit here.
+- **The list is followed exactly.** Its oddities (section 11.6) are listed in the page's note, not corrected, so the page can cite a published source.
+- **The list stays in the public repository, credited.** The spreadsheet is public but its page states no licence. The lookup holds its codes, the standard descriptions and the zone, with the source named. Asking the Collective would settle the licence question for good.
+- **Menu name:** "Foundational economy", with a few words after each zone, for example "Providential: health, education, care".
+
+Not yet built. The steps are in section 11.8.
+
+### 11.10 Foundational against tradeable
+
+*Test `tests/19_foundational_tradeable.R`, 23 November 2026. Done before deciding how to show the zones.*
+
+**The question.** Is "foundational" the same thing as "non-tradeable"? If it were, one could stand in for the other on the page.
+
+**Three measures of tradeable,** because the payments see only part of it:
+
+| | Measure | What it can't see |
+|----|----|----|
+| A. Payments | The share of an industry's receipts that comes from outside its region, placed among the other industries in the same region. All twelve regions | Households, exports abroad, and where work is done (firms sit where they are registered) |
+| B. Jobs | How unevenly an industry's jobs are spread across 168 areas of Great Britain, against all jobs. Local-serving industries spread like people do | Why an industry bunches; small industries look bunched anyway |
+| C. Input-output table, UK 2019 | The share of each product that goes abroad, to households, to government, and to other businesses (from the tradeable jobs work in `whole_economy_thinking`) | Trade between regions; anything regional |
+
+Measure A is test 05's "own-region share of income" turned round, for every region. For Yorkshire and the Humber it matches test 05 exactly.
+
+**The answer: they are two different things, except for public services.**
+
+| Zone | Jobs (m) | A. Place among a region's industries (0 most local, 1 most outside) | B. Bunching of jobs | C. Sold abroad | C. Sold to households and government | Jobs in products that are a quarter or more exported |
+|----|----|----|----|----|----|----|
+| Material | 4.9 | 0.57 | 0.24 | 8% | 40% | 3% |
+| Providential | 8.7 | 0.35 | 0.13 | 3% | 86% | 0% |
+| Overlooked | 6.4 | 0.45 | 0.16 | 10% | 54% | 18% |
+| Other | 10.6 | 0.51 | 0.25 | 20% | 17% | 33% |
+
+Averaged over each zone's jobs; the four intermediary divisions are left out.
+
+- **Providential is local on every measure.** Two thirds of its jobs are in the most local-selling third of industries on the payments and none in the most outside-selling third. Its jobs are spread like the population, and 86% of what it produces goes to households and government.
+- **Material is foundational but not local.** On the payments it sells outside its region slightly more than the average industry, in 11 of 12 regions. Food manufacturing and telecoms are among the most outside-selling industries of all, and motor trades, energy and warehousing are above the middle. Its jobs bunch as much as the "other" zone's do. Nationally, little of what it makes is sold abroad (8%). That figure is from the input-output table: the payments have no category for abroad. Taken together the measures point to trade between regions more than between countries, but none of them shows it directly. The payments show where the payer is registered, and cover a minority of receipts (below).
+- **"Other" is not the tradeable economy.** It sits in the middle on the payments. A third of its jobs are in products that are a quarter or more exported, and about a quarter are in the most local-selling third of industries: legal and accounting, real estate, security, building services. These are local business services, neither foundational nor tradeable.
+- **Overlooked is mostly local with an exporting tail:** clothing, textiles, air transport and accommodation.
+
+**The payments measure is weak, and the page shouldn't lean on it.**
+
+- **No category for abroad.** Regions are the twelve plus "unknown". Exports and imports aren't in the data, so anything said here about selling abroad comes from the input-output table.
+- **It covers about a third of receipts.** Of what Yorkshire and the Humber's industries received, 36% came from industries with a known region. 47% came from payers of unknown industry, 10% from the intermediaries and 7% from public administration with no region. This measure leaves all of those out, as the page does.
+- **Little spread.** In Yorkshire and the Humber eight in ten industries get between 59% and 85% of their receipts from outside the region. This is why the ring gauge was dropped (section 2.5).
+- **An industry's place changes from region to region.** The rank correlation between two regions' orderings averages 0.38. London and Northern Ireland are near 0.15 against everyone else. If selling outside belonged to the industry, this would be high. It belongs as much to where firms are registered.
+- **It agrees only loosely with the other two:** 0.21 with bunching of jobs and 0.47 with exports abroad. Those two agree with each other at 0.54.
+- **It misses the customers that make an industry local.** Retail and food and drink service sell over 80% to households and government, which the payments don't see. They come out in the middle on what they sell to other businesses.
+- **Outside payments are more hidden than inside ones:** 20% of outside value is held in Yorkshire and the Humber against 10% of inside value, and 40% against 8% in Northern Ireland. Using published values only barely changes the ordering (0.92).
+- **Regions differ on public services.** The providential zone's outside share of receipts is below the regional average in ten regions, by 3 to 27 points (Wales 27, the North West 21). It is level with the average in Yorkshire and the Humber and above it in Northern Ireland. Not looked into.
+
+**What this means for showing the zones.**
+
+- **Don't let "foundational" stand for "local", or "other" for "tradeable".** If both ideas are wanted on the page they need to be two separate things to look at.
+- **If tradeable is shown, take it from a measure fixed to the industry,** the same in every region: the input-output shares (abroad, households, government, other businesses) are the clearest, and they already exist in the tradeable jobs work. The payments' outside share is too flat and too tied to registration to carry it.
+- **The combination is the interesting part.** Four kinds of industry come out, not two: local public services (providential); networks and supply chains that reach beyond the region (material); local business services (a quarter of "other"); and exporters (a third of "other", and overlooked's tail). A view that could show foundational zone and who the industry sells to together would show that.
+
+Results by division are in `tests/outputs/foundational_tradeable_divisions.csv`, by zone in `foundational_tradeable_zones.csv`, and by zone and region in `foundational_tradeable_zone_by_region.csv`.
+
+### 11.11 Later: bringing public administration's payments in
+
+*An idea to come back to, not scoped. Raised 23 November 2026.*
+
+**What is there.** In every region, public administration with no region is a large payer of the region's industries, and the page drops it:
+
+| Region | Public administration's payments to the region's industries (£bn, published) | Share of what those industries were paid | Share of what education, health and care were paid |
+|----|----|----|----|
+| North East | 22 | 11% | 28% |
+| North West | 102 | 9% | 39% |
+| Yorkshire and the Humber | 49 | 7% | 15% |
+| East Midlands | 60 | 9% | 42% |
+| West Midlands | 92 | 10% | 49% |
+| East of England | 109 | 11% | 47% |
+| London | 320 | 10% | 40% |
+| South East | 188 | 10% | 34% |
+| South West | 72 | 12% | 43% |
+| Wales | 18 | 9% | 19% |
+| Scotland | 19 | 4% | 12% |
+| Northern Ireland | 10 | 5% | 13% |
+
+**Why it isn't simple.**
+
+- **It has no region,** so it is neither inside the region nor from the rest of the UK. It would have to be shown as a third thing: a payer that stands outside the map.
+- **It runs both ways.** Counting every payer and payee in Yorkshire and the Humber, £56 billion was received from public administration with no region and £20 billion was paid to it. Some of what is paid to it will be tax and rates.
+- **More of it is hidden:** 40% of its monthly figures touching Yorkshire and the Humber, so held values would matter.
+- **It varies a lot by region.** It is 49% of what education, health and care were paid in the West Midlands and 12% in Scotland. That may be devolved funding going by another route, or bodies being registered differently. It would need looking into before any comparison between regions.
+- **Payers of unknown industry are bigger still,** at 38% to 78% of what education, health and care were paid, and nothing says who they are.
+
+**A first thought.** Treat it like the halo: for each industry, an amount received from and paid to public administration, drawn separately from the rest-of-UK halo and off unless switched on. It wouldn't join the order, because it has no counterpart inside the region.

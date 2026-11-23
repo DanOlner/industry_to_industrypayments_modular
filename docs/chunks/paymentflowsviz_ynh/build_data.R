@@ -84,6 +84,28 @@ held_for <- function(code) {
   readRDS(f)
 }
 
+# ---- What the page leaves out -----------------------------------------------------------------------
+# The page shows payments where both sides have a known industry and a known region. Rows with an unknown industry (00)
+# or an unknown region are dropped above, and the intermediaries are off unless switched in. Public administration
+# almost never has a region, so nearly all of its payments go with the unknown-region rows. This measures, for the
+# region's industries, how much of what they were paid and what they paid out sits in each of those.
+# Published values only: hidden months of dropped rows are not held. (tests/19 has the same figures for Y&H.)
+left_out <- function(code, core) {
+  m <- readRDS(monthly_for(code)); here <- code
+  other_side <- function(sic, reg) fifelse(sic == '00', 'unknown_industry', fifelse(reg == 'unknown', fifelse(sic == '84', 'gov', 'other'),
+                  fifelse(sic %in% intermediary, 'intermediary', fifelse(sic %in% not_industry, 'other', fifelse(reg == here, 'inside', 'elsewhere')))))
+  shares <- function(d) { s <- d[, .(v = sum(value, na.rm = TRUE)), by = side]; function(k) s[side %in% k, sum(v)] / sum(s$v) }
+  rec <- shares(m[payee_region == here & payee_sic %in% core][, side := other_side(payer_sic, payer_region)])
+  pay <- shares(m[payer_region == here & payer_sic %in% core][, side := other_side(payee_sic, payee_region)])
+  ps <- shares(m[payee_region == here & payee_sic %in% intersect(core, c('85', '86', '87', '88'))][, side := other_side(payer_sic, payer_region)])
+  gov <- m[payer_sic == '84' & payer_region == 'unknown' & payee_region == here & payee_sic %in% core, sum(value, na.rm = TRUE)] / 1e9
+  list(shown_received = pct(rec(c('inside', 'elsewhere'))), inside_received = pct(rec('inside')), elsewhere_received = pct(rec('elsewhere')),
+       unknown_received = pct(rec('unknown_industry')), inter_received = pct(rec('intermediary')), gov_received = pct(rec('gov')),
+       shown_paid = pct(pay(c('inside', 'elsewhere'))), unknown_paid = pct(pay('unknown_industry')),
+       gov_paid = sprintf('£%s billion', num(gov, if (gov >= 10) 0 else 1)),
+       ps_shown = pct(ps(c('inside', 'elsewhere'))), ps_unknown = pct(ps('unknown_industry')), ps_gov = pct(ps('gov')))
+}
+
 # ---- Industrial strategy shares, region by region ---------------------------------------------------
 # The strategy's list mixes 2 to 5-digit codes; each division gets the share of its jobs in the region that sits in the
 # listed codes. Jobs: BRES employment by ITL3 area and five-digit SIC, latest year, summed to ITL1. Great Britain only,
@@ -241,6 +263,7 @@ build_region <- function(code) {
     groups_n = length(group_order), groups_firm = firm, groups_not_firm = sprintf('%d of the %d', length(core) - firm, length(core)),
     groups_named_by_hand = !is.null(hn), partner = regions[code == partner, name],
     is8_year = if (is.na(i8$year)) sprintf('%s (Great Britain only: Northern Ireland is not covered, so that highlight is left out here)', jobs_by_region()$year[1]) else i8$year)
+  facts <- c(facts, left_out(code, core))
 
   dat <- list(region = code, name = reg$name, the_name = reg$the_name, built = format(Sys.Date()),
               source = 'ONS, Industry-to-industry payment flows by region, UK (editions of 17 September and 22 October 2026)',

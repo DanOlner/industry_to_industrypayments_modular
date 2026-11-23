@@ -77,10 +77,13 @@ const problems = [];
       highlights: document.getElementById('lens').options.length, unfilled: [...document.querySelectorAll('[data-f]')].filter(e => !e.textContent && e.dataset.f !== 'small_example').map(e => e.dataset.f) }));
     console.log(`${r.code}${r.thin ? ' (thin)' : ''}: "${info.title}", ${info.links} links drawn, ${info.industries} industries, ${info.highlights} highlight sets` + (info.unfilled.length ? `, UNFILLED TEXT: ${info.unfilled.join(' ')}` : ''));
     if (info.unfilled.length) problems.push(`${r.code}: text with no figure: ${info.unfilled.join(' ')}`);
-    await shot(page, `20_${r.code}_full`);
-    await page.evaluate(() => { document.getElementById('compare').open = true; document.getElementById('order-note').open = true; }); await new Promise(res => setTimeout(res, 200));
-    await shot(page, `21_${r.code}_compare`, '#compare'); await shot(page, `22_${r.code}_order_note`, '#order-note');
-    await set(page, { cols: 'paygroup' }); await shot(page, `23_${r.code}_payment_groups`, '#chartwrap');
+    // full set of pictures for the three regions the build was developed on; one picture of the chart for the rest, to keep the folder small
+    if (['TLC', 'TLD', 'TLE'].includes(r.code)) {
+      await shot(page, `20_${r.code}_full`);
+      await page.evaluate(() => { document.getElementById('compare').open = true; document.getElementById('order-note').open = true; }); await new Promise(res => setTimeout(res, 200));
+      await shot(page, `21_${r.code}_compare`, '#compare'); await shot(page, `22_${r.code}_order_note`, '#order-note');
+      await set(page, { cols: 'paygroup' }); await shot(page, `23_${r.code}_payment_groups`, '#chartwrap');
+    } else await shot(page, `20_${r.code}_chart`, '#chartwrap');
     await page.close();
   }
   page = await open(1440, 1000, 'light', '?sel=46&cols=shift&m=2022-06&dir=down');

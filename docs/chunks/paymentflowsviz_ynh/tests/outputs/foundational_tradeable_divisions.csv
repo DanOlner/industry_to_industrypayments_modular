@@ -1,0 +1,81 @@
+sic2,short,section,main,fit,material,providential,overlooked,other,regions_ranked,pay_place,pay_place_sd,pay_third,outside_receipts_vs_region,outside_spending_vs_region,outside_receipts_ynh,jobs_gb,concentration,conc_third,export_share,household_share,government_share,b2b_share,export_third
+01,Farming,A,Material,whole,0.995,0,0,0.005,12,0.307,0.242,low,-0.089,-0.107,0.505,420645,0.523,high,0.073,0.292,0,0.555,middle
+02,Forestry,A,Overlooked,whole,0,0,1,0,9,0.196,0.255,low,-0.187,-0.207,0.462,23165,0.51,high,0.015,0.073,0,0.557,low
+03,Fishing,A,Material,whole,1,0,0,0,,,,,,,,14065,0.77,high,0.365,0,0,0.595,high
+05,Coal mining,B,Material,whole,1,0,0,0,,,,,,,,380,0.979,high,0.242,0.392,0,0.025,high
+06,Oil & gas extraction,B,Material,whole,1,0,0,0,,,,,,,,12360,0.867,high,0.853,0,0,0.102,high
+08,Quarrying,B,Overlooked,whole,0,0,1,0,9,0.146,0.216,low,-0.236,-0.256,0.421,17460,0.532,high,0.185,0.007,0,0.848,middle
+09,Mining support,B,Material,whole,0.959,0,0.041,0,6,0.653,0.484,high,0.007,0.05,,15375,0.882,high,0.15,0,0,0.832,middle
+10,Food manufacturing,C,Material,whole,1,0,0,0,12,0.809,0.186,high,0.109,0.055,0.847,387860,0.346,middle,0.153,0.351,0,0.49,middle
+11,Drinks manufacturing,C,Material,whole,1,0,0,0,12,0.485,0.302,middle,-0.033,-0.06,0.627,53320,0.444,high,0.202,0.434,0,0.36,middle
+12,Tobacco,C,Other,whole,0,0,0,1,,,,,,,,40,0.992,high,0.243,0.428,0,0.332,high
+13,Textiles,C,Overlooked,whole,0,0,1,0,11,0.542,0.253,middle,0.009,-0.059,0.712,48580,0.437,high,0.306,0.404,0,0.184,high
+14,Clothing,C,Overlooked,whole,0,0,1,0,9,0.556,0.134,middle,-0.005,-0.026,0.753,24065,0.467,high,0.744,0.186,0,0.06,high
+15,Leather,C,Overlooked,whole,0,0,1,0,,,,,,,,6250,0.642,high,0.745,0.017,0,0.156,high
+16,Wood products,C,Overlooked,whole,0,0,1,0,12,0.297,0.172,low,-0.087,-0.034,0.733,77375,0.364,middle,0.055,0.075,0,0.805,low
+17,Paper,C,Overlooked,whole,0,0,1,0,11,0.627,0.341,high,0.021,0.038,0.751,46435,0.432,high,0.155,0.111,0,0.723,middle
+18,Printing,C,Overlooked,whole,0,0,0.977,0.023,12,0.291,0.148,low,-0.109,0.015,0.686,71980,0.26,middle,0.003,0.105,0,0.923,low
+19,Coke & refined petroleum,C,Other,whole,0,0,0,1,,,,,,,,8255,0.768,high,0.276,0.245,0,0.468,high
+20,Chemicals,C,Other,most,0.021,0,0.283,0.696,12,0.769,0.194,high,0.07,0.034,0.859,105585,0.362,middle,0.461,0.114,0,0.407,high
+21,Pharmaceuticals,C,Other,whole,0,0,0,1,10,0.92,0.19,high,0.167,0.033,0.967,45620,0.542,high,0.366,0.131,0.184,0.292,high
+22,Rubber & plastics,C,Other,whole,0,0,0,1,12,0.775,0.125,high,0.102,0.05,0.777,153200,0.341,middle,0.37,0,0,0.622,high
+23,"Glass, cement & ceramics",C,Overlooked,split,0,0,0.508,0.492,12,0.424,0.343,middle,-0.077,-0.048,0.707,76090,0.399,middle,0.124,0.021,0,0.844,middle
+24,Basic metals,C,Other,whole,0,0,0,1,11,0.413,0.363,middle,-0.08,-0.058,0.733,73800,0.582,high,0.201,0,0,0.657,middle
+25,Fabricated metal,C,Other,whole,0,0,0.016,0.984,12,0.488,0.215,middle,-0.011,-0.007,0.77,278035,0.299,middle,0.182,0.079,0,0.586,middle
+26,Electronics,C,Other,whole,0,0,0,1,11,0.685,0.248,high,0.047,0.031,0.861,126080,0.346,middle,0.342,0.06,0,0.405,high
+27,Electrical equipment,C,Other,most,0.189,0,0.121,0.69,12,0.685,0.281,high,0.035,0.014,0.809,75880,0.356,middle,0.253,0.12,0,0.577,high
+28,Machinery,C,Other,whole,0,0,0,1,12,0.719,0.201,high,0.05,-0.009,0.819,158355,0.334,middle,0.649,0.029,0,0.295,high
+29,Motor vehicles,C,Other,whole,0,0,0,1,10,0.683,0.281,high,0.044,-0.011,0.831,136580,0.55,high,0.707,0.016,0,0.193,high
+30,Other transport equipment,C,Other,whole,0.046,0,0,0.954,8,0.54,0.342,middle,-0.007,-0.035,,127875,0.605,high,0.671,0.029,0,0.267,high
+31,Furniture,C,Overlooked,whole,0,0,1,0,12,0.475,0.211,middle,-0.049,-0.064,0.735,72670,0.438,high,0.135,0.366,0,0.152,middle
+32,Other manufacturing,C,Other,whole,0,0,0,1,12,0.739,0.14,high,0.07,0.018,0.743,87900,0.296,middle,0.578,0.13,0,0.206,high
+33,Machinery repair & install,C,Other,split,0.338,0,0.061,0.601,12,0.477,0.137,middle,-0.026,0.036,0.728,130770,0.242,low,0.1,0.012,0,0.887,middle
+35,Energy supply,D,Material,whole,1,0,0,0,12,0.639,0.311,high,0.027,-0.062,0.887,116900,0.344,middle,0.002,0.225,0,0.772,low
+36,Water supply,E,Material,whole,1,0,0,0,7,0.348,0.258,low,-0.106,-0.133,,48340,0.506,high,0.001,0.462,0,0.538,low
+37,Sewerage,E,Material,whole,1,0,0,0,,,,,,,,25440,0.422,middle,0,0.472,0,0.529,low
+38,Waste,E,Material,most,0.853,0,0,0.147,12,0.331,0.253,low,-0.077,-0.111,0.589,144825,0.237,low,0.238,0.007,0.319,0.422,middle
+39,Remediation,E,Other,whole,0,0,0,1,10,0.207,0.177,low,-0.162,-0.163,0.591,8065,0.402,middle,0,0,0,1,low
+41,Building construction,F,Overlooked,split,0,0,0.546,0.454,12,0.204,0.114,low,-0.142,-0.089,0.51,519350,0.138,low,0.009,0.004,0,0.465,low
+42,Civil engineering,F,Material,whole,1,0,0,0,12,0.456,0.219,middle,-0.047,-0.059,0.763,206515,0.243,low,0.009,0.004,0,0.465,low
+43,Building trades,F,Overlooked,whole,0,0,0.964,0.036,12,0.406,0.106,low,-0.044,-0.005,0.737,841535,0.172,low,0.009,0.004,0,0.465,low
+45,Motor trades,G,Material,whole,1,0,0,0,12,0.667,0.214,high,0.058,0.062,0.76,561620,0.185,low,0.01,0.478,0,0.425,low
+46,Wholesale,G,Other,split,0.084,0,0.302,0.614,12,0.663,0.202,high,0.034,0.077,0.749,1162755,0.153,low,0.334,0.129,0,0.488,high
+47,Retail,G,Material,split,0.431,0.059,0.232,0.278,12,0.563,0.177,middle,0.002,0.052,0.692,2662805,0.084,low,0.001,0.827,0,0.172,low
+49,Land transport,H,Material,whole,1,0,0,0,12,0.515,0.225,middle,-0.004,-0.004,0.716,562090,0.166,low,0.041,0.326,0,0.633,low
+50,Water transport,H,Overlooked,split,0.441,0,0.559,0,10,0.393,0.336,low,-0.118,-0.166,0.614,13440,0.63,high,0.479,0.354,0,0.167,high
+51,Air transport,H,Overlooked,whole,0.021,0,0.979,0,10,0.557,0.312,middle,-0.006,-0.051,0.784,76895,0.788,high,0.387,0.1,0,0.513,high
+52,Warehousing & transport support,H,Material,whole,1,0,0,0,12,0.58,0.163,middle,0.005,-0.007,0.782,666000,0.316,middle,0.146,0.037,0.08,0.737,middle
+53,Post & courier,H,Material,split,0.553,0,0,0.447,10,0.598,0.319,middle,0.023,-0.078,0.777,278170,0.199,low,0.098,0.033,0,0.869,middle
+55,Accommodation,I,Overlooked,whole,0,0,1,0,12,0.279,0.105,low,-0.089,-0.106,0.735,493645,0.28,middle,0.404,0.34,0,0.256,high
+56,Food & drink service,I,Overlooked,whole,0,0,1,0,12,0.5,0.159,middle,-0.014,-0.05,0.731,2058800,0.084,low,0.064,0.817,0,0.119,middle
+58,Publishing,J,Other,whole,0,0,0,1,11,0.765,0.149,high,0.063,0.023,0.775,123695,0.468,high,0.29,0.127,0,0.085,high
+59,"Film, TV & music",J,Other,whole,0,0,0,1,12,0.714,0.277,high,0.035,-0.033,0.784,137395,0.417,middle,0.291,0.218,0.094,0.264,high
+60,Broadcasting,J,Other,whole,0,0,0,1,,,,,,,,50165,0.649,high,0.291,0.218,0.094,0.264,high
+61,Telecoms,J,Material,whole,1,0,0,0,12,0.796,0.13,high,0.075,0.087,0.781,215585,0.265,middle,0.16,0.379,0,0.462,middle
+62,IT & software,J,Other,whole,0,0,0,1,12,0.781,0.116,high,0.078,0.087,0.814,817550,0.288,middle,0.147,0.002,0,0.563,middle
+65,Insurance & pensions,K,Other,whole,0,0,0,1,10,0.703,0.285,high,0.055,0.153,0.82,99280,0.583,high,0.174,0.517,0,0.309,middle
+68,Real estate,L,Other,most,0,0,0.261,0.739,12,0.26,0.144,low,-0.104,-0.116,0.637,640100,0.124,low,0.009,0.595,0.008,0.333,low
+69,Legal & accounting,M,Other,whole,0,0,0,1,12,0.208,0.132,low,-0.15,-0.12,0.617,834260,0.296,middle,0.159,0.011,0.008,0.749,middle
+70,Head offices & consultancy,M,Other,whole,0,0,0,1,12,0.542,0.146,middle,-0.002,0.033,0.7,939860,0.26,middle,0.582,0,0,0.411,high
+71,Architecture & engineering,M,Other,whole,0,0,0,1,12,0.57,0.157,middle,0.006,-0.004,0.766,549180,0.185,low,0.258,0.015,0,0.616,high
+72,Scientific R&D,M,Other,whole,0,0,0,1,10,0.649,0.28,high,0.024,0.003,0.907,172575,0.436,high,0.184,0,0.012,0.225,middle
+73,Advertising & market research,M,Other,whole,0,0,0,1,12,0.443,0.146,middle,-0.042,0.009,0.735,196135,0.433,high,0.19,0.003,0,0.807,middle
+74,Other professional,M,Other,whole,0,0,0,1,12,0.655,0.12,high,0.039,0.024,0.776,212610,0.161,low,0.174,0.038,0,0.788,middle
+75,Veterinary,M,Overlooked,whole,0,0,1,0,10,0.541,0.381,middle,-0.028,-0.017,0.942,84740,0.244,middle,0.002,0.693,0.223,0.083,low
+77,Rental & leasing,N,Other,whole,0,0,0,1,12,0.631,0.234,high,0.019,0.056,0.8,166190,0.191,low,0.151,0.303,0,0.546,middle
+78,Employment agencies,N,Other,whole,0,0,0,1,12,0.423,0.234,middle,-0.055,0.053,0.692,967985,0.202,low,0.074,0.001,0,0.925,middle
+79,Travel agencies,N,Overlooked,whole,0,0,0.931,0.069,12,0.702,0.215,high,0.043,0.073,0.88,88925,0.304,middle,0.008,0.737,0,0.256,low
+80,Security,N,Other,whole,0,0,0,1,12,0.295,0.132,low,-0.099,-0.009,0.627,218760,0.279,middle,0.057,0.021,0,0.923,low
+81,Building services & landscaping,N,Other,whole,0,0,0,1,12,0.307,0.135,low,-0.088,-0.013,0.605,758975,0.195,low,0.015,0.017,0.025,0.943,low
+84,Public administration,O,Providential,whole,0,1,0,0,9,0.401,0.289,low,-0.078,-0.015,0.794,1479725,0.188,low,0.012,0.028,0.86,0.093,low
+85,Education,P,Providential,whole,0,1,0,0,12,0.303,0.153,low,-0.102,-0.116,0.747,2676580,0.092,low,0.074,0.143,0.61,0.173,middle
+86,Health,Q,Providential,whole,0,1,0,0,12,0.479,0.275,middle,-0.016,0.003,0.745,2669470,0.13,low,0.002,0.076,0.899,0.023,low
+87,Residential care,Q,Providential,whole,0,1,0,0,11,0.286,0.275,low,-0.145,-0.084,0.81,760855,0.178,low,0.001,0.204,0.643,0.152,low
+88,Social work,Q,Providential,whole,0,1,0,0,11,0.095,0.144,low,-0.281,-0.144,0.659,944755,0.126,low,0.001,0.204,0.643,0.152,low
+90,Arts & entertainment,R,Other,whole,0,0,0,1,12,0.631,0.228,high,0.003,-0.047,0.788,110850,0.277,middle,0.241,0.317,0.164,0.276,middle
+91,Libraries & museums,R,Overlooked,whole,0,0,0.958,0.042,,,,,,,,111125,0.279,middle,0.305,0.097,0.32,0.129,high
+92,Gambling,R,Other,whole,0,0,0,1,,,,,,,,77935,0.221,low,0.023,0.856,0,0.121,low
+93,Sport & recreation,R,Overlooked,whole,0,0,0.995,0.005,12,0.288,0.097,low,-0.094,-0.065,0.696,532615,0.133,low,0.037,0.761,0.16,0.042,low
+94,Membership organisations,S,Other,whole,0,0,0,1,10,0.338,0.211,low,-0.1,-0.131,0.68,248120,0.19,low,0.003,0.433,0.38,0.184,low
+95,Repair of goods,S,Other,split,0,0,0.346,0.654,9,0.252,0.158,low,-0.105,0.021,0.523,52640,0.245,middle,0.12,0.337,0,0.543,middle
+96,Personal services,S,Overlooked,most,0,0,0.678,0.322,12,0.562,0.122,middle,-0.002,0.012,0.783,336015,0.133,low,0.007,0.875,0,0.119,low

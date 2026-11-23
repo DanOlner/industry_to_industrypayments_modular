@@ -26,6 +26,9 @@ Run the R scripts from the repo root, for example `Rscript docs/chunks/paymentfl
 | `14_all_regions_extract.R` | Scoping: one pass over the ONS files for every region's inside flows, and row counts for every pair of regions | `local/…/all_regions_own_monthly.rds`, `outputs/region_pair_row_counts.csv` |
 | `15_url_roundtrip.cjs` | Scoping: whether each control's setting survives a round trip through the address bar | `outputs/url_roundtrip.csv` |
 | `16_region_similarity.R` | Scoping: each region's data quality, how alike regions are overall, chain or web, and whether payment groups recur (about seven minutes) | `outputs/region_*.csv`, `payment_groups_uk_pooled.csv` |
+| `17_foundational_read_list.py` | Scoping: reads the Foundational Economy Collective's activity classification, where each code's zone is its row colour, into a table. Takes the path to the downloaded spreadsheet | `lookups/foundational_sic5.csv` |
+| `18_foundational_divisions.R` | Scoping: weights that list by jobs to see how each division splits between zones, what a division-level label loses, each region's zone shares, and where the zones sit in Y&H's payments | `outputs/foundational_*.csv` |
+| `19_foundational_tradeable.R` | Scoping: whether the foundational zones line up with tradeable against local, on three measures: outside share of receipts in the payments (every region), how bunched jobs are across areas, and the input-output table's export and household shares (about 90 seconds) | `outputs/foundational_tradeable_*.csv` |
 
 `functions_hierarchy.R` holds the shared pieces: held values for hidden months, the flow matrix, levels and the direction-shuffle check.
 

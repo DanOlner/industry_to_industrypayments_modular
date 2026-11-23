@@ -2,7 +2,7 @@
 
 ## Status: built, not yet published
 
-`index.html` is a single-page visualisation of monthly payments between a region's industries, January 2019 to September 2026. It opens on Yorkshire and the Humber and can switch to any other ITL1 region whose data have been built; so far that's a sample of three (Yorkshire and the Humber, the North West and the North East). Open it in a browser straight from disk; it needs no server and no internet connection.
+`index.html` is a single-page visualisation of monthly payments between a region's industries, January 2019 to September 2026. It opens on Yorkshire and the Humber and can switch to any of the twelve ITL1 regions. Open it in a browser straight from disk; it needs no server and no internet connection.
 
 It becomes public on GitHub Pages once this folder is committed and pushed to `master`.
 
