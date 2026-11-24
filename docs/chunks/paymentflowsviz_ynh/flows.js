@@ -46,7 +46,7 @@
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
-              show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir), pos: pick(q.get('pos'), ['all', 'year'], DEFAULTS.pos),
+              show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir), pos: pick(q.get('pos'), ['all', 'year', 'roll'], DEFAULTS.pos),
               smooth: q.get('smooth') !== '0', dots: q.get('dots') !== '0', inter: q.get('inter') === '1', halo: q.get('halo') === '1',
               pubonly: q.get('pubonly') === '1', trace: q.get('trace') === '1', ptable: q.get('ptable') === '1', vouch: q.get('vouch') !== '0', t: 0, sel: -1 };
 
@@ -88,14 +88,18 @@
 
   // ---------------------------------------------------------------- the months that positions are worked out on
   // All of them, as the page opens. Or, with "Positions from: the year shown", the calendar year of the month on the slider;
-  // a part-year at the end of the data takes the twelve months to the last month. Everything below that sums over "the
-  // months in hand" follows this: the level, the measures a column is ranked on, the pull between industries, and the
-  // pinned industry's chain figures. Circle sizes, the height scale and which industries are too small to place stay on
-  // all months, so the axis holds still (plan section 17; tests/33_yearly_positions.cjs).
-  let periods = [], perOf = [], pFixed;                    // pFixed: set while something is worked out on given months whatever the switch says (null: all months)
-  const period = () => pFixed !== undefined ? pFixed : S.pos === 'year' && periods.length ? periods[perOf[Math.max(0, Math.min(NM - 1, Math.round(S.t)))]] : null;
+  // a part-year at the end of the data takes the twelve months to the last month. Or, with "the 12 months to the month
+  // shown", a window that rolls forward with the slider. Everything below that sums over "the months in hand" follows this:
+  // the level, the measures a column is ranked on, the pull between industries, and the pinned industry's chain figures.
+  // Circle sizes, the height scale and which industries are too small to place stay on all months, so the axis holds
+  // still (plan section 17; tests/33_yearly_positions.cjs).
+  let periods = [], perOf = [], rolls = [], pFixed;        // pFixed: set while something is worked out on given months whatever the switch says (null: all months)
+  const monthNow = () => Math.max(0, Math.min(NM - 1, Math.round(S.t)));
+  const periodOf = m => S.pos === 'year' ? periods[perOf[m]] : S.pos === 'roll' ? rolls[m] : null;
+  const period = () => pFixed !== undefined ? pFixed : periods.length ? periodOf(monthNow()) : null;
+  const inPeriod = (p, fn) => { const keep = pFixed; pFixed = p; try { return fn(); } finally { pFixed = keep; } };
   const pKey = () => { const p = period(); return p ? p.key : 'all'; };
-  const onAll = fn => { const keep = pFixed; pFixed = null; try { return fn(); } finally { pFixed = keep; } };
+  const onAll = fn => inPeriod(null, fn);
   const monthsIn = () => { const p = period(); return p ? p.n : NM; };
   const sumIn = a => { const p = period(); if (!p) return d3.sum(a); let t = 0; for (let m = p.m0; m <= p.m1; m++) t += a[m]; return t; };
   const spanWords = cap => { const p = period(); return p ? (cap ? 'In ' : 'in ') + p.words : (cap ? 'Over' : 'over') + ' the whole period'; };
@@ -120,6 +124,9 @@
       if (ms.length < 12 && NM >= 12) { if (j) { m0 = NM - 12; m1 = NM - 1; } else { m0 = 0; m1 = 11; }
         words = `the 12 months to ${fmtMonth(monthDate[m1])}`; short = `12 months to ${fmtMonthShort(monthDate[m1])}`; }
       for (const m of ms) perOf[m] = j; return { key: y, m0, m1, n: m1 - m0 + 1, words, short }; });
+    // and the rolling ones: the twelve months to each month (the first eleven months share the first twelve)
+    const byEnd = {}; rolls = d3.range(NM).map(m => { const m1 = Math.min(NM - 1, Math.max(11, m));
+      return byEnd[m1] || (byEnd[m1] = { key: 'r' + m1, m0: Math.max(0, m1 - 11), m1, n: m1 - Math.max(0, m1 - 11) + 1, words: `the 12 months to ${fmtMonth(monthDate[m1])}`, short: `12 months to ${fmtMonthShort(monthDate[m1])}`, roll: true }); });
     sup = Int16Array.from(D.links.supplier); buy = Int16Array.from(D.links.buyer); basis = D.links.basis;
     const linkAt = new Map(); for (let k = 0; k < NL; k++) linkAt.set(pairKey(sup[k], buy[k]), k);
     rev = Int32Array.from({ length: NL }, (_, k) => linkAt.has(pairKey(buy[k], sup[k])) ? linkAt.get(pairKey(buy[k], sup[k])) : -1);
@@ -141,7 +148,8 @@
   const L0 = d => S.inter ? d.level_all : d.level;                            // the level on all months; each view uses levels worked out on its own set of industries
   // The level in use. On all months; or, by year, the build's level on that year's twelve months (the file has it for the
   // twelve months to every month). An industry too small to place keeps its all-months level: one year's is noise.
-  const L = d => { const p = period(); if (!p || d.small) return L0(d); const r = S.inter ? d.level_all_rolling : d.level_rolling, v = r ? r[p.m1] : null; return v == null ? L0(d) : v; };
+  const levelIn = (d, p) => { if (!p || d.small) return L0(d); const r = S.inter ? d.level_all_rolling : d.level_rolling, v = r ? r[p.m1] : null; return v == null ? L0(d) : v; };
+  const L = d => levelIn(d, period());
   const Lc = d => Math.max(lev[0], Math.min(lev[1], L(d)));                   // small industries are clamped into the range of the rest
   function monthTotals(measure, smooth, pub) {                                // sum over the links switched in, by month
     const key = [measure, smooth, pub, S.inter].join('|');
@@ -317,10 +325,16 @@
     // By year, whatever is placed by pull starts from the all-months positions and takes half the steps, so an industry
     // moves only as far as the year's payments pull it. Worked out from scratch each year, most of the movement between
     // years would be chance (tests/33). Ranked columns need no such start: rank and level fix the place.
-    const per = period(), warm = per && !byShift ? onAll(() => layoutFor(mode, cols)) : null;
-    const rnd = d3.randomLcg(7), base = warm || (mode === 'order' ? null : layoutFor('order', 'free'));
-    const sn = nodes.filter(d => act[d.i]).map(d => ({ i: d.i, level: L(d), col: colOf(d), small: d.small, r: rNode(wholeTotal[d.i] / NM), tx0: byShift ? txOf(d) : 0,
-      x: base ? base[d.i].x : (byShift ? txOf(d) : banded ? gx(colOf(d)) : x0 + rnd() * (x1 - x0)), y: base ? base[d.i].y : y(L(d)) }));
+    // A rolling window, month by month: worked out afresh each month, whatever is placed by pull jumps about, because two
+    // windows that share eleven months can still settle differently (tests/33: 22 pixels a month in hybrid and connections).
+    // So those glide. Positions are worked out for each year-end as above, and a month in between sits part-way from the
+    // year-end before to the year-end after. In the supplier order the height still follows the level on the twelve
+    // months to that month. A few steps then push apart any circles that have come to overlap.
+    const per = period(), gl = per && per.roll && !byShift ? glide(mode, cols, per, y) : null;
+    const warm = per && !byShift && !gl ? onAll(() => layoutFor(mode, cols)) : null;
+    const rnd = d3.randomLcg(7), base = gl ? null : warm || (mode === 'order' ? null : layoutFor('order', 'free'));
+    const sn = nodes.filter(d => act[d.i]).map(d => { const g = gl ? gl(d) : null; return { i: d.i, level: L(d), col: colOf(d), small: d.small, r: rNode(wholeTotal[d.i] / NM), tx0: byShift ? txOf(d) : 0,
+      x: g ? g.x : base ? base[d.i].x : (byShift ? txOf(d) : banded ? gx(colOf(d)) : x0 + rnd() * (x1 - x0)), y: g ? g.y : base ? base[d.i].y : y(L(d)), tx: g ? g.x : 0, ty: g ? g.y : 0 }; });
     // Pull between industries. Supplier order: a pair's two-way total as a share of the smaller partner's payments.
     // Hybrid and connections: affinity, the pair's payments over what the two industries' sizes alone would predict,
     // so the biggest industries do not drag everything to the middle (tests/08_clusters.R).
@@ -348,9 +362,11 @@
       if (banded) { const c = gx(d.col), hw = Math.max(0, cc.width[d.col] / 2 - Math.min(d.r, cc.width[d.col] / 2) - 1); d.x = Math.max(c - hw, Math.min(c + hw, d.x)); }
       if (byShift) { const tol = d.small ? Math.max(0, ax.stripW / 2 - d.r) : 22 * K; d.x = Math.max(d.tx0 - tol, Math.min(d.tx0 + tol, d.x)); }   // stays near its rank
       d.x = Math.max(x0, Math.min(x1 + (banded || byShift ? 24 * K : 0), d.x)); d.y = Math.max(y0, Math.min(y1, d.y)); } };
-    if (warm) sim.alpha(0.5);
-    for (let i = 0, n = warm ? 300 : 600; i < n; i++) { sim.tick(); pin(); }
-    if (!banded && !byShift) {
+    if (gl) { const push = d3.forceSimulation(sn).force('collide', d3.forceCollide(d => d.r + 3 * K).iterations(2)).force('x', d3.forceX(d => d.tx).strength(0.2)).force('y', d3.forceY(d => d.ty).strength(0.2)).stop();
+      for (let i = 0; i < 40; i++) { push.tick(); pin(); } }
+    else { if (warm) sim.alpha(0.5);
+      for (let i = 0, n = per ? 300 : 600; i < n; i++) { sim.tick(); pin(); } }                // a period's positions take half the steps
+    if (!banded && !byShift && !gl) {
       // Stretch to fill the frame. For hybrid and connections the stretch ignores the outermost few industries,
       // which are barely connected and would otherwise squeeze everything else; they are held at the edge.
       const xs = sn.map(d => d.x).sort(d3.ascending), ys = sn.map(d => d.y).sort(d3.ascending), p = mode === 'order' ? 0 : 0.04;
@@ -365,6 +381,14 @@
     for (const d of sn) out[d.i] = { x: d.x, y: d.y };
     return out;
   }
+  // Where the gliding puts an industry in the month a rolling window ends: part-way between its places at the year-ends
+  // either side (the yearly periods: each December, and the last month of the data).
+  function glide(mode, cols, per, y) {
+    const m = per.m1, ends = periods.map(p => p.m1), k1 = ends.findIndex(e => e >= m), k0 = ends[k1] === m || k1 === 0 ? k1 : k1 - 1, f = k1 === k0 ? 0 : (m - ends[k0]) / (ends[k1] - ends[k0]);
+    const P0 = periods[k0], P1 = periods[k1], A0 = inPeriod(P0, () => layoutFor(mode, cols)), A1 = k1 === k0 ? A0 : inPeriod(P1, () => layoutFor(mode, cols));
+    return d => { const a = A0[d.i], b = A1[d.i], x = a.x + (b.x - a.x) * f;
+      return { x, y: mode === 'order' ? y(levelIn(d, per)) + (a.y - y(levelIn(d, P0))) * (1 - f) + (b.y - y(levelIn(d, P1))) * f : a.y + (b.y - a.y) * f }; };
+  }
   function layoutFor(mode, cols) { const k = layoutKey(mode, cols); return layouts[k] || (layouts[k] = computeLayout(mode, cols)); }
   function targetLayout() {
     const base = layoutFor(S.layout, colsNow());
@@ -373,28 +397,47 @@
     return layouts[k] || (layouts[k] = base.map(p => (p.y < -100 ? p : { x: p.x, y: mid - p.y })));
   }
   let pos = null, tween = null, posPeriod = 'all';       // posPeriod: the months the positions on screen were worked out on
-  function moveTo(instant) {
+  function moveTo(instant, ms = 700) {
     const target = targetLayout(); posPeriod = pKey(); warmPeriods();
     if (instant || !pos || reduceMotion) { pos = target.map(p => ({ ...p })); tween = null; geoDirty = true; requestDraw(); return; }
-    tween = { from: pos.map((p, i) => (p.x < -100 ? { ...target[i] } : { ...p })), to: target, t0: performance.now() };   // industries coming in appear in place
+    tween = { from: pos.map((p, i) => (p.x < -100 ? { ...target[i] } : { ...p })), to: target, t0: performance.now(), ms };   // industries coming in appear in place
     requestDraw();
   }
 
-  // By year: once the month shown has moved into another year, slide to that year's positions
-  function followPeriod() { if (D && pos && pKey() !== posPeriod) moveTo(false); }
-  // The other years' positions for the view in hand, worked out one at a time while nothing is moving, nearest year first,
-  // so that playing through a January doesn't have to stop and work them out
+  // By period: once the month shown has moved into another year (or, rolling, another month), slide to its positions
+  function followPeriod() { if (D && pos && pKey() !== posPeriod) moveTo(false, S.pos === 'roll' ? 300 : 700); }
+  // Playing a rolling window: the circles sit part-way between this month's positions and the next, so they drift without steps
+  function rollPositions() {
+    const m0 = Math.max(0, Math.min(NM - 1, Math.floor(S.t))), m1 = Math.min(NM - 1, m0 + 1), f = S.t - m0;
+    const A = inPeriod(rolls[m0], targetLayout), B = m1 === m0 ? A : inPeriod(rolls[m1], targetLayout);
+    pos = A.map((p, i) => ({ x: p.x + (B[i].x - p.x) * f, y: p.y + (B[i].y - p.y) * f })); tween = null; geoDirty = true; posPeriod = pKey();
+  }
+  // The periods the months from..to use whose positions, for the view in hand, are not worked out yet
+  const held = p => inPeriod(p, () => layoutKey(S.layout, colsNow()) in layouts);
+  function notReady(from, to) { const need = [], seen = new Set(); if (S.pos === 'all') return need;
+    for (let m = from; m <= to; m++) { const p = periodOf(m); if (!seen.has(p.key)) { seen.add(p.key); if (!held(p)) need.push(p); } } return need; }
+  // Positions for the other periods of the view in hand, worked out one at a time while nothing is moving, nearest first,
+  // so that stepping and playing find them ready
   let warmTimer = 0;
   function warmPeriods() {
-    clearTimeout(warmTimer); if (S.pos !== 'year' || !D) return;
+    clearTimeout(warmTimer); if (S.pos === 'all' || !D) return;
     warmTimer = setTimeout(() => {
-      if (!D || S.pos !== 'year') return; if (playing || tween) { warmPeriods(); return; }
-      const cur = perOf[Math.round(S.t)], mode = S.layout, cols = colsNow();
-      for (const j of d3.range(periods.length).sort((a, b) => Math.abs(a - cur) - Math.abs(b - cur))) {
-        const keep = pFixed; pFixed = periods[j]; const had = layoutKey(mode, cols) in layouts; if (!had) layoutFor(mode, cols); pFixed = keep;
-        if (!had) { warmPeriods(); return; } }
+      if (!D || S.pos === 'all' || preparing) return; if (playing || tween) { warmPeriods(); return; }
+      const cur = monthNow(), todo = notReady(0, NM - 1).sort((a, b) => Math.abs(a.m1 - cur) - Math.abs(b.m1 - cur));
+      if (todo.length) { inPeriod(todo[0], () => layoutFor(S.layout, colsNow())); warmPeriods(); }
     }, playing || tween ? 300 : 40);
   }
+  // Before playing: work out whatever positions the months ahead still need, a few at a time so the page stays live, and
+  // show how far that has got on the Play button. Pressing the button again calls it off.
+  let preparing = null;
+  function prepare(todo, then) {
+    cancelPrepare(); const total = todo.length, btn = $('play'), label = () => { btn.textContent = `Getting ready ${Math.round(100 * (total - todo.length) / total)}%`; };
+    const step = () => { if (!preparing) return; const t0 = performance.now();
+      while (todo.length && performance.now() - t0 < 24) inPeriod(todo.shift(), () => layoutFor(S.layout, colsNow()));
+      if (todo.length) { label(); preparing.timer = setTimeout(step, 0); } else { cancelPrepare(); then(); } };
+    preparing = { timer: setTimeout(step, 30) }; btn.classList.add('busy'); btn.setAttribute('aria-busy', 'true'); btn.title = 'Working out the positions for each month. Press to stop.'; label();
+  }
+  function cancelPrepare() { if (!preparing) return; clearTimeout(preparing.timer); preparing = null; const btn = $('play'); btn.classList.remove('busy'); btn.removeAttribute('aria-busy'); btn.title = ''; btn.textContent = playing ? 'Pause' : 'Play'; warmPeriods(); }
 
   // ---------------------------------------------------------------- values at a (possibly fractional) month
   let curV, curN, disp, shown, paidD, recvD, paidV, recvV;  // allocated by setData()
@@ -613,8 +656,8 @@
   function frame(now) {
     raf = 0;
     const dt = Math.min(0.1, (now - lastNow) / 1000); lastNow = now;
-    if (playing) { S.t = Math.min(NM - 1, S.t + dt * +S.speed); if (S.t >= NM - 1) setPlaying(false); dirty = true; followPeriod(); }
-    if (tween) { const u = Math.min(1, (now - tween.t0) / 700), e = d3.easeCubicInOut(u);
+    if (playing) { S.t = Math.min(NM - 1, S.t + dt * +S.speed); if (S.t >= NM - 1) setPlaying(false); dirty = true; if (playing && S.pos === 'roll') rollPositions(); else followPeriod(); }
+    if (tween) { const u = Math.min(1, (now - tween.t0) / tween.ms), e = d3.easeCubicInOut(u);
       pos = tween.from.map((p, i) => ({ x: p.x + (tween.to[i].x - p.x) * e, y: p.y + (tween.to[i].y - p.y) * e })); geoDirty = true; dirty = true; if (u >= 1) tween = null; }
     if (dotsMoving()) { phase += dt; if (!playing && !tween) { skip = !skip; if (!skip) dirty = true; } else dirty = true; }   // dots alone redraw every other frame
     if (dirty) { draw(); dirty = false; if (Math.round(S.t) !== shownMonth) updateReadouts(); }
@@ -670,7 +713,7 @@
 
   // ---- the key
   function buildKey() {
-    const key = $('key'); key.replaceChildren(el('h2', null, 'Key')); const span = S.pos === 'year' ? 'in the year shown' : 'over the whole period';
+    const key = $('key'); key.replaceChildren(el('h2', null, 'Key')); const span = S.pos === 'year' ? 'in the year shown' : S.pos === 'roll' ? 'in the twelve months to the month shown' : 'over the whole period';
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = (w, h) => { const s = document.createElementNS(svgNS, 'svg'); s.setAttribute('width', w); s.setAttribute('height', h); s.setAttribute('viewBox', `0 0 ${w} ${h}`); return s; };
     const add = (s, tag, attrs) => { const e = document.createElementNS(svgNS, tag); for (const a in attrs) e.setAttribute(a, attrs[a]); s.appendChild(e); return e; };
@@ -724,6 +767,7 @@
       + ` Second-step links are fainter, and other industries are greyed. A trail stops where an industry’s ${goods() ? 'customers' : 'payers'} aren’t in the data.`));
     if (S.layout === 'order' && S.cols === 'shift') key.appendChild(el('p', 'd-small', 'Columns: left to right, from the industry whose place in the order shifts least to the one whose place shifts most. The measure is the standard deviation of its level, worked out on the 12 months to each month; the numbers along the top are that figure, in levels. Industries too small to place are kept apart on the right.'));
     if (S.pos === 'year') key.appendChild(el('p', 'd-small', 'Positions: each circle sits where the year shown puts it, and slides when the month moves into another year. Circle sizes follow the month as before. Industries too small to place stay where all the months put them.'));
+    if (S.pos === 'roll') key.appendChild(el('p', 'd-small', 'Positions: each circle sits where the twelve months to the month shown put it, and drifts as the months change. Height and ranked columns are worked out afresh for each month. Sideways position inside a column, and the hybrid and connections layouts, are worked out for each year-end and glide from one to the next. Industries too small to place stay where all the months put them.'));
     if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought. Services such as rent and insurance are in here with goods, and so are payments that bought nothing, such as taxes and dividends.'); key.appendChild(note); }
   }
 
@@ -958,7 +1002,9 @@
     for (const k of checks) $(k).checked = S[k];
     document.querySelectorAll('input[name=layout]').forEach(r => { r.checked = r.value === S.layout; });
     document.querySelectorAll('input[name=dir]').forEach(r => { r.checked = r.value === S.dir; });
-    $('cols').disabled = S.layout !== 'order'; $('halo').disabled = S.measure !== 'value'; $('pos-note').hidden = S.pos !== 'year';
+    $('cols').disabled = S.layout !== 'order'; $('halo').disabled = S.measure !== 'value'; $('pos-note').hidden = S.pos === 'all';
+    $('pos-note').textContent = S.pos === 'roll' ? 'Positions follow the twelve months to the month shown, so circles drift as the months change. Play first works every month’s positions out, which can take a few seconds. A move can mean that more or different payments were counted, not that the industry changed: see “Positions that follow the period” in the notes.'
+      : 'Positions follow the year shown, so circles slide when the month moves into another year. A move can mean that more or different payments were counted that year, not that the industry changed: see “Positions that follow the period” in the notes.';
     const nv = D ? vouched().length : 0; $('vouch').disabled = !nv; $('vouch-n').textContent = nv ? ` (${nv} in this region)` : ' (none found in this region)';
     for (const o of pickSel.options) { const n = nodes.find(d => d.id === o.value); o.hidden = o.disabled = !!n && !act[n.i]; }
     pickSel.value = S.sel >= 0 ? nodes[S.sel].id : '';
@@ -966,6 +1012,7 @@
   }
   function changed(k) {                                    // what each control has to refresh
     if (!D) return;
+    if (['layout', 'cols', 'lens', 'inter', 'show', 'pos'].includes(k)) cancelPrepare();          // the view being got ready for has changed
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
     if (k === 'layout' || k === 'cols' || (k === 'lens' && isTies(S.cols))) moveTo(false);
     if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
@@ -982,15 +1029,19 @@
 
   // ---- time: step, scrub, play
   const slider = $('month');
-  function setMonth(m) { S.t = Math.max(0, Math.min(NM - 1, m)); followPeriod(); refresh(); syncUrl(); }
-  function setPlaying(on) { playing = on; if (on && S.t >= NM - 1) S.t = 0; $('play').textContent = on ? 'Pause' : 'Play'; if (on) schedule(); else { S.t = Math.round(S.t); refresh(); syncUrl(); } }
+  function setMonth(m) { cancelPrepare(); S.t = Math.max(0, Math.min(NM - 1, m)); followPeriod(); refresh(); syncUrl(); }
+  function setPlaying(on, ready) {
+    if (on && !ready) { const todo = notReady(S.t >= NM - 1 ? 0 : Math.floor(S.t), NM - 1); if (todo.length) { prepare(todo, () => setPlaying(true, true)); return; } }   // positions that follow a period: have them all in hand first
+    cancelPrepare(); playing = on; if (on && S.t >= NM - 1) S.t = 0; $('play').textContent = on ? 'Pause' : 'Play';
+    if (on) schedule(); else { S.t = Math.round(S.t); followPeriod(); if (S.pos === 'roll') moveTo(false, 300); refresh(); syncUrl(); } }
+  const togglePlay = () => { if (preparing) cancelPrepare(); else setPlaying(!playing); };
   slider.addEventListener('input', e => { if (playing) setPlaying(false); setMonth(+e.target.value); });
   $('prev').addEventListener('click', () => { if (playing) setPlaying(false); setMonth(Math.round(S.t) - 1); });
   $('next').addEventListener('click', () => { if (playing) setPlaying(false); setMonth(Math.round(S.t) + 1); });
-  $('play').addEventListener('click', () => setPlaying(!playing));
+  $('play').addEventListener('click', togglePlay);
   document.addEventListener('keydown', e => {
     const tag = (e.target.tagName || '').toLowerCase(); if (e.metaKey || e.ctrlKey || e.altKey || tag === 'select' || tag === 'textarea' || (tag === 'input' && e.target.type !== 'range' && e.target.type !== 'radio' && e.target.type !== 'checkbox')) return;
-    if (e.key === ' ' && tag !== 'button' && tag !== 'summary' && tag !== 'input') { e.preventDefault(); setPlaying(!playing); }
+    if (e.key === ' ' && tag !== 'button' && tag !== 'summary' && tag !== 'input') { e.preventDefault(); togglePlay(); }
     else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && tag !== 'input') { e.preventDefault(); if (playing) setPlaying(false); setMonth(Math.round(S.t) + (e.key === 'ArrowLeft' ? -1 : 1)); }
     else if (e.key === 'Escape' && S.sel >= 0) select(-1);
   });
@@ -1045,6 +1096,7 @@
     const b = el('button', 'linklike', r.name); b.type = 'button'; b.addEventListener('click', () => loadRegion(code)); return b;
   }
   function loadRegion(code) {
+    cancelPrepare();
     const keepSel = D && S.sel >= 0 ? nodes[S.sel].id : wantSel, keepMonth = D ? D.months[Math.round(S.t)] : wantMonth;
     const arrive = () => {
       if (playing) { playing = false; $('play').textContent = 'Play'; }
@@ -1226,7 +1278,7 @@
     set(o) { const inter = 'inter' in o && o.inter !== S.inter; Object.assign(S, o); if (inter) { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); }
       geoDirty = true; pos = null; moveTo(true); buildKey(); reflect(); wording(); refresh(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, dottedLinks: () => dots.length, dottedMid(j) { const q = dots[j]; return q ? { x: 0.25 * q.ax + 0.5 * q.cx + 0.25 * q.zx, y: 0.25 * q.ay + 0.5 * q.cy + 0.25 * q.zy, supplier: nodes[q.h.si].id } : null; }, play: setPlaying,
     at(id) { const i = nodeOf(id); return pos && i >= 0 ? { x: pos[i].x, y: pos[i].y } : null; },       // where an industry's circle is on the canvas, so a test can click it
-    period: () => pKey(), moving: () => !!tween, viewsWorkedOut: () => Object.keys(layouts).length,
+    period: () => pKey(), moving: () => !!tween, gettingReady: () => !!preparing, playing: () => playing, viewsWorkedOut: () => Object.keys(layouts).length,
     // in the supplier order: the furthest any placed industry sits from the height its level gives, in pixels
     heightGap: () => d3.max(nodes.filter(d => act[d.i] && !d.small), d => Math.abs(pos[d.i].y - yOfLevel(L(d)))),
     // pairs of circles that overlap by more than a pixel, at the sizes the layout keeps apart

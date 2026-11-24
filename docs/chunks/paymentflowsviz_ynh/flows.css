@@ -99,6 +99,9 @@ select:disabled, label:has(input:disabled) { color: var(--muted); }
 .timebar { display: grid; grid-template-columns: auto 15ch 1fr; gap: 6px 14px; align-items: center; margin: 6px 0 10px; }
 .time-buttons { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 #play { min-width: 62px; font-weight: 600; }
+#play.busy { color: var(--muted); animation: getting-ready 0.9s ease-in-out infinite alternate; }      /* working out positions before it plays */
+@keyframes getting-ready { from { opacity: 1; } to { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { #play.busy { animation: none; } }
 .time-label { font-weight: 650; font-size: 16px; line-height: 1.2; }
 .time-label small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
 .time-track { position: relative; min-width: 0; }

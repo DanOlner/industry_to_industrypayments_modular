@@ -22,6 +22,12 @@
 //    The force-driven views are worked out two ways. Cold: from scratch each year, as the page works out a view now.
 //    Warm: starting from the all-months positions, so an industry moves only as far as the year pulls it.
 //
+// 4. Rolling. The same question for positions on the twelve months to each month, 82 windows, which would let circles
+//    drift instead of jumping each January. How far does a circle step from one month to the next? Three ways of working
+//    it out: each month on its own, starting from the all-months positions; each month starting from the month before
+//    ("chained"); and working positions out only at year-ends and gliding between them, with the height still on the
+//    twelve months to each month and a few steps to push overlapping circles apart. The page uses the last.
+//
 // Intermediaries are left out, as the page opens. Values include held values, as the page's positions do now: a hidden
 // month is held at the link's average published month in the same year, or in the nearest years if that year has none.
 // Where they are borrowed from other years they damp the change from one year to the next.
@@ -118,7 +124,7 @@ function study(code, detail) {
   const GROUPS = D.sector_groups, need = GROUPS.map(g => Math.sqrt(d3.sum(live.filter(d => d.group === g), d => 2 * rad[d.i] + 8 * K)) || 1), cx = {}, cw = {};
   { const total = d3.sum(need), a = pad.l + 8 * K, b = W - pad.r + 24 * K; let acc = 0; GROUPS.forEach((g, j) => { const w = (b - a) * need[j] / total; cx[g] = a + acc + w / 2; cw[g] = w; acc += w; }); }
   let layoutMs = [];
-  function layout(mode, cols, ds, start) {
+  function layout(mode, cols, ds, start, alpha0 = 0.5, steps = 300, fixedDom = null) {
     const t0 = process.hrtime.bigint(), banded = mode === 'order' && cols === 'group', rnd = d3.randomLcg(7);
     const base = start || (mode === 'order' ? null : layout('order', 'free', ds, null));
     const sn = live.map(d => ({ i: d.i, level: ds.level[d.i], col: d.group, r: rad[d.i], x: base ? base[d.i].x : banded ? cx[d.group] : x0 + rnd() * (x1 - x0), y: base ? base[d.i].y : yOf(ds.level[d.i]) }));
@@ -137,14 +143,17 @@ function study(code, detail) {
       if (mode === 'order') { const ty = yOf(d.level); d.y = Math.max(ty - slack, Math.min(ty + slack, d.y)); }
       if (banded) { const c = cx[d.col], hw = Math.max(0, cw[d.col] / 2 - Math.min(d.r, cw[d.col] / 2) - 1); d.x = Math.max(c - hw, Math.min(c + hw, d.x)); }
       d.x = Math.max(x0, Math.min(x1 + (banded ? 24 * K : 0), d.x)); d.y = Math.max(y0, Math.min(y1, d.y)); } };
-    if (start) sim.alpha(0.5);                                             // warm: a gentler start, and half the steps
-    for (let i = 0; i < (start ? 300 : 600); i++) { sim.tick(); pin(); }
+    if (start) sim.alpha(alpha0);                                          // warm: a gentler start, and half the steps (or as asked)
+    for (let i = 0; i < (start ? steps : 600); i++) { sim.tick(); pin(); }
+    const raw = nodes.map(() => null); for (const d of sn) raw[d.i] = { x: d.x, y: d.y };          // where the pulls left each circle, before the stretch to fill the frame
+    let dom = fixedDom;
     if (!banded) { const xs = sn.map(d => d.x).sort(d3.ascending), ys = sn.map(d => d.y).sort(d3.ascending), p = mode === 'order' ? 0 : 0.04;
-      const fx = d3.scaleLinear().domain([d3.quantile(xs, p), d3.quantile(xs, 1 - p)]).range([x0, x1]).clamp(true), fy = d3.scaleLinear().domain([d3.quantile(ys, p), d3.quantile(ys, 1 - p)]).range([y0, y1]).clamp(true);
+      if (!dom) dom = { x: [d3.quantile(xs, p), d3.quantile(xs, 1 - p)], y: [d3.quantile(ys, p), d3.quantile(ys, 1 - p)] };
+      const fx = d3.scaleLinear().domain(dom.x).range([x0, x1]).clamp(true), fy = d3.scaleLinear().domain(dom.y).range([y0, y1]).clamp(true);
       for (const d of sn) { d.tx = fx(d.x); d.ty = mode === 'order' ? d.y : fy(d.y); d.x = d.tx; d.y = d.ty; }
       const relax = d3.forceSimulation(sn).force('collide', d3.forceCollide(d => d.r + 6 * K).iterations(2)).force('x', d3.forceX(d => d.tx).strength(0.25)).force('y', d3.forceY(d => d.ty).strength(0.25)).stop();
       for (let i = 0; i < 60; i++) { relax.tick(); pin(); } }
-    const out = nodes.map(() => null); for (const d of sn) out[d.i] = { x: d.x, y: d.y };
+    const out = nodes.map(() => null); for (const d of sn) out[d.i] = { x: d.x, y: d.y }; out.raw = raw; out.dom = dom;
     if (!start || mode === 'order' || base === start) layoutMs.push([mode + '/' + cols + (start ? ' warm' : ' cold'), Number(process.hrtime.bigint() - t0) / 1e6]);
     return out;
   }
@@ -198,10 +207,80 @@ function study(code, detail) {
     const drift = placed.map(d => ({ d, v: Y[Y.length - 1].level[d.i] - Y[0].level[d.i] })).sort((a, b) => Math.abs(b.v) - Math.abs(a.v));
     console.log(`Largest changes in level from ${years[0]} to ${years[years.length - 1]}: ` + drift.slice(0, 8).map(r => `${r.d.short} ${r.v > 0 ? '+' : ''}${f2(r.v)}`).join(', ')); }
 
+  // ---- 4. rolling: positions on the twelve months to each month. How far does a circle move from one month to the next?
+  // Neighbouring windows share eleven of their twelve months, so steps should be small. A step of 20 pixels or more would
+  // show as a jump when played.
+  let roll = null;
+  if (detail || process.argv.includes('--rolling')) {
+    const R = d3.range(11, NM).map(m => fill(dataFor(d3.range(m - 11, m + 1))));
+    roll = views.filter(v => !/cold/.test(v[0])).map(([name, moved]) => { const med = [], p90 = [], all = [];
+      for (let j = 1; j < R.length; j++) { const r = moved(R[j - 1], R[j]); med.push(median(r)); p90.push(q90(r)); for (const v of r) all.push(v); }
+      // the same, after averaging each month's positions with the month before and after (possible only for the layouts, so left blank for the rest)
+      return { region: code, view: name.replace(', warm', ''), typical_step_px: median(med), one_in_ten_px: median(p90), steps_over_20px: all.filter(v => v >= 20).length / all.length, largest_px: d3.max(all),
+               year_on_year_px: d3.mean(d3.range(12, R.length), j => median(moved(R[j - 12], R[j]))) }; });
+    say(`\n4. Rolling: the twelve months to each month, ${R.length} windows. Movement of a circle from one month to the next, pixels.`);
+    say('Each month worked out on its own, starting from the all-months positions:');
+    const show = rr => console.table(rr.map(r => ({ view: r.view, 'typical step': f1(r.typical_step_px), 'one in ten steps over': f1(r.one_in_ten_px), 'steps of 20px or more': (100 * r.steps_over_20px).toFixed(1) + '%', 'largest step': f1(r.largest_px),
+      'typical move over 12 months': f1(r.year_on_year_px), ...(r.ms ? { 'ms a month': f1(r.ms), 'from the stand-alone positions': f1(r.apart_px), 'over 12 months, real over chance': f2(r.signal) } : {}) })));
+    if (detail) show(roll);
+    // Chained: each month starts from the month before (the first from the all-months positions), with a gentle start and few
+    // steps. A circle then moves only as far as one more month's payments pull it. Is that smooth, how far does it stray from
+    // the stand-alone positions, and does it still tell real years from mixed ones?
+    for (const [alpha0, steps] of [[0.3, 100], [0.15, 60]]) {
+      const ch = [['order', 'group', 'Supplier order, sector columns'], ['order', 'free', 'Supplier order, no columns'], ['hybrid', '-', 'Hybrid'], ['force', '-', 'Connections']].map(([mode, cols, label]) => {
+        const t0 = process.hrtime.bigint(), L = []; let prev = wholeLay[mode + cols]; for (const ds of R) { prev = layout(mode, cols, ds, prev, alpha0, steps); L.push(prev); }
+        const ms = Number(process.hrtime.bigint() - t0) / 1e6 / R.length, dist = (A, B) => placed.map(d => Math.hypot(A[d.i].x - B[d.i].x, A[d.i].y - B[d.i].y));
+        const med = [], p90 = [], all = []; for (let j = 1; j < L.length; j++) { const r = dist(L[j - 1], L[j]); med.push(median(r)); p90.push(q90(r)); for (const v of r) all.push(v); }
+        const apart = d3.mean(R, (ds, j) => median(dist(L[j], ds[mode + cols + true])));
+        // chance: the same chain run on the months in a shuffled order within each year would be the fair test, but that changes the windows; so compare
+        // movement over twelve months (no shared months) with twelve single steps laid end to end: a drift adds up, a wobble doesn't
+        const year = d3.mean(d3.range(12, L.length), j => median(dist(L[j - 12], L[j]))), path = d3.mean(d3.range(12, L.length), j => d3.sum(d3.range(j - 11, j + 1), i => med[i - 1]));
+        return { region: code, view: label, typical_step_px: median(med), one_in_ten_px: median(p90), steps_over_20px: all.filter(v => v >= 20).length / all.length, largest_px: d3.max(all), year_on_year_px: year, ms, apart_px: apart, signal: year / path }; });
+      // Gliding: work the positions out only for each year-end (each from the all-months positions, as the yearly switch
+      // does), and for the months between slide sideways from one year-end's place to the next. Height in the supplier
+      // order still follows the level on the twelve months to that month. Then a few steps that only push apart circles
+      // that have come to overlap. How smooth is that, and how many circles overlap without the push?
+      if (alpha0 === 0.3) {
+        const ends = [...d3.range(11, NM - 1, 12), NM - 1].filter((m, i, a) => a.indexOf(m) === i);          // each December, and the last month
+        const gl = [['order', 'group', 'Supplier order, sector columns'], ['order', 'free', 'Supplier order, no columns'], ['hybrid', '-', 'Hybrid'], ['force', '-', 'Connections']].map(([mode, cols, label]) => {
+          const banded = cols === 'group', A = {}, anchor = m => A[m] || (A[m] = layout(mode, cols, R[m - 11], wholeLay[mode + cols]));
+          const t0 = process.hrtime.bigint(), L = [], lapsBefore = [], lapsAfter = [];
+          const laps = P => { let n = 0; for (let a = 0; a < live.length; a++) for (let b = a + 1; b < live.length; b++) { const i = live[a].i, j = live[b].i; if (Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y) < rad[i] + rad[j] - 1) n++; } return n; };
+          for (let m = 11; m < NM; m++) { const e1 = ends.find(e => e >= m), e0 = m === e1 ? e1 : (ends[ends.indexOf(e1) - 1] ?? e1), f = e1 === e0 ? 0 : (m - e0) / (e1 - e0), A0 = anchor(e0), A1 = anchor(e1), ds = R[m - 11];
+            const sn = live.map(d => { const i = d.i, x = A0[i].x + (A1[i].x - A0[i].x) * f;
+              const y = mode === 'order' ? yOf(ds.level[i]) + (A0[i].y - yOf(R[e0 - 11].level[i])) * (1 - f) + (A1[i].y - yOf(R[e1 - 11].level[i])) * f : A0[i].y + (A1[i].y - A0[i].y) * f;
+              return { i, level: ds.level[i], col: d.group, r: rad[i], x, y, tx: x, ty: y }; });
+            const before = nodes.map(() => null); for (const d of sn) before[d.i] = { x: d.x, y: d.y }; lapsBefore.push(laps(before));
+            const relax = d3.forceSimulation(sn).force('collide', d3.forceCollide(d => d.r + 3 * K).iterations(2)).force('x', d3.forceX(d => d.tx).strength(0.2)).force('y', d3.forceY(d => d.ty).strength(0.2)).stop();
+            for (let i = 0; i < 40; i++) { relax.tick(); for (const d of sn) {
+              if (mode === 'order') { const ty = yOf(d.level); d.y = Math.max(ty - 14 * K, Math.min(ty + 14 * K, d.y)); }
+              if (banded) { const c = cx[d.col], hw = Math.max(0, cw[d.col] / 2 - Math.min(d.r, cw[d.col] / 2) - 1); d.x = Math.max(c - hw, Math.min(c + hw, d.x)); }
+              d.x = Math.max(x0, Math.min(x1 + (banded ? 24 * K : 0), d.x)); d.y = Math.max(y0, Math.min(y1, d.y)); } }
+            const out = nodes.map(() => null); for (const d of sn) out[d.i] = { x: d.x, y: d.y }; L.push(out); lapsAfter.push(laps(out)); }
+          const ms = Number(process.hrtime.bigint() - t0) / 1e6 / R.length, dist = (A, B) => placed.map(d => Math.hypot(A[d.i].x - B[d.i].x, A[d.i].y - B[d.i].y));
+          const med = [], p90 = [], all = []; for (let j = 1; j < L.length; j++) { const r = dist(L[j - 1], L[j]); med.push(median(r)); p90.push(q90(r)); for (const v of r) all.push(v); }
+          return { view: label, 'typical step': f1(median(med)), 'one in ten steps over': f1(median(p90)), 'steps of 20px or more': (100 * all.filter(v => v >= 20).length / all.length).toFixed(1) + '%', 'largest step': f1(d3.max(all)),
+                   'typical move over 12 months': f1(d3.mean(d3.range(12, L.length), j => median(dist(L[j - 12], L[j])))), 'ms a month, year-ends included': f1(ms),
+                   'overlapping pairs a month, before the push': f1(d3.mean(lapsBefore)), after: f1(d3.mean(lapsAfter)), 'most in a month, after': d3.max(lapsAfter) }; });
+        say('Gliding between year-end positions, height on the twelve months to each month, then a push apart:'); if (detail) console.table(gl); }
+      if (alpha0 === 0.3) for (const [a2, n2] of [[0.3, 100], [0.1, 60]]) {
+        const ch2 = [['order', 'group', 'Supplier order, sector columns'], ['order', 'free', 'Supplier order, no columns'], ['hybrid', '-', 'Hybrid'], ['force', '-', 'Connections']].map(([mode, cols, label]) => {
+          const t0 = process.hrtime.bigint(), L = [], W0 = wholeLay[mode + cols]; let prev = W0; for (const ds of R) { prev = layout(mode, cols, ds, prev.raw, a2, n2, W0.dom); L.push(prev); }
+          const ms = Number(process.hrtime.bigint() - t0) / 1e6 / R.length, dist = (A, B) => placed.map(d => Math.hypot(A[d.i].x - B[d.i].x, A[d.i].y - B[d.i].y));
+          const med = [], p90 = [], all = []; for (let j = 1; j < L.length; j++) { const r = dist(L[j - 1], L[j]); med.push(median(r)); p90.push(q90(r)); for (const v of r) all.push(v); }
+          const year = d3.mean(d3.range(12, L.length), j => median(dist(L[j - 12], L[j]))), path = d3.mean(d3.range(12, L.length), j => d3.sum(d3.range(j - 11, j + 1), i => med[i - 1]));
+          return { region: code, view: label, typical_step_px: median(med), one_in_ten_px: median(p90), steps_over_20px: all.filter(v => v >= 20).length / all.length, largest_px: d3.max(all), year_on_year_px: year, ms,
+                   apart_px: d3.mean(R, (ds, j) => median(dist(L[j], ds[mode + cols + true]))), signal: year / path, end: median(dist(L[L.length - 1], W0)) }; });
+        say(`Chained on the unstretched positions with the all-months stretch kept, starting strength ${a2}, ${n2} steps a month:`); if (detail) show(ch2);
+        say('  typical distance of the last month from the all-months positions: ' + ch2.map(r => `${r.view} ${f1(r.end)}`).join(', ')); }
+      say(`Chained, starting strength ${alpha0}, ${steps} steps a month (last column: how far it gets in twelve months over the length of the twelve steps; 1 is a straight line, near 0 a wobble on the spot):`); if (detail) show(ch);
+    }
+  }
+
   // ---- 2. time
   if (detail) { const by = d3.rollups(layoutMs, v => d3.median(v, d => d[1]), d => d[0]); console.log('\n2. Time to work one view out, in Node on this machine (milliseconds, median):');
     console.table(by.map(([view, ms]) => ({ view, ms: Math.round(ms) }))); const t0 = process.hrtime.bigint(); for (let i = 0; i < 20; i++) levels(Y[0]); console.log(`Levels for one year: ${(Number(process.hrtime.bigint() - t0) / 2e7).toFixed(1)} ms.`); }
-  return { code, name: D.name, dWhole, dYear, dSmall, table, tr, ms: d3.rollups(layoutMs, v => d3.median(v, d => d[1]), d => d[0]) };
+  return { code, name: D.name, dWhole, dYear, dSmall, table, tr, roll, ms: d3.rollups(layoutMs, v => d3.median(v, d => d[1]), d => d[0]) };
 }
 
 const done = todo.map(code => study(code, todo.length === 1 || code === 'TLE'));

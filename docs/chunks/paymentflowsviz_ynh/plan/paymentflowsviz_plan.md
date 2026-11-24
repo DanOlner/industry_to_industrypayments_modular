@@ -492,7 +492,7 @@ All 17 settings together also came back from one address of 190 characters. A ma
 - **Everything added since is in the address and comes back:** the region (`region`, 12 of 12), the seven newer column choices (`cols`, now 11 of 11: `ties`, `sells`, `buys`, `inside`, `sellsinside`, `buysinside` and `passed` added), the foundational economy highlights (`lens`, now 26 of 26) and the chain trace (`trace`, 2 of 2).
 - **One thing wasn't, and now is:** the side panel's "Show table" button, which swaps the partners chart for the two lists. It is `ptable=1`. The test now presses the button, reloads the address and presses it back.
 - **All 19 settings together** come back from one address of 207 characters.
-- **Added later the same day:** `vouch=0` switches off the dotted lines for hidden links (section 16), and `pos=year` makes positions follow the year shown (section 17). Both come back, 2 of 2.
+- **Added later the same day:** `vouch=0` switches off the dotted lines for hidden links (section 16), and `pos=year` makes positions follow the year shown (section 17), and `pos=roll` the twelve months to the month shown.
 - **Still not in the address, as before:** whether the table of links, the note on the order or the comparison of regions is open, and whether it is playing.
 
 **What's missing.**
@@ -1548,7 +1548,7 @@ It follows section 13.10. The short version:
 
 ## 17. Positions that follow the year shown: scoped, then built
 
-*24 November 2026, on request. Test `tests/33_yearly_positions.cjs`. Sections 17.1 to 17.6 were written before anything was built. Section 17.7 records what was then built, the same day.*
+*24 November 2026, on request. Test `tests/33_yearly_positions.cjs`. Sections 17.1 to 17.6 were written before anything was built. Section 17.7 records what was then built, the same day, and section 17.8 the rolling version that followed.*
 
 **The idea.** Positions are worked out once, on all 93 months, and held still while time plays (section 3.4). This would add a switch. With it on, an industry's position is worked out on the year shown, and circles move when the slider crosses into another year.
 
@@ -1708,7 +1708,53 @@ In the middle region the average industry's height moves 20 pixels between real 
 
 **Not done.**
 
-- **Rolling twelve months** in place of calendar years (decision 3).
+- **Rolling twelve months** in place of calendar years (decision 3). Built next: section 17.8.
 - **Connections is in,** as decided. Whether it reads as jitter when played is still to judge by eye.
 - **The slide deck** doesn't mention the switch.
+
+### 17.8 Built: positions on a rolling twelve months
+
+*24 November 2026, on request: "try the rolling version", with Play showing that positions are being got ready.*
+
+**What was tried first, and why it wasn't used.** `tests/33` now works positions out on the twelve months to each month, 82 windows, three ways. Figures are for Yorkshire and the Humber: how far a circle steps from one month to the next, in pixels.
+
+| What is placed | Each month on its own | Each month from the month before | Gliding between year-ends |
+|----|----|----|----|
+| Height: level in the order | 2 typical; 0.1% of steps are 20 or more | | |
+| Supplier order with sector columns | 3 typical; 7% are 20 or more | 3; 2% | 3; 0.5% |
+| Supplier order with no columns | 10; 25% | 6; 10% | 4; 1.5% |
+| Hybrid | 21; 55% | 13; 32% | 6; 3% |
+| Connections | 23; 55% | 14; 34% | 6; 3% |
+
+- **Height drifts smoothly on its own.** Two pixels a month, and it needs no working out: the file has the level for the twelve months to every month.
+- **Anything placed by pull shakes if each month is worked out on its own.** In hybrid and connections a circle steps over 20 pixels a month, twelve months in a row, to end the year 65 pixels from where it began. Two windows that share eleven of their twelve months still settle differently.
+- **Starting each month from the month before halves the shake but lets the picture wander.** In hybrid and connections the typical circle ends up 140 to 210 pixels from where the stand-alone working puts it for the same month. A variant that carries forward the positions as they were before the stretch to fill the frame does no better, and ends 230 to 320 pixels from the all-months picture. Either way a month's picture then depends on every month before it.
+- **Gliding is steady and stays put.** Positions are worked out only for each year-end, as the yearly switch does, and a month in between sits part-way from the year-end before to the year-end after. Two to four pairs of circles a month come to overlap that way. A few steps that only push them apart clear them: at most one pair is left in any month.
+
+**On the page.** "Positions from" has a third choice, "The 12 months to the month shown". In the address it is `pos=roll`.
+
+- **Height is the level on the twelve months to the month shown,** in the supplier order. It changes a little every month.
+- **Ranked columns rank on those twelve months,** worked out afresh for each month.
+- **Sideways position by pull, and all of hybrid and connections, glide between year-ends.** So in hybrid the height glides too.
+- **The first eleven months share the first twelve,** so nothing moves until December 2019.
+- **Play gets every month's positions ready first.** The button greys, pulses and reads "Getting ready 43%". Pressing it again calls that off. Then it plays.
+- **While playing, a circle sits part-way between this month's place and next month's,** so it drifts without steps. Stepping by hand slides over 0.3 seconds.
+- **Positions are also worked out behind while nothing is moving,** nearest month first, so Play often has little left to do.
+- **Colours, the Direction choice, the side panel, the key and the notes follow the window,** as they do the year.
+
+**How long getting ready takes,** from a cold start in Chrome: half a second where circles are placed by pull, because only the eight year-ends need a full working out. About three and a half seconds in the ranked columns, where every month does.
+
+**Checks.**
+
+- **All-months positions are still identical** to before any of this: 2,560 positions, largest difference 0 pixels. **Yearly positions placed by pull are identical** to the first build: 1,280 positions, 0 pixels.
+- **In the page test, stepped through every month:** a circle typically steps 2 pixels in sector columns, 5 in hybrid and connections, and 7 in "by share passed along". Height stays within the slack of the level. At most one pair of circles overlaps in any month. A year-end matches the yearly positions to within a pixel and a half.
+- **Play:** the button says it is getting ready, pressing again calls it off, and playing holds 60 frames a second with no gap between frames longer than 17 ms.
+- **The address** (`tests/15`): all three choices of "Positions from" come back, 3 of 3.
+- **Screenshots** `26`, `26b` and `26c` in `tests/outputs/page/`.
+
+**What to know when reading it.**
+
+- **Sideways position by pull is not the twelve months to that month.** It is a place between two year-ends. The key and the notes say so.
+- **Ranked columns still shuffle.** By share passed along, 18% of monthly steps are 20 pixels or more, about two places. That is the measure moving, not the layout.
+- **Yearly ranked columns changed slightly** from the first build. A period's positions now take half the steps the all-months ones do, to halve the wait. No circles overlap as a result.
 

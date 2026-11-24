@@ -146,6 +146,29 @@ const problems = [];
     await F(() => window.ynhFlows.load('TLE')); await wait(500); await set(page, { show: 'money', sel: 59, t: 5 }); await page.select('#pos', 'all'); await wait(1000);
     want(await F(() => document.getElementById('pos-note').hidden), true, 'note gone when switched off'); want(await places(), off, 'switched off, every circle back where it was'); }
   await page.close();
+  // positions on a rolling twelve months (plan section 17.8). Play first gets every month's positions ready and says so on
+  // the button; pressing it again calls that off. Playing then drifts. Stepped through every month: height stays at the
+  // level for those twelve months, circles don't overlap, steps are small, and a year-end matches the yearly positions.
+  for (const [view, q, typical, jumps] of [['sector columns', '', 4, 0.03], ['hybrid', '&layout=hybrid', 8, 0.08], ['connections', '&layout=force', 8, 0.08], ['by share passed along', '&cols=passed', 12, 0.3]]) {
+    page = await open(1440, 1000, 'light', '?pos=roll&m=2019-12&sel=70' + q);                      // December 2019: the first window, and the next month starts to roll
+    const want = (got, exp, what) => { if (got !== exp) problems.push(`rolling positions, ${view}, ${what}: expected ${exp}, got ${got}`); }, wait = ms => new Promise(r => setTimeout(r, ms)), F = fn => page.evaluate(fn);
+    want(await F(() => window.ynhFlows.period()), 'r11', 'the months in hand'); want(await F(() => document.getElementById('pos-now').textContent), '12 months to Dec 2019', 'window named beside the switch');
+    const t0 = Date.now(); await page.click('#play'); await wait(50);
+    want(await F(() => window.ynhFlows.gettingReady()), true, 'Play gets ready first'); want(/^Getting ready \d+%$/.test(await F(() => document.getElementById('play').textContent)), true, 'the button says so');
+    if (!q) { await page.click('#play'); await wait(120); want(await F(() => window.ynhFlows.gettingReady() || window.ynhFlows.playing()), false, 'pressing again calls it off'); want(await F(() => document.getElementById('play').textContent), 'Play', 'button back to Play'); await page.click('#play'); }
+    if (view === 'by share passed along') await shot(page, '26b_rolling_getting_ready', '.timebar');
+    await page.waitForFunction(() => window.ynhFlows.playing(), { timeout: 30000 }); const ready = Date.now() - t0; await wait(1500);
+    want(await F(() => window.ynhFlows.period() !== 'r11'), true, 'the window rolls while playing'); await page.click('#play'); await wait(500); want(await F(() => window.ynhFlows.playing()), false, 'paused');
+    const s = await F(() => { const ids = [...document.querySelectorAll('#pick option')].map(e => e.value).filter(Boolean), Y = window.ynhFlows, steps = []; let prev = null, laps = 0, gap = 0, dec = null;
+      for (let m = 11; m <= 92; m++) { Y.set({ t: m }); const p = ids.map(id => Y.at(id)); laps = Math.max(laps, Y.overlaps()); if (Y.state.layout === 'order') gap = Math.max(gap, Y.heightGap()); if (m === 47) dec = p;
+        if (prev) p.forEach((a, i) => { if (a.x > -100) steps.push(Math.hypot(a.x - prev[i].x, a.y - prev[i].y)); }); prev = p; }
+      Y.set({ pos: 'year', t: 47 }); const yr = ids.map(id => Y.at(id)), apart = Math.max(...yr.map((a, i) => Math.hypot(a.x - dec[i].x, a.y - dec[i].y))); Y.set({ pos: 'roll', t: 41 });
+      steps.sort((a, b) => a - b); return { typical: steps[Math.floor(steps.length / 2)], over20: steps.filter(v => v >= 20).length / steps.length, largest: steps[steps.length - 1], laps, gap, apart }; });
+    console.log(`rolling positions, ${view}: ready to play in ${ready} ms; month to month a circle typically steps ${s.typical.toFixed(1)} px, ${(100 * s.over20).toFixed(1)}% of steps are 20 px or more, the largest ${Math.round(s.largest)} px; most overlapping pairs in any month ${s.laps}`);
+    want(s.typical <= typical, true, `typical step of ${typical} px or less (${s.typical.toFixed(1)})`); want(s.over20 <= jumps, true, `no more than ${100 * jumps}% of steps of 20 px or more (${(100 * s.over20).toFixed(1)}%)`);
+    want(s.laps <= 1, true, `overlapping circles (${s.laps})`); want(s.gap <= 14.5, true, 'height is the level for the twelve months'); if (view !== 'by share passed along') want(s.apart <= 1.5, true, `a year-end matches the yearly positions (${s.apart.toFixed(1)} px apart)`);
+    if (!q) await shot(page, '26_rolling_june_2022_head_offices', '.stage'); if (view === 'hybrid') await shot(page, '26c_rolling_hybrid_june_2022', '#chartwrap');
+    await page.close(); }
   page = await open(1440, 1000, 'dark', '?pos=year&m=2021-06&sel=24&cols=inside'); await new Promise(r => setTimeout(r, 300)); await shot(page, '25i_dark_positions_2021_trade_inside_pinned', '.stage'); await page.close();
   page = await open(390, 844, 'light', '?pos=year&m=2019-06', 2); await shot(page, '25j_phone_positions_2019'); await page.close();
   page = await open(390, 844, 'light', '?sel=10', 2); await page.evaluate(() => { document.getElementById('outside').open = true; }); await new Promise(r => setTimeout(r, 300)); await shot(page, '24f_phone_what_the_payments_leave_out', '#outside'); await page.close();
@@ -198,10 +221,11 @@ const problems = [];
   }
   // ---- 3. playing
   if (!regionsOnly && !process.argv.includes('--shots-only')) {
-    for (const [name, q, dsf] of [['opening view', '', 2], ['every link, both directions, intermediaries in', '?cover=1&net=gross&inter=1', 2], ['positions following the year, through a January', '?pos=year', 2]]) {
+    for (const [name, q, dsf] of [['opening view', '', 2], ['every link, both directions, intermediaries in', '?cover=1&net=gross&inter=1', 2], ['positions following the year, through a January', '?pos=year', 2], ['positions on a rolling twelve months', '?pos=roll', 2]]) {
       page = await open(1440, 1000, 'light', q, dsf); if (/pos=year/.test(q)) await new Promise(r => setTimeout(r, 1500));      // let the other years be worked out behind, as they would be before anyone presses play
-      const r = await page.evaluate(() => new Promise(res => { let n = 0, last = 0, gap = 0; const ms = [], t0 = performance.now(); window.ynhFlows.state.t = 0; window.ynhFlows.play(true);
-        (function f(now) { n++; if (last && n > 3) gap = Math.max(gap, now - last); last = now; ms.push(window.ynhFlows.scriptMs()); if (performance.now() - t0 < 5000) requestAnimationFrame(f); else { ms.sort((a, b) => a - b); res({ fps: n / 5, ms: ms[Math.floor(ms.length / 2)], gap, links: window.ynhFlows.drawnLinks(), period: window.ynhFlows.period() }); } })(); }));
+      const r = await page.evaluate(() => new Promise(res => { let n = 0, last = 0, gap = 0, t0 = 0; const ms = []; window.ynhFlows.state.t = 0; window.ynhFlows.play(true);
+        (function go() { if (!window.ynhFlows.playing()) { setTimeout(go, 20); return; } t0 = performance.now(); requestAnimationFrame(f); })();      // rolling positions are got ready first
+        function f(now) { n++; if (last && n > 3) gap = Math.max(gap, now - last); last = now; ms.push(window.ynhFlows.scriptMs()); if (performance.now() - t0 < 5000) requestAnimationFrame(f); else { ms.sort((a, b) => a - b); res({ fps: n / 5, ms: ms[Math.floor(ms.length / 2)], gap, links: window.ynhFlows.drawnLinks(), period: window.ynhFlows.period() }); } } }));
       console.log(`playing, ${name}: ${r.links} links, ${r.ms.toFixed(1)} ms of script a frame, ${Math.round(r.fps)} frames a second, longest gap between frames ${Math.round(r.gap)} ms` + (r.period === 'all' ? '' : `, ended in ${r.period}`));
       await page.close();
     }

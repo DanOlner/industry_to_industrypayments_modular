@@ -1,7 +1,7 @@
 control,kind,values_tried,came_back,problems
 region,select,12,12,""
 cols,select,11,11,""
-pos,select,2,2,""
+pos,select,3,3,""
 lens,select,26,26,""
 pick,select,78,78,""
 show,select,2,2,""
