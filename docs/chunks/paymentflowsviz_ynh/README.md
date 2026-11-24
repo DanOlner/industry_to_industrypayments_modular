@@ -16,7 +16,9 @@ It becomes public on GitHub Pages once this folder is committed and pushed to `m
 | `build_data.R` | Builds those from the three ONS zips and prints checks |
 | `lib/d3.v7.9.0.min.js` | D3 7.9.0 (ISC licence), kept locally so the page has no outside dependencies |
 | `plan/paymentflowsviz_plan.md` | The plan, the test findings behind each design choice, and the decisions taken |
+| `plan/other_connections_plan.md` | A side plan: other sources for the links the payments can't see (households, other countries, the rest of the UK), with what three tests found |
 | `tests/` | The tests, their outputs, a rough prototype, and checks on the finished page. See `tests/README.md` |
+| `slides/` | A slide deck, "Local links and wider roles", explaining through three industries what the page can and can't show about supply chains. `chains_deck.html` is the built deck; `chains_deck.qmd` is its source; `make_screens.cjs` takes its screenshots from the page. Plan and build steps: `plan/chains_deck_plan.md` |
 
 ## Rebuilding the data
 

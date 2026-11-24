@@ -1,0 +1,141 @@
+region,payee_sic,industry,sells_mostly_to,class,gbp_m,payments_k,share,average_gbp,lockdown_apr_jun_2020_over_2019,december_over_average_month,jan_sep_2025_over_2019
+TLE,47,Retail,households,other industries,3035,1103,0.2195,2752,0.8017,1.136,1.646
+TLE,47,Retail,households,finance (64),1135,906.2,0.08207,1252,1.064,1.292,7.279
+TLE,47,Retail,households,"finance, auxiliary (66)",2.91,0.4,0.0002105,7275,,,
+TLE,47,Retail,households,information services (63),7.907,4.4,0.000572,1797,,,
+TLE,47,Retail,households,office support (82),584.9,305.4,0.04231,1915,0.8556,1.224,1.264
+TLE,47,Retail,households,public administration (84),1236,42.9,0.08944,28820,2.29,1.074,1.906
+TLE,47,Retail,households,unknown industry,7823,2712,0.5659,2885,0.9191,1.217,1.771
+TLE,56,Food & drink service,households,other industries,386.7,177.7,0.09639,2176,0.6357,1.139,2.049
+TLE,56,Food & drink service,households,finance (64),1224,899.4,0.3052,1361,0.506,1.283,51.65
+TLE,56,Food & drink service,households,"finance, auxiliary (66)",0.105,0,2.618e-05,,,,
+TLE,56,Food & drink service,households,information services (63),323,357.5,0.08052,903.5,2.335,1.186,6.018
+TLE,56,Food & drink service,households,office support (82),154.1,162.7,0.03843,947.4,0.2351,1.171,0.8386
+TLE,56,Food & drink service,households,public administration (84),149.4,43.2,0.03724,3458,4.617,0.8629,1.475
+TLE,56,Food & drink service,households,unknown industry,1774,902.2,0.4422,1966,0.4181,1.12,1.558
+TLE,55,Accommodation,households,other industries,87.67,16.5,0.1277,5314,0.4934,1.06,1.935
+TLE,55,Accommodation,households,finance (64),22.29,8.3,0.03247,2686,0.3843,1.188,8.011
+TLE,55,Accommodation,households,"finance, auxiliary (66)",0.092,0,0.000134,,,0.931,0.7857
+TLE,55,Accommodation,households,information services (63),0.029,0,4.225e-05,,,0.9559,
+TLE,55,Accommodation,households,office support (82),49.95,23.3,0.07276,2144,0.09254,0.9256,1.078
+TLE,55,Accommodation,households,public administration (84),93.17,6.5,0.1357,14330,4.585,0.8484,1.539
+TLE,55,Accommodation,households,unknown industry,433.3,165.8,0.6312,2613,0.2376,0.9749,1.643
+TLE,96,Personal services,households,other industries,787,213.1,0.6884,3693,0.8829,1.081,1.787
+TLE,96,Personal services,households,finance (64),124.3,132.7,0.1088,936.9,0.789,1.156,2.894
+TLE,96,Personal services,households,"finance, auxiliary (66)",6.252,0,0.005469,,0.5128,1.025,0.6516
+TLE,96,Personal services,households,information services (63),0.716,0,0.0006263,,1.181,1.124,2.667
+TLE,96,Personal services,households,office support (82),64.86,16.1,0.05674,4029,0.7186,1.065,1.117
+TLE,96,Personal services,households,public administration (84),116.8,24.9,0.1022,4690,2.838,0.9996,1.851
+TLE,96,Personal services,households,unknown industry,43.25,18.3,0.03783,2363,0.8105,1.06,1.629
+TLE,45,Motor trades,households,other industries,1913,358.3,0.2842,5339,0.5562,0.9716,1.757
+TLE,45,Motor trades,households,finance (64),1241,171.4,0.1844,7240,0.3615,0.8732,1.058
+TLE,45,Motor trades,households,"finance, auxiliary (66)",14.72,4.6,0.002188,3201,0.5788,0.9985,1.43
+TLE,45,Motor trades,households,information services (63),0.058,0,8.618e-06,,,,
+TLE,45,Motor trades,households,office support (82),374.4,97.5,0.05562,3840,0.5264,0.8902,0.7944
+TLE,45,Motor trades,households,public administration (84),79.47,6.5,0.01181,12230,3.701,0.8541,1.702
+TLE,45,Motor trades,households,unknown industry,3108,603.6,0.4617,5148,0.5393,0.9317,1.513
+TLE,93,Sport & recreation,households,other industries,150,136.7,0.1926,1097,0.5443,1.061,2.007
+TLE,93,Sport & recreation,households,finance (64),78.07,65.8,0.1003,1186,0.5709,1.144,9.045
+TLE,93,Sport & recreation,households,"finance, auxiliary (66)",0.373,0,0.0004792,,,1.096,1.853
+TLE,93,Sport & recreation,households,information services (63),0.151,0,0.000194,,,1.078,
+TLE,93,Sport & recreation,households,office support (82),29.46,22.7,0.03785,1298,0.2385,0.8717,0.9417
+TLE,93,Sport & recreation,households,public administration (84),25.68,4.5,0.03299,5706,4.272,0.9596,1.516
+TLE,93,Sport & recreation,households,unknown industry,494.7,453.3,0.6356,1091,0.5337,0.8493,1.604
+TLE,46,Wholesale,businesses,other industries,8912,1755,0.6078,5077,0.9096,1.099,1.573
+TLE,46,Wholesale,businesses,finance (64),521.7,136.9,0.03558,3811,0.8019,1.074,2.137
+TLE,46,Wholesale,businesses,"finance, auxiliary (66)",1.186,0,8.088e-05,,,,
+TLE,46,Wholesale,businesses,information services (63),2.24,0,0.0001528,,1.41,0.9997,1.551
+TLE,46,Wholesale,businesses,office support (82),420.5,82.7,0.02868,5085,1.018,1.095,1.266
+TLE,46,Wholesale,businesses,public administration (84),383.6,23.6,0.02616,16250,1.942,1.029,1.285
+TLE,46,Wholesale,businesses,unknown industry,4422,1216,0.3016,3638,0.8975,1.078,1.617
+TLE,25,Fabricated metal,businesses,other industries,902.8,87.8,0.4715,10280,0.8334,1.013,1.269
+TLE,25,Fabricated metal,businesses,finance (64),56.7,7.9,0.02961,7177,1.109,1.092,1.932
+TLE,25,Fabricated metal,businesses,"finance, auxiliary (66)",0.51,0.2,0.0002664,2550,,1.298,
+TLE,25,Fabricated metal,businesses,information services (63),0.023,0,1.201e-05,,,,
+TLE,25,Fabricated metal,businesses,office support (82),39.49,6.5,0.02063,6076,0.9534,0.9776,1.135
+TLE,25,Fabricated metal,businesses,public administration (84),131.3,3.3,0.06857,39780,3.199,0.9191,1.334
+TLE,25,Fabricated metal,businesses,unknown industry,783.8,101.3,0.4094,7738,0.8313,1.036,1.241
+TLE,41,Building construction,businesses,other industries,959.7,53,0.3694,18110,0.8225,1.144,1.623
+TLE,41,Building construction,businesses,finance (64),52.42,8.3,0.02017,6316,0.9214,1.201,1.144
+TLE,41,Building construction,businesses,"finance, auxiliary (66)",0.715,0.4,0.0002752,1788,1.307,1.251,2.516
+TLE,41,Building construction,businesses,information services (63),0.106,0,4.079e-05,,1.304,1.234,1.135
+TLE,41,Building construction,businesses,office support (82),33.99,4.2,0.01308,8094,0.716,1.171,1.208
+TLE,41,Building construction,businesses,public administration (84),313.5,12.4,0.1207,25280,1.005,1.149,1.152
+TLE,41,Building construction,businesses,unknown industry,1238,85.4,0.4764,14500,0.781,1.119,1.492
+TLE,69,Legal & accounting,businesses,other industries,568.8,270.7,0.2529,2101,1.008,1.053,2.271
+TLE,69,Legal & accounting,businesses,finance (64),140,40.4,0.06224,3465,0.799,1.06,3.317
+TLE,69,Legal & accounting,businesses,"finance, auxiliary (66)",10.04,2.5,0.004463,4015,1.049,0.984,1.603
+TLE,69,Legal & accounting,businesses,information services (63),1.555,1.1,0.0006914,1414,1.414,1.095,5.633
+TLE,69,Legal & accounting,businesses,office support (82),38.98,20,0.01733,1949,0.9018,1.052,1.908
+TLE,69,Legal & accounting,businesses,public administration (84),143.8,14.5,0.06394,9918,1.603,0.9772,1.218
+TLE,69,Legal & accounting,businesses,unknown industry,1346,260,0.5984,5177,0.9081,1.03,2.133
+UK,47,Retail,households,other industries,30630,9836,0.1962,3114,0.8017,1.136,1.646
+UK,47,Retail,households,finance (64),17960,11200,0.115,1603,1.064,1.292,7.279
+UK,47,Retail,households,"finance, auxiliary (66)",49.32,5.5,0.0003159,8967,,,
+UK,47,Retail,households,information services (63),48.82,19,0.0003127,2569,,,
+UK,47,Retail,households,office support (82),14690,3754,0.09405,3912,0.8556,1.224,1.264
+UK,47,Retail,households,public administration (84),10740,491.9,0.0688,21840,2.29,1.074,1.906
+UK,47,Retail,households,unknown industry,82020,24320,0.5253,3373,0.9191,1.217,1.771
+UK,56,Food & drink service,households,other industries,10200,4084,0.1529,2496,0.6357,1.139,2.049
+UK,56,Food & drink service,households,finance (64),17330,10960,0.2598,1582,0.506,1.283,51.65
+UK,56,Food & drink service,households,"finance, auxiliary (66)",57.63,42,0.000864,1372,,,
+UK,56,Food & drink service,households,information services (63),5442,5186,0.08159,1049,2.335,1.186,6.018
+UK,56,Food & drink service,households,office support (82),3777,3104,0.05663,1217,0.2351,1.171,0.8386
+UK,56,Food & drink service,households,public administration (84),1003,148.4,0.01504,6759,4.617,0.8629,1.475
+UK,56,Food & drink service,households,unknown industry,28890,14720,0.4332,1962,0.4181,1.12,1.558
+UK,55,Accommodation,households,other industries,2125,373.8,0.1191,5684,0.4934,1.06,1.935
+UK,55,Accommodation,households,finance (64),657.2,215.4,0.03683,3051,0.3843,1.188,8.011
+UK,55,Accommodation,households,"finance, auxiliary (66)",31.04,6,0.001739,5172,,0.931,0.7857
+UK,55,Accommodation,households,information services (63),4.794,0.4,0.0002687,11980,,0.9559,
+UK,55,Accommodation,households,office support (82),1443,490.5,0.08088,2942,0.09254,0.9256,1.078
+UK,55,Accommodation,households,public administration (84),992.5,76.1,0.05563,13040,4.585,0.8484,1.539
+UK,55,Accommodation,households,unknown industry,12590,3432,0.7056,3668,0.2376,0.9749,1.643
+UK,96,Personal services,households,other industries,13820,5632,0.3683,2453,0.8829,1.081,1.787
+UK,96,Personal services,households,finance (64),2465,1885,0.06572,1308,0.789,1.156,2.894
+UK,96,Personal services,households,"finance, auxiliary (66)",192,80.8,0.005118,2376,0.5128,1.025,0.6516
+UK,96,Personal services,households,information services (63),32.72,13.4,0.0008724,2442,1.181,1.124,2.667
+UK,96,Personal services,households,office support (82),1973,790,0.05259,2497,0.7186,1.065,1.117
+UK,96,Personal services,households,public administration (84),3653,233.3,0.09738,15660,2.838,0.9996,1.851
+UK,96,Personal services,households,unknown industry,15380,9028,0.41,1704,0.8105,1.06,1.629
+UK,45,Motor trades,households,other industries,31940,5110,0.2758,6250,0.5562,0.9716,1.757
+UK,45,Motor trades,households,finance (64),23280,2299,0.201,10120,0.3615,0.8732,1.058
+UK,45,Motor trades,households,"finance, auxiliary (66)",311,116.5,0.002686,2669,0.5788,0.9985,1.43
+UK,45,Motor trades,households,information services (63),2.839,0,2.452e-05,,,,
+UK,45,Motor trades,households,office support (82),4169,887,0.036,4700,0.5264,0.8902,0.7944
+UK,45,Motor trades,households,public administration (84),1618,116.3,0.01397,13910,3.701,0.8541,1.702
+UK,45,Motor trades,households,unknown industry,54480,8262,0.4705,6594,0.5393,0.9317,1.513
+UK,93,Sport & recreation,households,other industries,2755,1129,0.2128,2440,0.5443,1.061,2.007
+UK,93,Sport & recreation,households,finance (64),1088,662.2,0.08406,1643,0.5709,1.144,9.045
+UK,93,Sport & recreation,households,"finance, auxiliary (66)",29.17,12.3,0.002253,2371,,1.096,1.853
+UK,93,Sport & recreation,households,information services (63),7.448,2.7,0.0005753,2759,,1.078,
+UK,93,Sport & recreation,households,office support (82),832.3,346.7,0.06429,2401,0.2385,0.8717,0.9417
+UK,93,Sport & recreation,households,public administration (84),857.3,58,0.06622,14780,4.272,0.9596,1.516
+UK,93,Sport & recreation,households,unknown industry,7376,3484,0.5698,2117,0.5337,0.8493,1.604
+UK,46,Wholesale,businesses,other industries,119400,22210,0.5733,5377,0.9096,1.099,1.573
+UK,46,Wholesale,businesses,finance (64),5785,1774,0.02777,3261,0.8019,1.074,2.137
+UK,46,Wholesale,businesses,"finance, auxiliary (66)",266.3,66.1,0.001278,4029,,,
+UK,46,Wholesale,businesses,information services (63),94.42,22.5,0.0004532,4196,1.41,0.9997,1.551
+UK,46,Wholesale,businesses,office support (82),7221,1326,0.03466,5445,1.018,1.095,1.266
+UK,46,Wholesale,businesses,public administration (84),4855,312.8,0.0233,15520,1.942,1.029,1.285
+UK,46,Wholesale,businesses,unknown industry,70680,16080,0.3392,4395,0.8975,1.078,1.617
+UK,25,Fabricated metal,businesses,other industries,6598,617.9,0.4885,10680,0.8334,1.013,1.269
+UK,25,Fabricated metal,businesses,finance (64),429.7,52.1,0.03182,8248,1.109,1.092,1.932
+UK,25,Fabricated metal,businesses,"finance, auxiliary (66)",4.856,1.5,0.0003595,3237,,1.298,
+UK,25,Fabricated metal,businesses,information services (63),0.023,0,1.703e-06,,,,
+UK,25,Fabricated metal,businesses,office support (82),353.1,48,0.02614,7357,0.9534,0.9776,1.135
+UK,25,Fabricated metal,businesses,public administration (84),383.1,14.8,0.02837,25890,3.199,0.9191,1.334
+UK,25,Fabricated metal,businesses,unknown industry,5738,839.9,0.4248,6832,0.8313,1.036,1.241
+UK,41,Building construction,businesses,other industries,16780,1195,0.3237,14050,0.8225,1.144,1.623
+UK,41,Building construction,businesses,finance (64),1930,192.2,0.03722,10040,0.9214,1.201,1.144
+UK,41,Building construction,businesses,"finance, auxiliary (66)",97.13,13.9,0.001873,6988,1.307,1.251,2.516
+UK,41,Building construction,businesses,information services (63),49.65,19.1,0.0009574,2599,1.304,1.234,1.135
+UK,41,Building construction,businesses,office support (82),1155,126.9,0.02227,9102,0.716,1.171,1.208
+UK,41,Building construction,businesses,public administration (84),7621,208.7,0.147,36520,1.005,1.149,1.152
+UK,41,Building construction,businesses,unknown industry,24220,1572,0.467,15410,0.781,1.119,1.492
+UK,69,Legal & accounting,businesses,other industries,9398,3970,0.2933,2367,1.008,1.053,2.271
+UK,69,Legal & accounting,businesses,finance (64),2223,229.7,0.06937,9677,0.799,1.06,3.317
+UK,69,Legal & accounting,businesses,"finance, auxiliary (66)",223.9,44.5,0.006989,5032,1.049,0.984,1.603
+UK,69,Legal & accounting,businesses,information services (63),147.4,111.6,0.0046,1321,1.414,1.095,5.633
+UK,69,Legal & accounting,businesses,office support (82),1004,433,0.03134,2319,0.9018,1.052,1.908
+UK,69,Legal & accounting,businesses,public administration (84),1570,274.6,0.04899,5716,1.603,0.9772,1.218
+UK,69,Legal & accounting,businesses,unknown industry,17480,3865,0.5454,4522,0.9081,1.03,2.133

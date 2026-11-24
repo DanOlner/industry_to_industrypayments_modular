@@ -647,7 +647,7 @@
         : 'Upwards it follows the industries whose net payments make up a tenth or more of what it is paid net, and then theirs; downwards the industries that take a tenth or more of what it pays net, and then theirs.')
       + ` Second-step links are fainter, and other industries are greyed. A trail stops where an industry’s ${goods() ? 'customers' : 'payers'} aren’t in the data.`));
     if (S.layout === 'order' && S.cols === 'shift') key.appendChild(el('p', 'd-small', 'Columns: left to right, from the industry whose place in the order shifts least to the one whose place shifts most. The measure is the standard deviation of its level, worked out on the 12 months to each month; the numbers along the top are that figure, in levels. Industries too small to place are kept apart on the right.'));
-    if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought, and rent, insurance and rates are in here too.'); key.appendChild(note); }
+    if (goods()) { const note = el('p', 'd-small', 'Goods and services are an inference: each payment turned round. Nothing in the data says what was bought. Services such as rent and insurance are in here with goods, and so are payments that bought nothing, such as taxes and dividends.'); key.appendChild(note); }
   }
 
   // ---- detail panel for the pinned industry
@@ -656,6 +656,7 @@
     for (let k = 0; k < NL; k++) if (lact[k] && curV[k] > 0 && (asPayer ? buy[k] : sup[k]) === i) out.push({ name: nodes[asPayer ? sup[k] : buy[k]].short, v: curV[k], n: curN[k], held: !S.pubonly && basis[k][Math.round(S.t)] === 'h' });
     return out.sort((a, b) => b.v - a.v).slice(0, n);
   }
+  let partnerTable = false;                                // the side panel's partners: a chart, or the two lists behind "Show table"
   function renderDetail() {
     const box = $('detail'); box.replaceChildren();
     if (S.sel < 0) { box.append(el('h2', null, 'Pick an industry'), el('p', 'd-hint', 'Click a circle to pin it. Its payments, partners and place in the order appear here. Hover over a circle or a link for its figures.')); return; }
@@ -686,11 +687,38 @@
     { const it = insides(), r = it.rank[i];
       box.append(el('p', 'd-small', `Over the whole period, ${fmtPct(insides('buysinside').sd[i])} of what it ${goods() ? 'buys' : 'pays'} and ${fmtPct(insides('sellsinside').sd[i])} of what it ${goods() ? 'sells' : 'is paid'} is inside the region: ${fmtPct(it.sd[i])} of the two together${r < 0 ? '' : `, ${r + 1} of ${it.n} counting from the least`}.`)); }
 
-    for (const [title, asPayer] of [[goods() ? 'It buys most from' : 'It pays most to', true], [goods() ? 'It sells most to' : 'It is paid most by', false]]) {
-      box.append(el('h3', null, title)); const list = partners(i, asPayer);
-      if (!list.length) box.append(el('p', 'd-small', 'Nothing published.'));
-      for (const p of list) { const r = el('div', 'd-row'); r.append(el('span', 'n', p.name + (p.held ? ' (held)' : '')), el('span', 'v', `${fmtMoney(p.v)}, ${p.n >= 50 ? d3.format(',')(Math.round(p.n / 100) * 100) : 'under 50'} payments`)); box.append(r); }
-    }
+    // Its main partners here. A chart by default: for the eight industries most passes between, what it pays each (left)
+    // and what each pays it (right), back to back, ordered as the chart is (buyers above in the money view, suppliers
+    // above in the goods view). "Show table" swaps it for the two lists, which also give the number of payments.
+    { const g = goods(), count = n => (n >= 50 ? d3.format(',')(Math.round(n / 100) * 100) : 'under 50') + ' payments';
+      const head = el('h3', 'd-headrow'); head.append(document.createTextNode('Its main partners here'));
+      const tog = el('button', 'd-toggle', partnerTable ? 'Show chart' : 'Show table'); tog.type = 'button'; tog.addEventListener('click', () => { partnerTable = !partnerTable; renderDetail(); });
+      head.append(tog); box.append(head);
+      if (partnerTable) for (const [title, asPayer] of [[g ? 'It buys most from' : 'It pays most to', true], [g ? 'It sells most to' : 'It is paid most by', false]]) {
+        box.append(el('p', 'd-chainhead', title)); const list = partners(i, asPayer);
+        if (!list.length) box.append(el('p', 'd-small', 'Nothing published.'));
+        for (const p of list) { const r = el('div', 'd-row'); r.append(el('span', 'n', p.name + (p.held ? ' (held)' : '')), el('span', 'v', `${fmtMoney(p.v)}, ${count(p.n)}`)); box.append(r); } }
+      else { const by = new Map(), get = j => by.get(j) || by.set(j, { name: nodes[j].short, r: 0, p: 0, rn: 0, pn: 0, rh: false, ph: false }).get(j);
+        for (let k = 0; k < NL; k++) { if (!lact[k] || !(curV[k] > 0)) continue; const held = !S.pubonly && basis[k][m] === 'h';
+          if (sup[k] === i) { const o = get(buy[k]); o.r = curV[k]; o.rn = curN[k]; o.rh = held; }               // that industry pays it
+          else if (buy[k] === i) { const o = get(sup[k]); o.p = curV[k]; o.pn = curN[k]; o.ph = held; } }        // it pays that industry
+        const rows = [...by.values()].sort((a, b) => (b.r + b.p) - (a.r + a.p)).slice(0, 8).sort((a, b) => (g ? 1 : -1) * ((a.r - a.p) - (b.r - b.p)));
+        if (!rows.length) box.append(el('p', 'd-small', 'Nothing published.'));
+        else { const w = 290, cx = w / 2, half = cx - 48, rh = 31, top = 20, hgt = top + rows.length * rh, mx = d3.max(rows, o => Math.max(o.r, o.p)), len = v => Math.max(v > 0 ? 1 : 0, half * v / mx);
+          const left = g ? 'it buys from them' : 'it pays them', right = g ? 'it sells to them' : 'they pay it';
+          const svg = d3.create('svg').attr('class', 'pchart').attr('viewBox', `0 0 ${w} ${hgt}`).attr('role', 'img')
+            .attr('aria-label', `What ${d.short} ${g ? 'buys from and sells to' : 'pays to and is paid by'} its eight largest partners here. ` + rows.map(o => `${o.name}: ${g ? 'buys' : 'pays'} ${fmtMoney(o.p)}, ${g ? 'sells' : 'is paid'} ${fmtMoney(o.r)}`).join('; '));
+          svg.append('text').attr('x', cx - 8).attr('y', 10).attr('text-anchor', 'end').text('\u2190 ' + left); svg.append('text').attr('x', cx + 8).attr('y', 10).text(right + ' \u2192');
+          const bar = (x0, x1, y, out) => { const r = Math.min(3, Math.abs(x1 - x0) / 2), sg = out > 0 ? 1 : -1;      // square at the centre line, rounded at the far end
+            return `M${x0},${y}H${x1 - sg * r}Q${x1},${y} ${x1},${y + r}V${y + 9 - r}Q${x1},${y + 9} ${x1 - sg * r},${y + 9}H${x0}Z`; };
+          rows.forEach((o, n) => { const y = top + n * rh;
+            svg.append('text').attr('class', 'pc-name').attr('x', cx).attr('y', y + 10).attr('text-anchor', 'middle').text(o.name);
+            for (const [v, cnt, held, sg, what] of [[o.p, o.pn, o.ph, -1, g ? 'It buys from' : 'It pays'], [o.r, o.rn, o.rh, 1, g ? 'It sells to' : 'It is paid by']]) { if (!(v > 0)) continue; const x1 = cx + sg * len(v);
+              svg.append('path').attr('class', 'pc-bar' + (held ? ' held' : '')).attr('d', bar(cx, x1, y + 15, sg)).append('title').text(`${what} ${o.name}: ${fmtMoney(v)} a month, ${count(cnt)}${held ? '. Hidden this month: held at an average' : ''}`);
+              svg.append('text').attr('class', 'pc-val').attr('x', x1 + sg * 4).attr('y', y + 23).attr('text-anchor', sg < 0 ? 'end' : 'start').text(fmtMoney(v)); }
+            svg.append('line').attr('class', 'pc-gap').attr('x1', cx).attr('x2', cx).attr('y1', y + 14).attr('y2', y + 25);       // a gap in the page colour parts the two bars at the centre
+            svg.append('line').attr('class', 'pc-axis').attr('x1', cx).attr('x2', cx).attr('y1', y + 12).attr('y2', y + 14.5); svg.append('line').attr('class', 'pc-axis').attr('x1', cx).attr('x2', cx).attr('y1', y + 24.5).attr('y2', y + 27); });
+          box.append(svg.node(), el('p', 'd-small', `£ a month, ${lowerFirst(periodText(m))}: the ${rows.length === 8 ? 'eight ' : ''}industries here ${g ? 'it trades most with' : 'with the largest payments to and from it'}${rows.some(o => o.rh || o.ph) ? '. Dashed bars are hidden by ONS this month and shown at an average' : ''}.`)); } } }
 
     // its place in the order over time
     const roll = S.inter ? d.level_all_rolling : d.level_rolling, lvl = L(d);

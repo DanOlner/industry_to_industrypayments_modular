@@ -54,6 +54,8 @@ const problems = [];
   await set(page, { trace: true }); await shot(page, '06m_trace_chain_other_manufacturing', '.stage');
   await set(page, { cols: 'group', sel: 33 }); await shot(page, '06n_trace_chain_building_construction', '#chartwrap'); await set(page, { trace: false, sel: -1 });
   await set(page, { cols: 'passed', show: 'goods', sel: 37 }); await shot(page, '06o_passed_along_goods_view_wholesale', '.stage'); await set(page, { trace: true, sel: 26 }); await shot(page, '06p_trace_goods_view', '.stage'); await set(page, { show: 'money', trace: false, sel: -1 });      // 37: Wholesale
+  await set(page, { cols: 'group', show: 'goods', sel: 26 }); await shot(page, '06q_side_panel_partner_chart_goods', '#detail'); await set(page, { show: 'money' }); await shot(page, '06r_side_panel_partner_chart_money', '#detail');
+  await page.click('#detail .d-toggle'); await new Promise(r => setTimeout(r, 200)); await shot(page, '06s_side_panel_partner_table', '#detail'); await page.click('#detail .d-toggle'); await set(page, { sel: -1 });
   await set(page, { lens: 'none', cols: 'group' });
   await set(page, { lens: 'none', layout: 'hybrid' }); await shot(page, '07_hybrid', '#chartwrap');
   await set(page, { layout: 'force' }); await shot(page, '08_connections', '#chartwrap');
@@ -77,7 +79,7 @@ const problems = [];
   await page.mouse.move(box.x + box.width * 0.46, box.y + box.height * 0.55); await new Promise(r => setTimeout(r, 200)); await shot(page, '15_tooltip_a', '#chartwrap');
   await page.close();
 
-  page = await open(1440, 1000, 'dark'); await shot(page, '16_open_dark_full'); await set(page, { halo: true, cover: '0.5', show: 'goods' }); await shot(page, '16b_dark_goods_halo', '#chartwrap'); await set(page, { halo: false, cover: '0.8', show: 'money' }); await set(page, { sel: 39, lens: 'group:Manufacturing' }); await shot(page, '17_dark_pinned_highlight', '.stage'); await page.close();
+  page = await open(1440, 1000, 'dark'); await shot(page, '16_open_dark_full'); await set(page, { halo: true, cover: '0.5', show: 'goods' }); await shot(page, '16b_dark_goods_halo', '#chartwrap'); await set(page, { halo: false, cover: '0.8', sel: 26 }); await shot(page, '16c_dark_side_panel_partner_chart', '#detail'); await set(page, { sel: -1, show: 'money' }); await set(page, { sel: 39, lens: 'group:Manufacturing' }); await shot(page, '17_dark_pinned_highlight', '.stage'); await page.close();
   page = await open(390, 844, 'light', '', 2); await shot(page, '18_phone_full'); await shot(page, '18b_phone_chart', '#chartwrap'); await page.close();
   page = await open(900, 1100, 'light'); await shot(page, '19_tablet_full'); await page.close();
 

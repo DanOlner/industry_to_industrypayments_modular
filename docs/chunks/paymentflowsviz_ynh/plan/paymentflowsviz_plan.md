@@ -428,7 +428,7 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 - **Revisions.** When ONS issues the next edition, re-run and compare the levels before updating the page.
 - **Bringing public administration's payments in.** They have no region, so they can't go in the inside or outside totals as they stand. See section 11.11.
 - **Showing an industry's local links without losing its wider role.** Wholesale is the test case: a middle link nationally, an end of the line in every region's payments. Scoped in section 13.10, with one idea tested and found not to work.
-- **Who the payers of unknown industry are.** They account for about half of what a region's industries are paid. Nothing here says who they are; ONS's own notes on the data would be the place to look.
+- **Who the payers of unknown industry are.** They account for about half of what a region's industries are paid. ONS's write-ups say how an account gets an industry but not who fails to; the data shows these payers have no region either, which points to accounts ONS couldn't match to any register. See section 14.
 
 ## 9. Files
 
@@ -448,6 +448,9 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/22_local_columns.cjs` | The test behind the columns "by trade inside the region", and whether that goes with the order (section 12) |
 | `tests/23_middle_links.cjs`, `23b_middle_links_io.R` | The check on Other manufacturing as a middle link, and scoping for a chain measure, with the same measure on the input-output table (section 13) |
 | `tests/24_chains_across_the_edge.R` | Scoping: whether counting payments across the region's edge makes the chain measure match an industry's wider role (section 13.10) |
+| `tests/25_unknown_industry.R` | Whether payers and payees with no industry also have no region, as ONS's method implies (section 14) |
+| `plan/chains_deck_plan.md`, `slides/` | A slide deck explaining local links and wider roles through three industries: its plan, its source (`chains_deck.qmd`), the script that takes its screenshots, and the built deck (`chains_deck.html`) |
+| `plan/other_connections_plan.md`, `tests/26_card_takings.R`, `tests/27_trade_at_the_edge.R`, `tests/28_accounts_geography.R`, `tests/29_accounts_reading.R` | A side plan on other sources for the links the payments can't see (households, other countries, the rest of the UK on a better footing), with three tests: card takings inside the payments, ONS's regional trade figures beside the payments, and turnover by geography read from large companies' accounts |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
@@ -1432,3 +1435,100 @@ This is the more promising use of the across-the-edge data: not a better chain s
 - **Imports can't be recovered from this data** by any route.
 
 Figures by industry and region are in `tests/outputs/chains_across_the_edge.csv`.
+
+## 14. What ONS's own write-ups say
+
+*Checked 24 November 2026. Three ONS pages were read: the article [Industry-to-industry payment flows, UK: 2017 to 2024, experimental data](https://www.ons.gov.uk/economy/economicoutputandproductivity/output/articles/industrytoindustrypaymentflowsuk/2017to2024experimentaldata) (13 January 2025), the article [Industry-to-industry payment flows, UK: 2019 to 2025](https://www.ons.gov.uk/economy/economicoutputandproductivity/output/articles/industrytoindustrypaymentflowsuk/2019to2025) (30 January 2026), and the [methodology note](https://www.ons.gov.uk/economy/economicoutputandproductivity/output/methodologies/industrytoindustrymonthlypaymentsukqmi) that the second points to (30 January 2026). Test `tests/25_unknown_industry.R`.*
+
+### 14.1 Why so much has no industry
+
+**What ONS says.**
+
+- **An account is first judged to be an organisation or a person** from three things: whether it is registered to use Bacs, words in its name ("Ltd" against "Mrs"), and who it pays and is paid by (paying Corporation Tax suggests an organisation; receiving benefits suggests a person).
+- **An organisation then gets its industry and its address from one match:** its account name against Companies House, or against lists of public bodies (schools, universities, hospitals, local and central government). The matching is approximate, with a cut-off, so "not all accounts can be confidently matched to an organisation".
+- **Unknown industry** is "organisations for which it is not possible to assign a valid SIC code under our current approach".
+- **ONS doesn't say how much is unknown, or who.** Neither article nor the note gives a share, or names sole traders, partnerships or anyone else as the reason.
+
+**What the data adds** (`tests/25_unknown_industry.R`, published values, all twelve regions).
+
+| | Yorkshire and the Humber | Range across regions |
+|----|----|----|
+| Of the money paid to the region by payers of unknown industry: from payers with no region either | 96% | 92% to 99% |
+| Of what the region pays to payees of unknown industry: to payees with no region either | 96% | 91% to 98% |
+| Of what the region's own organisations pay: paid by those with no industry | 2.5% | 1.6% to 11% |
+| Payers with no region: unknown industry | 87% | 79% to 93% |
+| Payers with no region: public administration | 12.5% | 7% to 21% |
+| Of what public administration pays into the region: paid from a public administration account with no region | 99.9% | 99.6% to 100% |
+| Of what the region pays to public administration: paid to a public administration account with no region | 99.8% | 98.8% to 100% |
+| Of everything paid to the region's organisations: from payers of unknown industry | 48% | 39% to 58% |
+
+- **No industry and no region go together.** That is what one failed match would produce, since both come from it. So the half of receipts from "payers of unknown industry" is, almost entirely, accounts ONS judged to be organisations but could not find on Companies House or a public-body list.
+- **Organisations ONS could place nearly always have an industry.** Only a few per cent of what a region's own organisations pay is by ones with no industry. These will be matched records with no usable code.
+- **Who the unmatched are is a deduction, not something ONS states.** Companies House holds companies and limited liability partnerships. Sole traders, ordinary partnerships and unincorporated charities aren't on it. Nor is a business whose account name differs enough from its registered name. Accounts that pass money on for others are another candidate: ONS says telling such "pass-through" payments apart "is not always possible".
+- **Public administration is the odd one out: its accounts have an industry but no region, whichever side of a payment they are on.** The other party is an organisation in the region, with a region and usually an industry. So this is public money arriving from nowhere in particular and landing somewhere known, which is the easier way round.
+- **The amounts.** Over the period, public administration accounts with no region paid £56bn into Yorkshire and the Humber and were paid £20bn by organisations there. Public administration accounts placed in the region paid £0.2bn and were paid £0.8bn. Even in London the placed ones paid £5.5bn against £405bn from the regionless ones, so this is not only central government: councils must be regionless too, or sit under unknown industry.
+- **What is unexplained is only the mismatch with ONS's note,** which says a public body's address is "taken directly" from the list it was matched to. One reading is that government accounts are recognised by name or by who they pay, which gives an industry and no address. That is a guess.
+- **What it allows.** Because the receiving side is placed, government's payments to a region's industries can be shown as they are, from one buyer with no region. Section 11.11 parked this; the direction of the gap is the reason it is feasible.
+
+### 14.2 What else they confirm, add or contradict
+
+| Topic | What ONS says | What it means here |
+|----|----|----|
+| **Region** | An organisation is given one region, "based on their registered address", mainly from Companies House. ONS names the "headquarter effect" and is exploring other ways to locate organisations | Confirms the page's note. Use ONS's term |
+| **Industry of a group** | A payment "may be classified under the industry of an organisation's headquarters, rather than the actual operational unit". Companies House codes are self-reported | New. The headquarter effect bends industry as well as region. Part of why head offices is one of the largest circles |
+| **What a payment is** | "Some observed payments would be for capital expenditure or transfers, such as tax, subsidy, benefits, etc., rather than intermediate and final consumption. Currently, we are unable to distinguish different types of payments." Bacs Direct Credit is used for "salaries, benefits, dividends and supplier payments" | The page said rent and insurance weren't purchases. They are: they are services. What isn't a purchase is tax, subsidy and dividends. Corrected on the page and in the deck (below) |
+| **Households and abroad** | "Every effort has been made to remove personal accounts". Payments involving overseas accounts are excluded because they go through Swift | Confirms both |
+| **Which payments** | Bacs Direct Debit, Bacs Direct Credit and Faster Payments. Not CHAPS, cards, cash or cheques, so it "would not capture the universe of payments between industries" | Confirms. CHAPS is the high-value system, so the largest payments are missing |
+| **Coverage** | 2.34 million organisations in 2025, "over 40%" of the UK's 5.79 million. Unweighted. After hiding, 83.3% of value is published at this page's level of detail (two-digit industry by region), against 97.1% without regions | New figures. The sample grew from 117,000 organisations in the first release to 3.1 million and then 3.5 million |
+| **Trends** | Shifts towards electronic payment "can create apparent growth". Organisations joining and leaving Bacs and Faster Payments change the sample | Confirms the page's "growth over time may be coverage" |
+| **Hiding figures** | Done before the data reach ONS, organisation by organisation: a minimum number of contributors, a limit on any one dominating, and "consistent suppression across time periods and related tables" | Confirms the page's note. The last part explains links that are never published |
+| **Intermediaries** | Some accounts process "transactions on behalf of other organisations", which can "underrepresent smaller organisations" | Supports leaving the intermediaries out by default |
+| **Timing** | Payments "often correspond to transactions agreed weeks or months earlier" | New. A reason not to read single months closely |
+| **Use beside the national tables** | The data "could enhance short-term GDP estimates, improve input-output and supply-use balancing, and provide plausibility checks for structural relationships between industries" | ONS treats the national tables as the frame and payments as a check on them. That is section 13.10's principle |
+| **Unknown rows** | The 2026 article says flows with unknown industry or region "are excluded" | Contradicts the files used here (editions of September and October 2026), which carry them as industry `00` and region `unknown`. They may be left out of the article's own charts only |
+
+### 14.3 Changes made, and not made
+
+**Made.**
+
+- **The page's wording on rent and insurance** (two notes at the foot, the ties note, and the key in the goods view). It now says services such as rent and insurance count with goods, and that taxes, subsidies and dividends are the payments that bought nothing.
+- **The deck:** the same correction on "What the data is"; a line on why so many payers have no industry on "What the data leaves out"; ONS's term for the headquarter effect; and ONS's article and methodology note in the sources.
+
+**Suggested for the page, not made.**
+
+- **Say why industry is unknown** in the note "Most of what these industries are paid isn't drawn": industry and address come from matching an account's name to Companies House or a list of public bodies, and where there is no match the account has neither.
+- **Say the headquarter effect bends industry too,** in the "Registered offices" note.
+- **Give ONS's coverage figure:** over 40% of UK organisations, and 83% of value published at this level of detail.
+
+**Worth asking ONS** (contact: the Card Payments team named on all three pages).
+
+- **What share of organisations and of value is unmatched,** and what kinds of organisation they are.
+- **Why public administration has an industry but no region.**
+- **Whether the "excluded" in the 2026 article describes the published files.**
+- **Which of a company's up to four codes is used.**
+
+## 15. Built: the side panel's partners as a chart
+
+*24 November 2026, on request. The chart is the one from slide 8 of the deck (`slides/chains_deck.qmd`), fitted to the side panel.*
+
+- **What changed.** The pinned industry's two lists, "It pays most to" and "It is paid most by", are now one chart under "Its main partners here". The lists are still there behind a "Show table" button, which turns into "Show chart".
+- **The chart.** One row for each of the eight industries most passes between. Left of the centre, what the pinned industry pays that partner; right, what the partner pays it. Each bar has its amount at the tip, and the partner's name sits above the pair.
+- **Order.** Rows follow the main chart: in the money view those that pay it most, net, are at the top; in the goods view its suppliers are. The headings change with the view too ("it pays them" and "they pay it", or "it buys from them" and "it sells to them").
+- **It shows the month on the slider,** like the bars above it, and follows the three-month average and published-only switches. The deck's version is the whole period.
+- **Hidden months** held at an average are drawn faint with a dashed outline, as held links are on the main chart, and the caption says so when there are any. A first version called them "paler", which was backwards in the dark theme, where the bars are light and a faint one looks darker.
+- **Hovering over a bar** gives the amount and the number of payments. The number of payments is otherwise only in the table.
+- **The choice of chart or table lasts while the page is open.** It isn't in the address.
+- **Checks:** no page or console errors; 60 frames a second. Screenshots `06q` (goods view), `06r` (money view) and `06s` (table) in `tests/outputs/page/`.
+
+## 16. Other sources for the links the payments can't see
+
+*24 November 2026. Scoped in its own file, [`other_connections_plan.md`](other_connections_plan.md), with tests 26 to 29. Nothing from it is on the page.*
+
+It follows section 13.10. The short version:
+
+- **ONS publishes each region's imports and exports by industry group, and its trade with every other region.** On those figures wholesale and motor trades in Yorkshire and the Humber bring in £48bn of goods a year from outside the region, a fifth of it from abroad, and send out £31bn. That is the middle link the payments don't show.
+- **Card takings are in the payments** as finance's payments to shops and restaurants, and behave like household spending. But they are a few per cent of the real total, so they mark where household money enters and can't measure it.
+- **Retail's large payments to London finance are not card spending.** They are a few very large payments by retailers registered in three regions, starting in 2023.
+- **Large companies' accounts state turnover by geography,** and a pilot read it from 324 of 1,956 sets of accounts. A model then read 66 Yorkshire and the Humber companies' accounts in full (test 29): 55 give a checked share of sales abroad.
+- **The accounts show a chain the payments hide.** Food manufacturers registered in the region say their main customers are supermarkets, and ONS has never published a month of retail paying food manufacturing inside the region, so the page draws no link there.
+- **The side plan's section 8 gives an order of work, and its section 9 the decisions.**

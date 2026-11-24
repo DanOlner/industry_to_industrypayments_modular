@@ -1,0 +1,7 @@
+broad,companies,turnover_gbp_bn,split_from_table,say_all_in_uk,say_mostly_in_uk,withheld,not_given,turnover_with_a_share_gbp_bn,outside_uk_weighted,by_destination,by_origin,say_where_they_buy,name_purchase_currencies,give_group_purchases,give_group_sales,say_who_customers_are,say_who_suppliers_are,main_customers_retailers,their_turnover_gbp_bn,main_customer_own_group,its_turnover_gbp_bn
+Retail,10,42.6,2,6,0,0,2,18.4,0%,1,0,2,2,1,1,8,6,0,0,1,1.5
+Manufacturing,25,19.6,18,4,1,0,2,17.4,12%,14,1,10,7,1,1,21,19,7,7.6,3,1.8
+Non-manufacturing production,13,15.3,6,3,1,0,3,5.9,0%,5,0,4,1,1,1,12,11,1,0.3,0,0
+"Transport, storage, accommodation and food",10,11.9,3,6,1,0,0,4.4,2%,1,0,0,2,1,1,7,4,0,0,0,0
+Wholesale and motor trades,8,5.6,5,2,0,1,0,5,2%,5,0,4,3,0,0,7,5,0,0,1,0.9
+All,66,95,34,21,3,1,7,51.1,4%,26,1,20,15,4,4,55,45,8,7.9,5,4.1
