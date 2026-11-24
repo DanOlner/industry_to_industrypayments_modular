@@ -297,7 +297,7 @@ So the switch is cheap. With it on, the four appear at their own levels and the 
 
 - **Links point the way the money went,** from payer to payee, so they run down the page from buyers to suppliers. The data are payments and nothing else.
 - **A switch shows goods and services instead.** It turns each link round (widest at the supplying end, dots moving with what was paid for) and flips the vertical order, so suppliers are at the top and things still mostly run down the page. Blue still means "down the page". This is an inference, and a wrong one for rent, insurance premiums, rates and refunds; the key and the notes say so whenever it's on.
-- **Positions don't move with time.** Levels are stable enough (section 2.2) that fixing them costs little, and then everything that moves on screen is a change in payments. The detail panel shows how an industry's level drifted.
+- **Positions don't move with time.** Levels are stable enough (section 2.2) that fixing them costs little, and then everything that moves on screen is a change in payments. The detail panel shows how an industry's level drifted. (A switch added later lets positions follow the year shown instead: section 17.)
 - **Changing layout** slides circles to their new places over about 0.7 seconds.
 - **Switching the intermediaries in** adds four circles; the others shift slightly to the levels worked out with all 81.
 - **Dots** drift along their links all the time, paused or playing, so cadence can be read on a single month.
@@ -492,6 +492,7 @@ All 17 settings together also came back from one address of 190 characters. A ma
 - **Everything added since is in the address and comes back:** the region (`region`, 12 of 12), the seven newer column choices (`cols`, now 11 of 11: `ties`, `sells`, `buys`, `inside`, `sellsinside`, `buysinside` and `passed` added), the foundational economy highlights (`lens`, now 26 of 26) and the chain trace (`trace`, 2 of 2).
 - **One thing wasn't, and now is:** the side panel's "Show table" button, which swaps the partners chart for the two lists. It is `ptable=1`. The test now presses the button, reloads the address and presses it back.
 - **All 19 settings together** come back from one address of 207 characters.
+- **Added later the same day:** `vouch=0` switches off the dotted lines for hidden links (section 16), and `pos=year` makes positions follow the year shown (section 17). Both come back, 2 of 2.
 - **Still not in the address, as before:** whether the table of links, the note on the order or the comparison of regions is open, and whether it is playing.
 
 **What's missing.**
@@ -1545,9 +1546,9 @@ It follows section 13.10. The short version:
 - **The chart had the food manufacturing and retail link running the wrong way in Yorkshire and the Humber:** only what food makers pay retail is published, so that small flow was the one link drawn. The page now says so.
 - **The side plan's section 8 gives an order of work, and its section 9 the decisions.**
 
-## 17. Scoped, not built: positions that follow the year shown
+## 17. Positions that follow the year shown: scoped, then built
 
-*24 November 2026, on request. Test `tests/33_yearly_positions.cjs`. Nothing here is built.*
+*24 November 2026, on request. Test `tests/33_yearly_positions.cjs`. Sections 17.1 to 17.6 were written before anything was built. Section 17.7 records what was then built, the same day.*
 
 **The idea.** Positions are worked out once, on all 93 months, and held still while time plays (section 3.4). This would add a switch. With it on, an industry's position is worked out on the year shown, and circles move when the slider crosses into another year.
 
@@ -1663,9 +1664,51 @@ In the middle region the average industry's height moves 20 pixels between real 
 - **In `flows.js`, roughly 70 lines.** Four sums over all months become sums over the months in hand. The layout's key gains the period. The layout takes a starting position. A change of year while the switch is on calls the slide that changing layout already uses.
 - **Checks to add:** with the switch off, every position is identical to today's; with it on, each industry's height is its level for the year, within the few pixels of slack the layout allows; circles don't overlap; playing through a January stays at 60 frames a second; the address round-trips; screenshots of 2019 and 2025 in the same view.
 
-### 17.6 Decisions for you
+### 17.6 Decisions
+
+*All four taken on 24 November 2026, as recommended.*
 
 1. **Build it for the supplier-order views?** My recommendation: yes, as a switch that is off at first.
 2. **Hybrid and connections: follow the year, or stay put?** You asked for both. They cost nothing extra to include, since they use the same warm start. But chance alone moves a circle there over half as far as a real change of year does. My recommendation: include them, look at them playing, and take connections back out if it reads as jitter.
 3. **Calendar years, or the twelve months to the month shown?** Rolling windows would drift smoothly, with no jump each January. Height could do it now, since the file has those levels. The rest would need a layout for each of 82 months, about five seconds a view in all. My recommendation: calendar years first.
 4. **Should the side panel's chain figures and the trace follow the year too?** They are worked out on all months and say so. If the "passed along" column ranks on the year, the bar beside it should use the same months, or the two will disagree. My recommendation: yes, both follow the switch.
+
+### 17.7 Built: the switch, and what follows it
+
+**On the page.**
+
+- **A switch, "Positions from": "All months" or "The year shown".** It starts on all months, so the page opens as before. Beside it the page names the year in use. In the address it is `pos=year`.
+- **Height is the industry's level in that calendar year,** the build's own figure from the file. The axis names the year. For 2026 it is the twelve months to September 2026.
+- **The seven ranked column choices rank on that year:** the three by ties, the three by trade inside the region, and share passed along. "By how much its place shifts" is unchanged.
+- **Everything placed by pull starts from the all-months positions** and takes half the steps, in sector, payment-group and free columns and in hybrid and connections.
+- **Blue and orange follow the year too.** A link is blue when its buyer is above its supplier in that year's order, so blue still means down the page. The "Direction" choice follows suit.
+- **The side panel uses the same months and says so:** its sentences on trade inside the region, ties to the highlight and place in the order, the chain bar, and the traced chain. Headings read "Chain or two-way trade, 2023".
+- **The side panel's line of the level over time** shades the months the position is worked out on and rings the level they give.
+- **The other years are worked out behind,** nearest year first, a year at a time while nothing is moving. In Chrome each takes 50 to 60 ms where circles are placed by pull, and about 85 ms in the ranked columns, which are worked out from scratch. Playing then doesn't have to stop for one.
+- **Three pieces of text:** a note under the controls while the switch is on, a line in the key, and "Positions by year" in the notes at the foot, which gives the figures from section 17.3 on how far to trust a move. "How the order is worked out" mentions the switch.
+
+**What stays on all months, switch or no switch.**
+
+- **Circle spacing, the height scale and the average-industry line,** so the axis holds still.
+- **Industries too small to place.** They keep their all-months level and stay in their strip.
+- **Which column an industry is in.**
+- **Figures quoted in the notes,** such as the region's share passed along.
+
+**Checks.**
+
+- **Switched off, nothing moved.** Every circle's position in 16 views of two regions, 2,560 positions, recorded before the change and again after: the largest difference is 0 pixels.
+- **Switched on and off again in the page test** (`tests/13`), every circle returns exactly to where it was.
+- **Switched on:** in every supplier-order view tried, each industry sits within the 14 pixels of slack of its level for the year. No circles overlap in any of ten views. Stepping from December into January slides the circles and works nothing out again. The switch survives a change of region.
+- **Playing through a January:** 60 frames a second, and the longest gap between two frames is 17 ms, the same as with the switch off.
+- **No page or console errors.**
+- **The address** (`tests/15`): the switch comes back, 2 of 2, and with every other setting at once in an address of 216 characters.
+- **Ten screenshots,** `25` to `25j` in `tests/outputs/page/`: head offices and consultancy pinned in 2019 and in 2025; hybrid, connections and "by share passed along" in each of those years; the dark theme with columns by trade inside the region; and a phone.
+
+**What it shows straight away.** Head offices and consultancy in Yorkshire and the Humber sits 0.45 levels to the buyer side of the average in 2019 and 0.05 in 2025. Its split changes with it: 51% two-way and 40% buyer end in 2019, 73% two-way and 3% buyer end in 2025. One thing to weigh before reading that as a change in the industry: in June 2025, 37% of the value shown for it is a held average, against 7.5% in June 2019.
+
+**Not done.**
+
+- **Rolling twelve months** in place of calendar years (decision 3).
+- **Connections is in,** as decided. Whether it reads as jitter when played is still to judge by eye.
+- **The slide deck** doesn't mention the switch.
+

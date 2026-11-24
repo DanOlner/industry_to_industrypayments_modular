@@ -116,6 +116,38 @@ const problems = [];
     want(await dotsNow(), 0, 'North East, which has none'); want(await page.$eval('#vouch', e => e.disabled), true, 'tick box greyed out where there are none');
     want(await page.$eval('#vouch-n', e => e.textContent.trim()), '(none found in this region)', 'words on the tick box where there are none'); }
   await page.close();
+  // positions that follow the year shown (plan section 17). Switched on: height is the year's level, no circles overlap,
+  // the other years are worked out behind, and a step across a January slides the circles without working anything out
+  // again. Switched off again: every circle is back exactly where it was.
+  page = await open(1440, 1000, 'light', '?sel=70&m=2019-06');
+  { const want = (got, exp, what) => { if (got !== exp) problems.push(`positions by year, ${what}: expected ${exp}, got ${got}`); };
+    const wait = ms => new Promise(r => setTimeout(r, ms)), F = fn => page.evaluate(fn);
+    const places = () => F(() => JSON.stringify([...document.querySelectorAll('#pick option')].map(e => e.value).filter(Boolean).map(id => window.ynhFlows.at(id))));
+    const off = await places();
+    await page.select('#pos', 'year'); await wait(1800);                                              // the slide, then the other years worked out behind it
+    want(await F(() => window.ynhFlows.period()), '2019', 'the months in hand'); want(await F(() => document.getElementById('pos-now').textContent), '2019', 'year named beside the switch');
+    want(await F(() => document.getElementById('pos-note').hidden), false, 'note under the controls'); want(/pos=year/.test(await F(() => location.search)), true, 'in the address');
+    want(await F(() => window.ynhFlows.heightGap() <= 14.5), true, 'height is the year\'s level, within the slack'); want(await F(() => window.ynhFlows.overlaps()), 0, 'overlapping circles');
+    want(await places() !== off, true, 'circles moved'); await shot(page, '25_positions_2019_head_offices', '.stage');
+    const views = await F(() => window.ynhFlows.viewsWorkedOut()); want(views >= 9, true, `all eight periods worked out ahead (${views} views held)`);
+    await set(page, { t: 11 }); await wait(200); const dec = await places();
+    await page.click('#next'); await wait(150); want(await F(() => window.ynhFlows.moving()), true, 'stepping into January slides the circles'); await wait(900);
+    want(await F(() => window.ynhFlows.period()), '2020', 'the months in hand after the step'); want(await places() !== dec, true, 'circles moved with the year');
+    want(await F(() => window.ynhFlows.viewsWorkedOut()), views, 'views held after the step (nothing worked out again)');
+    await set(page, { t: 77 }); await wait(300); await shot(page, '25b_positions_2025_head_offices', '.stage');
+    await set(page, { t: 92 }); await wait(200); want(await F(() => document.getElementById('pos-now').textContent), '12 months to Sep 2026', 'the part-year named');
+    for (const [name, o, pic] of [['hybrid, 2019', { layout: 'hybrid', t: 5, sel: -1 }, '25c_positions_hybrid_2019'], ['hybrid, 2025', { t: 77 }, '25d_positions_hybrid_2025'], ['connections, 2019', { layout: 'force', t: 5 }, '25e_positions_connections_2019'],
+      ['connections, 2025', { t: 77 }, '25f_positions_connections_2025'], ['by share passed along, 2019', { layout: 'order', cols: 'passed', t: 5 }, '25g_positions_passed_along_2019'], ['by share passed along, 2025', { t: 77 }, '25h_positions_passed_along_2025'],
+      ['free columns', { cols: 'free' }], ['payment groups', { cols: 'paygroup' }], ['intermediaries in', { cols: 'group', inter: true }], ['goods and services', { inter: false, show: 'goods' }]]) {
+      await set(page, o); await wait(250); want(await F(() => window.ynhFlows.overlaps()), 0, `overlapping circles, ${name}`);
+      if (await F(() => window.ynhFlows.state.layout === 'order')) want(await F(() => window.ynhFlows.heightGap() <= 14.5), true, `height is the year's level, ${name}`);
+      if (pic) await shot(page, pic, '#chartwrap'); }
+    await F(() => window.ynhFlows.load('TLD')); await wait(700); want(await F(() => window.ynhFlows.period()), '2025', 'kept on switching region'); want(await F(() => window.ynhFlows.heightGap() <= 14.5), true, 'height in another region');
+    await F(() => window.ynhFlows.load('TLE')); await wait(500); await set(page, { show: 'money', sel: 59, t: 5 }); await page.select('#pos', 'all'); await wait(1000);
+    want(await F(() => document.getElementById('pos-note').hidden), true, 'note gone when switched off'); want(await places(), off, 'switched off, every circle back where it was'); }
+  await page.close();
+  page = await open(1440, 1000, 'dark', '?pos=year&m=2021-06&sel=24&cols=inside'); await new Promise(r => setTimeout(r, 300)); await shot(page, '25i_dark_positions_2021_trade_inside_pinned', '.stage'); await page.close();
+  page = await open(390, 844, 'light', '?pos=year&m=2019-06', 2); await shot(page, '25j_phone_positions_2019'); await page.close();
   page = await open(390, 844, 'light', '?sel=10', 2); await page.evaluate(() => { document.getElementById('outside').open = true; }); await new Promise(r => setTimeout(r, 300)); await shot(page, '24f_phone_what_the_payments_leave_out', '#outside'); await page.close();
   page = await open(1440, 1000, 'light', '?region=TLL&sel=10'); await page.evaluate(() => { document.getElementById('outside').open = true; }); await new Promise(r => setTimeout(r, 300)); await shot(page, '24g_wales_what_the_payments_leave_out', '#outside'); await page.close();
 
@@ -166,11 +198,11 @@ const problems = [];
   }
   // ---- 3. playing
   if (!regionsOnly && !process.argv.includes('--shots-only')) {
-    for (const [name, q, dsf] of [['opening view', '', 2], ['every link, both directions, intermediaries in', '?cover=1&net=gross&inter=1', 2]]) {
-      page = await open(1440, 1000, 'light', q, dsf);
-      const r = await page.evaluate(() => new Promise(res => { let n = 0; const ms = [], t0 = performance.now(); window.ynhFlows.state.t = 0; window.ynhFlows.play(true);
-        (function f() { n++; ms.push(window.ynhFlows.scriptMs()); if (performance.now() - t0 < 5000) requestAnimationFrame(f); else { ms.sort((a, b) => a - b); res({ fps: n / 5, ms: ms[Math.floor(ms.length / 2)], links: window.ynhFlows.drawnLinks() }); } })(); }));
-      console.log(`playing, ${name}: ${r.links} links, ${r.ms.toFixed(1)} ms of script a frame, ${Math.round(r.fps)} frames a second`);
+    for (const [name, q, dsf] of [['opening view', '', 2], ['every link, both directions, intermediaries in', '?cover=1&net=gross&inter=1', 2], ['positions following the year, through a January', '?pos=year', 2]]) {
+      page = await open(1440, 1000, 'light', q, dsf); if (/pos=year/.test(q)) await new Promise(r => setTimeout(r, 1500));      // let the other years be worked out behind, as they would be before anyone presses play
+      const r = await page.evaluate(() => new Promise(res => { let n = 0, last = 0, gap = 0; const ms = [], t0 = performance.now(); window.ynhFlows.state.t = 0; window.ynhFlows.play(true);
+        (function f(now) { n++; if (last && n > 3) gap = Math.max(gap, now - last); last = now; ms.push(window.ynhFlows.scriptMs()); if (performance.now() - t0 < 5000) requestAnimationFrame(f); else { ms.sort((a, b) => a - b); res({ fps: n / 5, ms: ms[Math.floor(ms.length / 2)], gap, links: window.ynhFlows.drawnLinks(), period: window.ynhFlows.period() }); } })(); }));
+      console.log(`playing, ${name}: ${r.links} links, ${r.ms.toFixed(1)} ms of script a frame, ${Math.round(r.fps)} frames a second, longest gap between frames ${Math.round(r.gap)} ms` + (r.period === 'all' ? '' : `, ended in ${r.period}`));
       await page.close();
     }
   }

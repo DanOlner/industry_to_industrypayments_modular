@@ -91,6 +91,9 @@ select:disabled, label:has(input:disabled) { color: var(--muted); }
 .seg span { display: inline-flex; align-items: center; }
 .checks { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink2); }
 .checks label { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.checks label:has(#vouch) { white-space: normal; }       /* long, with its count: wraps on a phone instead of running off the edge */
+.ctl-note { flex-basis: 100%; margin: 0; max-width: 110ch; color: var(--ink2); font-size: 12.5px; }
+#pos-now { color: var(--ink); font-weight: 600; }
 
 /* ---- time ---- */
 .timebar { display: grid; grid-template-columns: auto 15ch 1fr; gap: 6px 14px; align-items: center; margin: 6px 0 10px; }
