@@ -450,7 +450,8 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/24_chains_across_the_edge.R` | Scoping: whether counting payments across the region's edge makes the chain measure match an industry's wider role (section 13.10) |
 | `tests/25_unknown_industry.R` | Whether payers and payees with no industry also have no region, as ONS's method implies (section 14) |
 | `plan/chains_deck_plan.md`, `slides/` | A slide deck explaining local links and wider roles through three industries: its plan, its source (`chains_deck.qmd`), the script that takes its screenshots, and the built deck (`chains_deck.html`) |
-| `plan/other_connections_plan.md`, `tests/26_card_takings.R`, `tests/27_trade_at_the_edge.R`, `tests/28_accounts_geography.R`, `tests/29_accounts_reading.R`, `tests/30_accounts_reading_all.R` | A side plan on other sources for the links the payments can't see (households, other countries, the rest of the UK on a better footing), with three tests: card takings inside the payments, ONS's regional trade figures beside the payments, and turnover by geography read from large companies' accounts |
+| `plan/other_connections_plan.md`, `tests/26_card_takings.R`, `tests/27_trade_at_the_edge.R`, `tests/28_accounts_geography.R`, `tests/29_accounts_reading.R`, `tests/30_accounts_reading_all.R`, `tests/31_abs_coverage.R`, `tests/32_household_spending.R` | A side plan on other sources for the links the payments can't see (households, other countries, the rest of the UK on a better footing), with three tests: card takings inside the payments, ONS's regional trade figures beside the payments, and turnover by geography read from large companies' accounts |
+| `tests/33_yearly_positions.cjs` | Scoping: whether positions could follow the year shown, and how much of the movement would be chance (section 17) |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
@@ -1529,7 +1530,7 @@ Figures by industry and region are in `tests/outputs/chains_across_the_edge.csv`
 
 ## 16. Other sources for the links the payments can't see
 
-*24 November 2026. Scoped in its own file, [`other_connections_plan.md`](other_connections_plan.md), with tests 26 to 30. Nothing from it is on the page.*
+*24 November 2026. Scoped in its own file, [`other_connections_plan.md`](other_connections_plan.md), with tests 26 to 32. Its ONS trade figures and company accounts are now on the page; the rest is not.*
 
 It follows section 13.10. The short version:
 
@@ -1537,7 +1538,134 @@ It follows section 13.10. The short version:
 - **Card takings are in the payments** as finance's payments to shops and restaurants, and behave like household spending. But they are a few per cent of the real total, so they mark where household money enters and can't measure it.
 - **Retail's large payments to London finance are not card spending.** They are a few very large payments by retailers registered in three regions, starting in 2023.
 - **Large companies' accounts state turnover by geography,** and a pilot read it from 324 of 1,956 sets of accounts. A model then read 66 Yorkshire and the Humber companies' accounts in full (test 29): 55 give a checked share of sales abroad.
-- **The accounts show a chain the payments hide.** Food manufacturers registered in the region say their main customers are supermarkets, and ONS has never published a month of retail paying food manufacturing inside the region, so the page draws no link there.
+- **The accounts show a chain the payments hide.** Food manufacturers registered in the region say their main customers are supermarkets, and ONS has never published a month of retail paying food manufacturing inside the region, so the page can't show it.
 - **The reading was then run over all 1,956 large employers' accounts across Great Britain** (test 30). It gives sales abroad, whether a company says it buys from abroad, and its main kind of customer, by industry group and region of registration. Yorkshire and the Humber is the only region where the food manufacturing to retail link is never published.
-- **A feature is scoped, not built** (the side plan's section 7.1): a section under the chart for what the payments leave out, a side panel block from the accounts, and a dotted line for a hidden link the accounts vouch for.
+- **Built** (the side plan's sections 7.1 and 7.2): a section under the chart, "What the payments leave out", with ONS's trade figures at the region's edge and what large companies' accounts say; a side panel block, "Beyond the payments"; and a dotted line for a hidden link the accounts point to. Companies are named, with links to Companies House. The data is `data/outside.js`, built by `build_outside.R`.
+- **Two more checks** (tests 31 and 32, the side plan's sections 6.1 and 6.2). Against ONS's regional business survey the payments record a third of these industries' turnover, and the chart's links in Yorkshire and the Humber are 1% to 5% of most large industries' turnover. Household spending by region can be set beside the payments in pounds: households spend about as much in shops, restaurants and hotels as those industries turn over.
+- **The chart had the food manufacturing and retail link running the wrong way in Yorkshire and the Humber:** only what food makers pay retail is published, so that small flow was the one link drawn. The page now says so.
 - **The side plan's section 8 gives an order of work, and its section 9 the decisions.**
+
+## 17. Scoped, not built: positions that follow the year shown
+
+*24 November 2026, on request. Test `tests/33_yearly_positions.cjs`. Nothing here is built.*
+
+**The idea.** Positions are worked out once, on all 93 months, and held still while time plays (section 3.4). This would add a switch. With it on, an industry's position is worked out on the year shown, and circles move when the slider crosses into another year.
+
+**The short answer.**
+
+- **It needs no new data and nothing new in the build.** Every position is already worked out in the browser, from monthly payments the page holds. The one ingredient that comes from the build, the level, is already in the file for every year.
+- **It is quick.** One view for one year takes about a tenth of a second.
+- **The question is whether the movement means anything.** For height and for the ranked columns it does. For the views that place industries by pull alone, most of the movement is chance unless each year starts from the all-months positions. Even then, chance alone moves a circle over half as far as a real change of year does.
+
+### 17.1 What sets a position now
+
+Six settings can move a circle: the layout (supplier order, hybrid, connections), the columns (eleven choices, in supplier order only), intermediaries in or out, the highlight (only with the three "ties" columns), money or goods (which turns the order over), and the width of the window. The month, the measure, the widths and the other switches don't.
+
+Behind those settings are a few ingredients. This is what each would do by year.
+
+| Ingredient | What it places | Worked out now | By year |
+|----|----|----|----|
+| Level in the order | Height, in supplier order and hybrid | In the build, on all months | Yes. The build already works it out on the 12 months to every month, for the side panel's line, and the file carries it. A calendar year's level is the December value |
+| Ties, trade inside the region, share passed along | Sideways rank, in seven of the column choices | In the browser, summing all months | Yes. The same sums over the year's months |
+| How much its place shifts | Sideways rank, in one column choice | In the browser, from the levels on each 12 months | No. It measures change across the whole period |
+| Pull between industries that pay each other | Sideways position in sector, payment-group and free columns; everything in hybrid and connections | In the browser, summing all months | Yes, with care (section 17.3) |
+| Sector group and payment group | Which column | Fixed, and from the build | No. Payment groups are the ones that hold across years (section 2.7) |
+| Circle size for spacing, "too small to place", the height scale | Keeping circles apart, the strip of small industries, the axis | All months | Best left as they are, so the axis and the strip hold still |
+
+### 17.2 Data and time: neither is a problem
+
+- **No new data.** The levels on each 12 months are 91 KB of Yorkshire and the Humber's 2.6 MB file, and have been there since the first build.
+- **The level could also be worked out in the browser.** The test does it in JavaScript in half a millisecond a year. For industries large enough to place it matches the build's in every region, to within 0.004 on all months and 0.012 on a single year. Levels span 1.4 in Yorkshire and the Humber. The gap is rounding: the file holds payments to the nearest £1,000 and the build works on pounds. For industries too small to place the gap reaches 0.08, one more reason to leave those where they are. Calendar years don't need this, because the build's figures are in the file. Any other window would.
+- **One view for one year takes about a tenth of a second.** In Chrome, each view takes 85 to 105 ms the first time it is shown, drawing included, and 2 ms after that. In Node the layout alone takes 110 to 290 ms from scratch and 55 to 80 ms from a warm start, across the twelve regions.
+- **Working everything out ahead is not needed.** A region has about 170 views: 85 with intermediaries out and 85 with them in, 75 of each 85 being the three "ties" columns for 25 highlight sets. With eight periods that is about 1,360 layouts, a couple of minutes. But the page works a view out only when it is first shown and then keeps it. By year it would do the same: the view in hand for the year in hand, and the next year's while the current one plays.
+- **Positions can't be shipped ready-made anyway.** They depend on the width of the window.
+
+### 17.3 Would the movement mean anything?
+
+**The test.** For each pair of neighbouring years, positions are worked out twice over.
+
+- **Real:** on the first year, and on the second.
+- **Mixed:** on two made-up years. Each has every calendar month once, half from the first year and half from the second: one takes January from the first, February from the second, and so on, and the other takes the rest.
+
+If nothing about the year mattered, industries would move as far between the mixed years as between the real ones. So the mixed figure is how far chance alone moves a circle, and the gap between the two is what belongs to the year.
+
+Movement is in pixels on a chart 1,064 wide and 745 high, for the average industry that is not too small to place, across the six pairs of years from 2019 to 2025. Intermediaries are out.
+
+**Yorkshire and the Humber.**
+
+| What is placed | Real years | Mixed years | Real over mixed |
+|----|----|----|----|
+| Height: level in the order | 21 | 6 | 3.4 |
+| Sideways: rank by trade inside the region | 45 (3.7 places of 66) | 15 (1.3) | 2.9 |
+| Sideways: rank by share passed along | 61 (5.0 places) | 24 (2.0) | 2.5 |
+| Sideways: rank by ties to manufacturing | 35 (2.9 places) | 13 (1.1) | 2.6 |
+| Supplier order with sector columns, each year starting from the all-months positions | 27 | 12 | 2.3 |
+| Supplier order with no columns, each year from scratch | 86 | 68 | 1.3 |
+| The same, each year starting from the all-months positions | 56 | 30 | 1.9 |
+| Hybrid, from scratch | 129 | 79 | 1.6 |
+| Hybrid, from the all-months positions | 79 | 43 | 1.9 |
+| Connections, from scratch | 163 | 105 | 1.5 |
+| Connections, from the all-months positions | 84 | 49 | 1.7 |
+
+**All twelve regions** give the same picture. Real over mixed:
+
+| What is placed | Middle region | Lowest and highest |
+|----|----|----|
+| Height: level in the order | 2.9 | 2.4 to 3.4 |
+| Sideways rank, the three measures | 2.5 to 2.7 | 1.9 to 3.9 |
+| Supplier order with sector columns | 2.3 | 1.9 to 2.9 |
+| Supplier order with no columns, from scratch | 1.5 | 1.2 to 2.0 |
+| The same, from the all-months positions | 1.9 | 1.6 to 2.1 |
+| Hybrid, from scratch | 1.7 | 0.8 to 2.3 |
+| Hybrid, from the all-months positions | 1.9 | 1.7 to 2.4 |
+| Connections, from scratch | 1.6 | 0.9 to 2.5 |
+| Connections, from the all-months positions | 1.9 | 1.6 to 2.2 |
+
+In the middle region the average industry's height moves 20 pixels between real years and 7 between mixed ones. Where a figure is under 1, circles moved further between the mixed years than the real ones: nothing but chance.
+
+**What it shows.**
+
+- **Height carries real change.** The average industry moves 21 pixels between neighbouring years and 6 between mixed ones. One in ten moves more than 45 pixels in a year.
+- **So do the ranked columns,** though they are noisier. By share passed along, the average industry moves five places of 66 a year, and two by chance.
+- **Views placed by pull alone are mostly chance if each year is worked out from scratch.** With no columns, in hybrid and in connections, a circle moves 86 to 163 pixels between real years and 68 to 105 between mixed ones. The picture rearranges itself whether or not anything changed, because a small change in the pulls can settle into a different arrangement.
+- **Starting each year from the all-months positions halves that.** Movement by chance falls to 30 to 49 pixels. Real years then move circles nearly twice as far as mixed ones, against three times for height. It is also quicker.
+- **Sector columns behave like height,** because a circle can't leave its column and its height is pinned to its level.
+- **Industries wobble more than they travel.** The typical industry ends 2025 only 1.8 average steps from where 2019 put it, after six steps. Six steps the same way would give 6, and a random walk about 2.4. Across the regions the figure is 1.6 to 2.3.
+- **A few do travel.** Thirteen of the 66 end 2025 more than a tenth of the way up or down the order from where 2019 put them. Across the regions it is between 8 of 58 (Northern Ireland) and 23 of 75 (London). Social work rises by 0.48 on levels that span 1.4, a third of the chart. Head offices and consultancy falls by 0.39, basic metals rises by 0.37 and electrical equipment by 0.33. Head offices and consultancy is one of the largest circles on the chart.
+
+**Three cautions on reading any of it.**
+
+- **"Belongs to the year" is not "the economy changed".** The value captured rose 72% from 2019 to 2025, much of it wider coverage (section 2.1). A level can move because different firms' payments are being counted.
+- **Held values damp the change a little.** A hidden month is held at the link's average published month in the same year. Where the year has none it is borrowed from the nearest years, which makes neighbouring years more alike. Held values are 8% to 14% of a year's value in Yorkshire and the Humber.
+- **The test can't say whether a move is right,** only whether it is more than chance.
+
+### 17.4 What I'd build
+
+**A switch by the layout controls: "Positions from: all months / the year shown".** Off at first, so the page opens as it does now and existing links still work.
+
+**With it on:**
+
+- **Height is the industry's level in that calendar year,** the build's own figure.
+- **Columns ranked by ties, by trade inside the region or by share passed along rank on that year.**
+- **Everything placed by pull starts from the all-months positions** and moves only as far as the year's payments pull it. That covers sideways position within sector and payment-group columns, free columns, hybrid and connections.
+- **These stay as they are:** which column an industry is in; the "shifts" column; circle spacing; the height scale and the average-industry line; and the industries too small to place, which stay where all months put them, because their yearly levels are noise.
+- **2026 has nine months,** so its positions use the twelve months to September 2026 and say so. That gives eight periods.
+- **Crossing into another year slides the circles** over 0.7 seconds, as changing layout does now. At normal speed a year plays for four seconds.
+- **The axis names the year,** and the side panel's line of the level over time marks it.
+- **It goes in the address,** as `pos=year`.
+- **A sentence by the switch** says a move can be a change in what is counted.
+
+**What it costs the page.** Section 3.4 fixed positions so that "everything that moves on screen is a change in payments". With the switch on, a link can also change because its ends moved. That is the reason to keep it off at first.
+
+### 17.5 What it would take
+
+- **No change to the data files or the build.**
+- **In `flows.js`, roughly 70 lines.** Four sums over all months become sums over the months in hand. The layout's key gains the period. The layout takes a starting position. A change of year while the switch is on calls the slide that changing layout already uses.
+- **Checks to add:** with the switch off, every position is identical to today's; with it on, each industry's height is its level for the year, within the few pixels of slack the layout allows; circles don't overlap; playing through a January stays at 60 frames a second; the address round-trips; screenshots of 2019 and 2025 in the same view.
+
+### 17.6 Decisions for you
+
+1. **Build it for the supplier-order views?** My recommendation: yes, as a switch that is off at first.
+2. **Hybrid and connections: follow the year, or stay put?** You asked for both. They cost nothing extra to include, since they use the same warm start. But chance alone moves a circle there over half as far as a real change of year does. My recommendation: include them, look at them playing, and take connections back out if it reads as jitter.
+3. **Calendar years, or the twelve months to the month shown?** Rolling windows would drift smoothly, with no jump each January. Height could do it now, since the file has those levels. The rest would need a layout for each of 82 months, about five seconds a view in all. My recommendation: calendar years first.
+4. **Should the side panel's chain figures and the trace follow the year too?** They are worked out on all months and say so. If the "passed along" column ranks on the year, the bar beside it should use the same months, or the two will disagree. My recommendation: yes, both follow the switch.

@@ -14,7 +14,9 @@ Three tests were written and run (`tests/26`, `27` and `28`), and a list of othe
 - **They don't give imports as figures, but many say where they buy.** 20 of the 66 say something about where their goods come from and 15 name the currencies they buy in, mostly dollars and euros.
 - **The same reading was then run over all 1,956 accounts, across Great Britain** (test 30, section 5.6), for $12. 1,206 give a share of sales abroad. Most large companies sell nothing abroad: the median is nil in seven of nine industry groups, and 5% for manufacturers. About half of manufacturers and wholesalers, and 63% of retailers, say they buy from abroad.
 - **They also say who the customers are, and that turned up a chain the page can't show.** Manufacturers with £7.6bn of turnover, nearly all food makers, say their customers are mainly retailers and supermarkets, and three more with £1.8bn say their main customer is their own supermarket group. ONS has never published a single month of retail paying food manufacturing inside the region. The UK-wide reading shows Yorkshire and the Humber is the only region where that is so.
-- **The best untested sources** are ONS's regional Annual Business Survey (turnover and purchases by division and region, placed at sites), regional household spending, Visa card spending by where shoppers live and shop, and HMRC's lists of importers and exporters by name.
+- **Against ONS's business survey, the payments record a third of these industries' turnover,** and an eighth counting only payments from known industries (test 31, section 6.1). In Yorkshire and the Humber the chart's links are 1% to 5% of most large industries' turnover. Registered offices put a fifth more of the typical industry's payments in London than of its turnover, and barely half in Wales.
+- **Household spending can be set beside the payments in pounds** (test 32, section 6.2). Households spend about as much in shops, restaurants and hotels as those industries turn over. Card takings in the payments are 2% to 4% of it.
+- **Still untested:** HMRC's lists of importers and exporters by name.
 
 **My recommendation:** put the official trade figures beside the payments first, because they exist, cover every region and need no guessing. Section 8 has the order I'd work in, and section 9 the decisions.
 
@@ -251,7 +253,7 @@ Some of the companies read, from their filed accounts:
 | Polypipe | Plastics | £448m | 7% |
 | Barrett Steel | Metals wholesale | £422m | 8% |
 
-*These are public accounts of large companies, named because the request was for prominent firms to test on. Say if you'd rather the plan named none.*
+*These are public accounts of large companies. Dan's decision, 24 November 2026: named companies are fine, here and on the page, since it is all open data.*
 
 ### 5.4 The model reading: how it was set up
 
@@ -318,7 +320,7 @@ Some of the companies read, from their filed accounts:
 
 - **Their customers are mainly retailers and supermarkets.** Seven manufacturers, six of them food makers, with £7.6bn of turnover, say so in words like "the majority of our customer sales are to large UK based household name grocery retailers".
 - **Some are a supermarket's own suppliers.** Three meat and cooked-meat processors (£1.8bn) and a fruit and vegetable wholesaler (£0.9bn) say their main customer is their own group, or name the supermarket. Each shares an ultimate parent, as stated in its accounts, with one of the region's two large supermarket groups, and both groups have such companies registered here.
-- **None of this is on the page.** Retail paying food manufacturing inside Yorkshire and the Humber has a row in ONS's data for all 93 months, and every one is hidden. So is retail paying farming. With no published month to hold a value at, the page draws no link at all.
+- **The page gets this wrong.** Retail paying food manufacturing inside Yorkshire and the Humber has a row in ONS's data for all 93 months, and every one is hidden. So is retail paying farming. With no published month to hold a value at, the page can't draw either. (Corrected after the build, section 7.2: for food manufacturing the page does draw the small flow the other way, what food makers pay retail, so it shows a link running the wrong way.)
 - **So one of the region's largest real chains is invisible in the payments:** farms, to food manufacturers, to supermarkets. It may also be that some of this trade never passes through the banks, where a group settles between its own companies on its books.
 
 **What this means for the plan.**
@@ -424,9 +426,9 @@ Ordered by how soon each could be used. "Checked" means I read ONS's or the publ
 
 | Source | What it would add | Basis | How checked |
 |----|----|----|----|
-| **ONS regional Annual Business Survey** (2024 results, June 2026) | Turnover, purchases and approximate GVA by region and two-digit division, for the non-financial business economy | Sites, not registered offices | From a search. Datasets not opened |
-| **ONS regional household final consumption expenditure**, 2009 to 2023 (February 2026) | What households in each ITL1 and ITL2 area spend, by 12 kinds of spending, with finer detail in the dataset. Yorkshire and the Humber: £120.0bn in 2023, £21,448 a head | Mainly residents' spending wherever it happens. A second set counts spending inside the region | Bulletin read by a helper. Dataset not opened |
-| **ONS and Visa consumer card spending** (flows article, March 2024; data on Nomis) | Where cardholders live against where they spend face to face, by postal district, with a region-to-region table. 74% of face-to-face spending is in the cardholder's own postal area | The shop's location, not the retailer's office. Shares and indexes, not pounds. Visa cards only. 13% of spending has no merchant location | Articles read by a helper. Data not opened |
+| **ONS regional Annual Business Survey** (2024 results, June 2026) | Turnover, purchases and approximate GVA by region and two-digit division, for the non-financial business economy | Sites, not registered offices | Workbook opened and used: section 6.1 |
+| **ONS regional household final consumption expenditure**, 2009 to 2023 (February 2026) | What households in each ITL1 and ITL2 area spend, by 12 kinds of spending, with finer detail in the dataset. Yorkshire and the Humber: £120.0bn in 2023, £21,448 a head | Mainly residents' spending wherever it happens. A second set counts spending inside the region | Workbook opened and used: section 6.2 |
+| **ONS and Visa consumer card spending** (flows article, March 2024; data on Nomis) | Where cardholders live against where they spend face to face, by postal district, with a region-to-region table. 74% of face-to-face spending is in the cardholder's own postal area | The shop's location, not the retailer's office. Shares and indexes, not pounds. Visa cards only. 13% of spending has no merchant location | Articles read by a helper. The data are indexed proportions only, so not used: section 6.2 |
 | **HMRC importers and exporters lists** (monthly since 2016) | Names, addresses, postcodes and commodity codes of businesses that import or export. No values | Named businesses, so they can be matched to Companies House. Businesses can opt out | From a search |
 | **HMRC regional trade in goods statistics** (quarterly) | Imports and exports by region, product group and partner country | Shared out by employees since 2016 | From a search |
 | **DfT road freight statistics** (tables RFS0122 and RFS0123) | Goods lifted and moved between regions of origin and destination | Where lorries load and unload | From a search. ONS already uses this survey for its interregional goods figures |
@@ -445,6 +447,95 @@ Ordered by how soon each could be used. "Checked" means I read ONS's or the publ
 - **The devolved surveys are an independent check for three of the twelve regions.** The earlier test used a tradability index, not the inside and outside shares the page now has. It could be rerun on those.
 
 **Not pursued:** card schemes' and banks' own data (not open), and business surveys of who exports (shares of firms, not values).
+
+### 6.1 Step 3, done: the payments against the Annual Business Survey
+
+*Test `tests/31_abs_coverage.R`, run 24 November 2026. Outputs `abs_coverage_by_division.csv` and `abs_coverage_by_region_division.csv`. Log `31_abs_coverage.log` in `local/paymentflowsviz_ynh/`. 2023, published payment values.*
+
+**The yardstick.** ONS's regional Annual Business Survey gives turnover and purchases for 78 divisions in each region, 2008 to 2024. It is a survey grossed up to all businesses, and its regional figures are for sites, not registered offices. It leaves out finance, most of farming and the public sector. ONS hides about one cell in eight.
+
+**How much the payments see.**
+
+- **A third of turnover.** The surveyed divisions were paid £1,487bn in the payments, against turnover of £4,549bn. Payments include VAT and turnover doesn't, so the true share is a little lower.
+- **An eighth, counting only payments from known industries,** which is what the chart's links are made of.
+- **On the buying side, half:** they paid £1,422bn against purchases of £2,969bn. To known industries, a fifth.
+- **It varies a great deal by industry.** The median division is at 28%, with a quarter under 18% and a quarter over 40%.
+
+| Division | Turnover | Paid to it, over turnover | From known industries only |
+|----|----|----|----|
+| Wholesale | £1,119bn | 17% | 10% |
+| Retail | £449bn | 28% | 6% |
+| Motor trades | £264bn | 41% | 11% |
+| IT and software | £198bn | 52% | 22% |
+| Building construction | £151bn | 32% | 10% |
+| Building trades | £131bn | 57% | 27% |
+| Food manufacturing | £103bn | 32% | 17% |
+| Food and drink service | £88bn | 55% | 9% |
+| Motor vehicles | £60bn | 6% | 1% |
+| Other transport equipment | £30bn | 4% | 1% |
+
+- **Some divisions come out over 100%,** which shows the two sources don't mean the same thing by them. Health is at 225%: the survey covers only part of health, and the payments' division takes in more. Office and business support is at 153%: it is an intermediary, passing money through.
+
+**What the chart's links amount to in Yorkshire and the Humber.** Payments from industries inside the region, as a share of each industry's turnover there:
+
+- **Wholesale 5%** (turnover £48bn), **retail 1%** (£36bn), **motor trades 3%** (£22bn), **food manufacturing 3%** (£15bn), **building trades 11%** (£8bn).
+- **For most large industries it is between 1% and 5%.** That is the scale of what the chart draws against what the industry does.
+
+**Where the payments are placed against where the work is.** Each region's share of a division's payments, over its share of the division's turnover, at the median division:
+
+| London | South East | West Midlands | North West | Yorkshire and the Humber | East Midlands | East of England | South West | Scotland | Northern Ireland | North East | Wales |
+|----|----|----|----|----|----|----|----|----|----|----|----|
+| 1.21 | 1.16 | 1.12 | 1.03 | 0.96 | 0.95 | 0.95 | 0.84 | 0.80 | 0.70 | 0.65 | 0.56 |
+
+- **Registered offices pull payments to London and the South East, and away from Wales, the North East and Northern Ireland.** The typical division has a fifth more of its payments in London than of its turnover, and in Wales barely half.
+- **In London:** food manufacturing has 7% of the division's turnover and 18% of its payments; telecoms 26% and 42%; retail 23% and 31%.
+- **Yorkshire and the Humber is close to even.**
+
+**Are the payments a guide to where an industry is?** Mostly. Within a division, across the twelve regions, turnover share and payment share have a rank correlation of 0.85 at the median, with a quarter of divisions under 0.72. It is weakest for gambling (0.19), other transport equipment (0.22), paper, motor vehicles and pharmaceuticals (0.36 to 0.38) and other manufacturing (0.45): industries with a few large firms.
+
+**What this adds.**
+
+- **A coverage figure for every division,** on a recognised yardstick. The handover's "median 16%" was against the national input-output table's sales between industries. This is against all turnover.
+- **A measure of the registered-office effect for every region,** which the page has so far only described in words.
+- **A caution on the page's best example.** Other manufacturing is one of the divisions where the payments are a poor guide to where the industry is.
+
+### 6.2 Step 4, done: household spending
+
+*Test `tests/32_household_spending.R`, run 24 November 2026. Output `household_spending_by_region.csv`. Log `32_household_spending.log`. 2023.*
+
+**The source.** ONS's regional household final consumption expenditure gives spending by kind of good or service, for each region, 2009 to 2023. It comes two ways: spending that takes place in the region, and spending by the region's residents wherever they do it. The first is what a region's shops take. UK households spent £1,622bn in 2023, of which a sixth is imputed rent that nobody pays.
+
+**The match to industries is by hand and loose.** A kind of spending is a product, and an industry is who sold it. Fourteen lines were matched, covering 73% of spending.
+
+**UK, 2023, £ billion.**
+
+| What households spend on | Spending | Turnover of the industries that sell it | Paid to them, in the payments | Of which from finance | From known industries |
+|----|----|----|----|----|----|
+| Goods bought in shops (retail) | 477 | 449 | 125 | 13 | 26 |
+| Eating and drinking out (food and drink service) | 137 | 88 | 48 | 5 | 8 |
+| Hotels and other accommodation | 37 | 37 | 17 | 1 | 2 |
+| Vehicles (motor trades) | 61 | 264 | 109 | 24 | 29 |
+| Phone and internet services (telecoms) | 24 | 66 | 20 | 1 | 9 |
+
+- **For shops, restaurants and hotels, household spending is about the size of the industry's whole turnover.** So these industries sell almost wholly to households, as the national table says, and the payments' links between industries are a small side of them.
+- **Card takings in the payments are 2% to 4% of what households spend** in shops, restaurants and hotels. That confirms section 3.5's rough 3% with a proper figure for spending.
+- **For motor trades, finance's payments are 40% of what households spend on vehicles.** That isn't card takings. It is car finance: the lender pays the dealer.
+- **Eating out comes to 156% of the industry's turnover.** Spending includes VAT and covers canteens and pubs' drink, so the two don't mean the same thing.
+
+**Yorkshire and the Humber.** Households spend £34.4bn a year in shops there, against retail turnover of £36.3bn. The payments show retail there being paid £8.9bn, of which £2.1bn is from known industries and £0.8bn from finance. Eating and drinking out is £9.4bn of spending against £5.6bn of turnover and £2.8bn of payments.
+
+**Spending that crosses the region's edge.** Spending in the region as a share of spending by its residents: London 146%, the North West 102%, Yorkshire and the Humber 89%, Wales 79%, Northern Ireland 76%. For goods in shops Yorkshire and the Humber is at 92%, and for hotels 56%.
+
+- **Treat these with care for services.** ONS places spending in a region partly from businesses' own turnover returns, so London's 264% for recreation and culture is partly head offices again.
+
+**Is card capture even across regions?** No. Finance's payments are between 1% and 5% of households' spending in shops, depending on the region. So card takings can't be scaled up by one factor.
+
+**The Visa card data.** Not used. What ONS publishes on Nomis is a 123 MB file of indexed proportions between postal districts: how the pattern has changed since early 2019, not how much is spent where. The shares that would matter here (how much of a region's card spending stays in it) are in ONS's article as a chart, with no table to download. The household spending tables above do the same job in pounds.
+
+**What this adds.**
+
+- **Households can be put beside the payments in pounds,** by region, for the industries that sell to them.
+- **A second reading of what finance pays an industry:** card takings for shops and restaurants, loans for car dealers.
 
 ## 7. How any of this could reach the page
 
@@ -519,23 +610,88 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 - **Whether a hidden link that the accounts don't vouch for should be marked at all.** About a quarter of cells are never published. Most are small. Marking them all would bury the chart, which is why this uses the accounts to pick.
 - **How to word the buying side.** Accounts say that a company imports, not how much.
 
+### 7.2 Built: the section, the side panel block and the dotted line
+
+*Built 24 November 2026, on Dan's go: decisions 1 to 4 of section 9, with the defaults taken for the rest. `build_outside.R` makes `data/outside.js`; the page code is in `flows.js`.*
+
+**Decisions as taken.**
+
+- **Named companies are fine,** in the plan and on the page: it is all open data. So the rule in 7.1 that no company is named is dropped. Each company on the page links to its record at Companies House.
+- **ONS's goods figures between regions are shown, as a rough guide. Its services figures between regions are not,** because they are partly built from these payments.
+- **The side panel block is at group level,** with the group named.
+
+**What is on the page.**
+
+- **A section under the chart, "What the payments leave out".** Four parts:
+    - goods and services crossing the region's edge, by ONS's nine industry groups;
+    - what large companies' accounts say, group by group, with Great Britain beside the region;
+    - the hidden links the accounts point to, in words, with the companies named;
+    - the companies themselves, a folded list for each group: name, industry, turnover, share sold outside the UK, main customers, and whether it says it buys from abroad.
+- **A block in the side panel, "Beyond the payments",** when an industry is pinned: its group's figures from ONS and from the accounts, up to six of the largest companies in its own division registered there, a sentence where companies name government as their main customer, and a sentence for any hidden link. A button opens the section.
+- **A dotted line with no width** between two industries where ONS hides the payments and the accounts point to a link. All of a region's dotted lines show when nothing is pinned or hovered. Pin or hover an industry and only its own show. A tick box, "Hidden links that company accounts point to", switches them off, and is `vouch=0` in the address. The tick box says how many the region has, and is greyed out where it has none.
+- **A tooltip on the dotted line** says which payments are hidden and how many companies point to the link. Clicking the line pins the supplying industry, whose side panel names the companies.
+- **A line in the key** for the dotted line, and **a note at the foot of the page** in regions that have one.
+
+**One thing found while building, which changes how the missing link is described.**
+
+- **The chart does draw a link between food manufacturing and retail in Yorkshire and the Humber, but it is the flow the other way.** What food manufacturing pays retail is published (about £3m a month). What retail pays food manufacturing is hidden in every month.
+- **So with one net link a pair, the chart shows a small link running the wrong way,** from the food makers to the shops. The page now says so: "The chart shows only the flow the other way."
+- **The dotted line is bowed to the other side** of that link so the two can be told apart.
+- **Section 5.5 said "the page draws no link at all".** That was wrong for this pair and is corrected there, as is the same claim in the main plan's section 16. It holds for farming and retail, where neither direction is published.
+
+**Rules as built.**
+
+- **A share of sales abroad is shown where five or more companies give one.** Below that the table shows a dash, but the companies are still counted and listed.
+- **A hidden link needs two or more companies** naming that kind of customer, a kind that is one division, and payments hidden in at least three months in four. Government as the buyer is left out of the lines and put in words.
+- **Three links qualify:** food manufacturing and farming, each selling to retail, in Yorkshire and the Humber; and drinks manufacturing selling to retail in the West Midlands.
+- **Nothing from the accounts or from ONS has a width or is added to the payments.**
+
+**The data file.** `data/outside.js` is 148 KB for all regions and loads with the page. It holds ONS's figures, the accounts' figures by group, 1,935 companies with a region, and the hidden links. `build_outside.R` makes it in a few seconds from `tests/outputs/trade_at_the_edge.csv` and the company-level results of test 30, which are not in the repo. So it can only be rebuilt on a machine where test 30 has been run. The page works without the file: the section, the block and the lines just don't appear.
+
+**Company names** are stored in capitals at Companies House. The build puts them in title case by rule, which gets a few wrong: initials it can't recognise come out as "Jct600" for JCT600.
+
+**Checks.**
+
+- **Page checks** (`tests/13`): no page or console errors, 60 frames a second. Ten new screenshots, `24` to `24j` in `tests/outputs/page/`: the dotted line with food manufacturing pinned; the side panel block; the section with one group's companies open; the switch off; the dark theme with retail pinned in the goods view; a phone; Wales, which has few companies; both lines with nothing pinned; an industry pinned by a real click; and the tooltip on a line.
+- **The dotted lines are checked with a real pointer:** two with nothing pinned, one after clicking food manufacturing with the pointer left on it, a tooltip on the line, a click on the line pinning its supplier, none when switched off, and the tick box greyed out in the North East.
+- **The address** (`tests/15`): the new switch comes back, 2 of 2.
+- **By eye:** the two dotted lines in Yorkshire and the Humber run from retail to food manufacturing and to farming, clear of the link that runs the other way.
+
+**A fault found in use, 24 November, and fixed.**
+
+- **The dotted line did not show after clicking an industry.** It was drawn only when the pointer was off every circle, and a click leaves the pointer on the circle just pinned. The page test missed it because it pins through a script, with no pointer.
+- **Even when it worked it was easy to miss:** it showed only with one of three industries pinned, and the tick box did nothing in the nine regions with no such link.
+- **Now** the lines show without pinning, follow hovering as other links do, have a tooltip, and the tick box says how many there are.
+
+**Not done.**
+
+- **Northern Ireland has no companies,** because the region lookup is Great Britain's. Its section shows ONS's figures only.
+- **Group accounts are not de-duplicated.** Two companies in one group both count, as 7.1's open question says.
+- **The figures were not checked against the test output cell by cell.** They come from the same file by a short script, and the Yorkshire and the Humber rows match section 5.5 and 5.6.
+- **Whether the section is open is not in the address,** like the page's other folds.
+
 ## 8. The order I'd work in
 
-1. **Put ONS's regional trade figures in the build** as a small lookup by region and group, and draft the side panel block. Small, and it changes what the page can say about wholesale.
-2. **The model reading: done,** on the 66 (section 5.5) and then on all 1,956 with customer kinds added (section 5.6). Next for this strand is building section 7.1, if wanted.
-3. **The Annual Business Survey check.** Open the regional datasets, and set turnover and purchases by division and region against the payments.
-4. **Households:** open the regional household spending dataset and the Visa data on Nomis, and see how well kinds of spending map onto divisions.
+1. **ONS's regional trade figures on the page: done** (section 7.2), as a table under the chart and in the side panel.
+2. **The model reading: done,** on the 66 (section 5.5) and then on all 1,956 with customer kinds added (section 5.6). **The accounts feature is built** (section 7.2).
+3. **The Annual Business Survey check: done** (section 6.1).
+4. **Households: done** for household spending (section 6.2). The Visa data turned out not to be usable for this.
 5. **HMRC lists against Companies House:** a count of importing and exporting businesses by division in Yorkshire and the Humber. This needs the `companieshouseopen` database and a name and postcode match.
 6. **Division-level trade guesses** (section 4.4), once 3 and 5 say how far they can be trusted.
 
 ## 9. Decisions for you
+
+*Taken 24 November 2026: the defaults for all, except that named companies are fine (4). Items 1 to 4 were then built, section 7.2. Item 6 stands: the Annual Business Survey is next.*
 
 1. **Is the side panel block (step 1) wanted,** and at group level only? My recommendation: yes, with the group named.
 2. **Build the accounts feature (section 7.1)?** The reading it needed is done (section 5.6). My recommendation: yes, with the UK's row shown beside the region's, the dotted line kept, and the public administration cases put in words.
 3. **Should the page say that the food manufacturing to retail link is hidden?** My recommendation: yes, in the notes for Yorkshire and the Humber, since it is one of the region's largest chains. The check is done: it is the only region where the link is never published. The West Midlands has it in 18 months of 93.
 4. **Named companies in this plan** (section 5.3): keep, or take out before it is published?
 5. **Should the interregional figures be shown on the page at all,** given the oddities in 4.3? My recommendation: the goods figures yes, as a rough guide; the services figures no.
-6. **Which of steps 3 to 5 matters most to you?** I'd take the Annual Business Survey first.
+6. **Which of steps 3 to 5 matters most to you?** Steps 3 and 4 are done. Step 5, HMRC's lists against Companies House, is next.
+7. **Should the side panel give a coverage figure for the pinned industry?** For example: "Across the UK the payments record about a third of this industry's turnover. The links drawn here are about 3% of its turnover in this region." My recommendation: yes. It is the plainest way to say how much the chart leaves out, and it needs only `abs_coverage_by_region_division.csv`.
+8. **Should "What the payments leave out" get a households part?** A table for the region: what households spend in shops, eating out, hotels and on vehicles, beside those industries' turnover and what the payments show. My recommendation: yes, for those four lines only, where the match to an industry is clean.
+9. **Should the page say where the payments are placed against where the work is?** One line in the note on registered offices, with the region's figure from section 6.1. My recommendation: yes.
 
 ## 10. Files, checks, and what isn't done
 
@@ -546,8 +702,10 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 | `tests/28_accounts_geography.R` | Turnover by geography read from large employers' OCR'd accounts |
 | `tests/29_accounts_reading.R` | A model reading of 66 Yorkshire and the Humber companies' accounts: where they sell, where they buy, and who their customers are |
 | `tests/30_accounts_reading_all.R`, `tests/functions_accounts.R` | The same reading over all 1,956 accounts, with customer and supplier kinds; and the mechanics the two tests share |
+| `tests/31_abs_coverage.R`, `tests/32_household_spending.R` | The payments against ONS's regional business survey, and household spending beside turnover and the payments |
 | `tests/lookups/la_itl1.csv` | Local authority to region, Great Britain, made by test 30 from a postcode lookup in `companieshouseopen` |
-| `tests/outputs/card_takings_by_payer.csv`, `card_takings_retail_by_region.csv`, `trade_at_the_edge.csv`, `accounts_geography_by_industry.csv`, `accounts_reading_summary.csv`, and five files beginning `accounts_all_` | Their outputs |
+| `build_outside.R`, `data/outside.js` | The page's data from these other sources, and the script that builds it |
+| `tests/outputs/card_takings_by_payer.csv`, `card_takings_retail_by_region.csv`, `trade_at_the_edge.csv`, `accounts_geography_by_industry.csv`, `accounts_reading_summary.csv`, five files beginning `accounts_all_`, `abs_coverage_by_division.csv`, `abs_coverage_by_region_division.csv` and `household_spending_by_region.csv` | Their outputs |
 | `local/paymentflowsviz_ynh/downloads/` | The three ONS workbooks, each in its own folder (not published) |
 | `local/paymentflowsviz_ynh/accounts_geography_companies.csv`, `accounts_reading_set.csv`, `accounts_reading_results.csv`, `accounts_all_results.csv`, `accounts_read/`, `accounts_read_all/` | Company-level results, the reading set, and each answer from the model (not published) |
 
@@ -559,7 +717,7 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 
 **Not done, or not checked.**
 
-- **Nothing here is on the page.**
+- **Card takings, household spending and the business survey's coverage figures are not on the page.** ONS's trade figures and the accounts are (section 7.2).
 - **Retail sales of about £500bn a year** is from memory.
 - **The 2008 Regulations' current wording** on turnover by market was not read in full.
 - **Several sources in section 6 were found by search only,** as marked.

@@ -8,6 +8,11 @@
   'use strict';
   const d3 = window.d3, IDX = window.FLOWS_REGIONS;
   const $ = id => document.getElementById(id);
+  // Other sources on the links the payments can't show (data/outside.js, built by build_outside.R): ONS's estimates of goods
+  // and services crossing the region's edge, and what the accounts of large companies registered here say about where they
+  // sell, where they buy and who their customers are. They sit beside the payments and are never added to them.
+  const OUT = window.FLOWS_OUTSIDE || null;
+  let vouchCache = null;                                   // hidden links the accounts point to in the region shown; reset with the data
   if (!IDX || !d3) { document.body.insertAdjacentText('afterbegin', 'The data or drawing library did not load.'); return; }
 
   // The region's data in use. Everything here is set by setData(), which runs again whenever the region changes.
@@ -36,14 +41,14 @@
   const regionOf = code => IDX.regions.find(r => r.code === code);
   let wantMonth = q.get('m'), wantSel = q.get('sel');     // resolved once the region's data has arrived
   const DEFAULTS = { region: IDX.default, layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
-                     smooth: true, dots: true, inter: false, halo: false, pubonly: false, trace: false, ptable: false, speed: '3' };
+                     smooth: true, dots: true, inter: false, halo: false, pubonly: false, trace: false, ptable: false, vouch: true, speed: '3' };
   const S = { region: (regionOf(q.get('region')) || {}).built ? q.get('region') : IDX.default, layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'ties', 'sells', 'buys', 'inside', 'sellsinside', 'buysinside', 'passed', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
               show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir),
               smooth: q.get('smooth') !== '0', dots: q.get('dots') !== '0', inter: q.get('inter') === '1', halo: q.get('halo') === '1',
-              pubonly: q.get('pubonly') === '1', trace: q.get('trace') === '1', ptable: q.get('ptable') === '1', t: 0, sel: -1 };
+              pubonly: q.get('pubonly') === '1', trace: q.get('trace') === '1', ptable: q.get('ptable') === '1', vouch: q.get('vouch') !== '0', t: 0, sel: -1 };
 
   // ---------------------------------------------------------------- colours, from the stylesheet so light and dark both work
   let C = {};
@@ -98,7 +103,7 @@
     curV = new Float32Array(NL); curN = new Float32Array(NL); disp = new Float32Array(NL); shown = new Float32Array(NL);
     paidD = new Float64Array(NN); recvD = new Float64Array(NN); paidV = new Float64Array(NN); recvV = new Float64Array(NN);
     geo = new Float32Array(NL * (NSEG + 1) * 4); ctrl = new Float32Array(NL * 3); widthNow = new Float32Array(NL); radNow = new Float32Array(NN);
-    hoverNode = hoverLink = -1; drawn = []; pos = null; tween = null; geoDirty = true; shownMonth = -1;
+    hoverNode = hoverLink = hoverDot = -1; drawn = []; dots = []; pos = null; tween = null; geoDirty = true; shownMonth = -1; vouchCache = null;
     buildOptions(); $('month').max = NM - 1;
   }
 
@@ -394,7 +399,7 @@
   }
 
   // ---------------------------------------------------------------- drawing
-  let hoverNode = -1, hoverLink = -1, phase = 0, drawn = [], lastScriptMs = 0;
+  let hoverNode = -1, hoverLink = -1, hoverDot = -1, phase = 0, drawn = [], dots = [], lastScriptMs = 0;      // dots: the dotted lines as drawn, for the pointer
   let widthNow, radNow;
   function wrapText(text, maxW) { const words = text.split(' '), lines = []; let line = '';
     for (const w of words) { const t = line ? line + ' ' + w : w; if (line && ctx.measureText(t).width > maxW) { lines.push(line); line = w; } else line = t; }
@@ -509,6 +514,21 @@
     }
     ctx.globalAlpha = 1;
 
+    // ---- links ONS hides here in every month or most, that company accounts point to: a dotted line with no width.
+    // It says "there is a link", not how much. All of them show until an industry is hovered or pinned, then only its own.
+    const vl = S.vouch ? vouched().filter(h => act[h.si] && act[h.bi] && (focus < 0 || h.si === focus || h.bi === focus)) : [];
+    dots = [];
+    if (vl.length) {
+      ctx.save(); ctx.setLineDash([0.1, 5.5 * Math.max(0.8, K)]); ctx.lineCap = 'round'; ctx.lineWidth = 2.6 * Math.max(0.8, K); ctx.strokeStyle = C.ink;
+      for (const h of vl) { const a = P[h.si], z = P[h.bi], dx = z.x - a.x, dy = z.y - a.y, mx = (a.x + z.x) / 2, my = (a.y + z.y) / 2;
+        // a bow, on the other side from the link that runs the opposite way between the two, so the two can be told apart
+        const side = h.rk >= 0 && (ctrl[h.rk * 3] - mx) * -dy + (ctrl[h.rk * 3 + 1] - my) * dx > 0 ? -1 : 1;
+        ctx.globalAlpha = hoverLink >= 0 || (focus < 0 && lensOn && !(share[h.si] > 0 || share[h.bi] > 0)) ? 0.25 : 1;   // stands back with the other links
+        const cx = mx - dy * 0.2 * side, cy = my + dx * 0.2 * side; dots.push({ h, ax: a.x, ay: a.y, cx, cy, zx: z.x, zy: z.y });
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo(cx, cy, z.x, z.y); ctx.stroke(); }
+      ctx.restore();
+    }
+
     // ---- industries
     for (const d of live) {
       const p = P[d.i], r = radNow[d.i], sh = lensOn ? share[d.i] : 0, off = tr && !tr.members.has(d.i), dim = off || (lensOn && sh === 0 && d.i !== focus);
@@ -521,7 +541,7 @@
     }
     // ---- names: the focus first, then highlighted industries, then by size; skipped where they would collide
     ctx.font = font(fs); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
-    const boxes = [], rank = d => (d.i === focus ? 8 : 0) + (tr && tr.members.has(d.i) ? 4 : 0) + (lensOn && share[d.i] > 0 ? 2 : 0) + (d.small ? 0 : 1);
+    const boxes = [], rank = d => (d.i === focus ? 8 : 0) + (tr && tr.members.has(d.i) ? 4 : 0) + (vl.some(h => h.si === d.i || h.bi === d.i) ? 4 : 0) + (lensOn && share[d.i] > 0 ? 2 : 0) + (d.small ? 0 : 1);
     const byRank = live.slice().sort((a, b) => rank(b) - rank(a) || radNow[b.i] - radNow[a.i]);
     for (const d of byRank) {
       const p = P[d.i], r = radNow[d.i] + (d.i === S.sel ? 4 : 0), tw = ctx.measureText(d.short).width;
@@ -613,6 +633,8 @@
     s = svg(66, 24); rib(s, 7, 9, 'var(--with)'); add(s, 'line', { x1: 5, x2: 61, y1: 7, y2: 7, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': '3 4' });
     add(s, 'line', { x1: 3, x2: 63, y1: 20, y2: 20, stroke: 'var(--with)', 'stroke-width': 1.2, 'stroke-dasharray': '4 3' });
     row(s, '<b>Dashed:</b> this month is hidden by ONS and shown at the average of the link’s published months.');
+    if (S.vouch && vouched().length) { s = svg(66, 14); add(s, 'line', { x1: 4, x2: 62, y1: 7, y2: 7, stroke: 'var(--ink)', 'stroke-width': 2.6, 'stroke-dasharray': '0.1 5.5', 'stroke-linecap': 'round' });
+      row(s, '<b>Dotted:</b> payments between these two are hidden by ONS here, but company accounts say there is a link. It has no width because no amount is known. Pin either end to read which companies.'); }
     const cs = S.scale === 'share' ? [[0.02 * monthTotals('value', S.smooth, S.pubonly).mean, '2%'], [0.2 * monthTotals('value', S.smooth, S.pubonly).mean, '20%']] : [[5e3, '£5m'], [1e5, '£100m']];
     s = svg(66, 2 * rNode(cs[1][0]) + 4); const R = rNode(cs[1][0]); cs.slice().reverse().forEach(([v]) => add(s, 'circle', { cx: 33, cy: 2 * R + 2 - rNode(v), r: rNode(v), fill: 'var(--node)', stroke: 'var(--node-line)' }));
     row(s, isVal ? `<b>Circle:</b> an industry. Area is what it pays plus what it is paid by other industries here: ${cs[0][1]} and ${cs[1][1]} ${S.scale === 'share' ? 'of the month’s payments' : 'a month'}.`
@@ -765,6 +787,8 @@
         box.append(el('p', 'd-small', g ? 'Each step follows net sales worth a tenth or more of what the industry sells net (downwards on the chart) or buys net (upwards), two steps each way. A trail stops where an industry’s customers aren’t in the data, as with public services and shops.'
           : 'Each step follows net payments worth a tenth or more of what the industry is paid net (upwards on the chart) or pays net (downwards), two steps each way. A trail stops where an industry’s payers aren’t in the data, as with public services and shops.')); } }
 
+    detailOutside(box, d);
+
     // what is hidden
     const never = S.inter ? d.never_all : d.never_core, cells = S.inter ? d.cells_all : d.cells_core;
     let held = 0, all = 0; for (let k = 0; k < NL; k++) if (lact[k] && (sup[k] === i || buy[k] === i)) { all += curV[k]; if (basis[k][m] === 'h') held += curV[k]; }
@@ -797,16 +821,18 @@
 
   // ---------------------------------------------------------------- pointer: hover for figures, click to pin
   const tip = $('tip');
-  function hit(x, y) {                                     // nearest industry, else nearest drawn link
+  function hit(x, y) {                                     // nearest industry, else a dotted line, else nearest drawn link
     let bn = -1, bd = 1e9;
     for (const d of nodes) { if (!act[d.i]) continue; const dd = Math.hypot(pos[d.i].x - x, pos[d.i].y - y), reach = Math.max(12, radNow[d.i] + 4); if (dd < reach && dd - radNow[d.i] < bd) { bd = dd - radNow[d.i]; bn = d.i; } }
-    if (bn >= 0) return { node: bn, link: -1 };
+    if (bn >= 0) return { node: bn, link: -1, dot: -1 };
+    for (let j = 0; j < dots.length; j++) { const q = dots[j];
+      for (let i = 1; i < 32; i++) { const u = i / 32, v = 1 - u; if (Math.hypot(v * v * q.ax + 2 * v * u * q.cx + u * u * q.zx - x, v * v * q.ay + 2 * v * u * q.cy + u * u * q.zy - y) < 6) return { node: -1, link: -1, dot: j }; } }
     let bl = -1; bd = 1e9;
     for (const k of drawn) { const o = k * (NSEG + 1) * 4, reach = Math.max(4, widthNow[k] / 2 + 2);
       for (let i = 0; i < NSEG; i++) { const p = o + i * 4, x1 = geo[p], y1 = geo[p + 1], dx = geo[p + 4] - x1, dy = geo[p + 5] - y1, l2 = dx * dx + dy * dy || 1;
         const u = Math.max(0, Math.min(1, ((x - x1) * dx + (y - y1) * dy) / l2)), dd = Math.hypot(x - x1 - u * dx, y - y1 - u * dy);
         if (dd < reach && dd < bd) { bd = dd; bl = k; } } }
-    return { node: -1, link: bl };
+    return { node: -1, link: bl, dot: -1 };
   }
   function showTip(x, y) {
     tip.replaceChildren();
@@ -815,6 +841,11 @@
       tip.append(el('div', 't-title', d.short), el('div', 't-sub', `SIC ${d.id}, ${d.group}`));
       const r1 = el('div'); r1.append(document.createTextNode(goods() ? 'Buys from other industries here ' : 'Pays other industries here '), el('span', 't-val', fmtMoney(paidV[d.i]))); const r2 = el('div'); r2.append(document.createTextNode(goods() ? 'Sells to them ' : 'Is paid by them '), el('span', 't-val', fmtMoney(recvV[d.i])));
       tip.append(r1, r2, el('div', 't-note', d.small ? 'Too small to place reliably. Click to pin.' : 'Click to pin and see more.'));
+    } else if (hoverDot >= 0 && dots[hoverDot]) { const h = dots[hoverDot].h, sn = nodes[h.si].short, bn = nodes[h.bi].short;
+      tip.append(el('div', 't-title', goods() ? `${sn} supplies ${bn}` : `${bn} pays ${sn}`), el('div', 't-sub', 'A link the payments can’t show'));
+      tip.append(el('div', null, `ONS hides these payments here in ${hiddenWords(h)}, so no amount is known.`));
+      tip.append(el('div', null, `${h.n} large ${sn.toLowerCase()} companies registered here name ${h.kind} as their main customers.`));
+      tip.append(el('div', 't-note', `Click to pin ${sn.toLowerCase()} and read which.`));
     } else if (hoverLink >= 0) { const k = hoverLink, r = rev[k], payer = nodes[buy[k]].short, payee = nodes[sup[k]].short;
       const said = (x, y) => goods() ? `${y} supplies ${x}` : `${x} pays ${y}`;       // x pays y, or the same thing turned round
       tip.append(el('div', 't-title', said(payer, payee)));
@@ -832,12 +863,12 @@
   function pointer(e) {
     if (!pos || tween) return;
     const b = canvas.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top, h = hit(x, y);
-    if (h.node !== hoverNode || h.link !== hoverLink) { hoverNode = h.node; hoverLink = h.link; canvas.style.cursor = h.node >= 0 ? 'pointer' : 'default'; requestDraw(); }
+    if (h.node !== hoverNode || h.link !== hoverLink || h.dot !== hoverDot) { hoverNode = h.node; hoverLink = h.link; hoverDot = h.dot; canvas.style.cursor = h.node >= 0 || h.dot >= 0 ? 'pointer' : 'default'; requestDraw(); }
     showTip(x, y);
   }
   canvas.addEventListener('pointermove', pointer);
-  canvas.addEventListener('pointerleave', () => { hoverNode = hoverLink = -1; tip.style.display = 'none'; requestDraw(); });
-  canvas.addEventListener('click', e => { const b = canvas.getBoundingClientRect(), h = hit(e.clientX - b.left, e.clientY - b.top); select(h.node >= 0 ? (h.node === S.sel ? -1 : h.node) : h.link >= 0 ? S.sel : -1); });
+  canvas.addEventListener('pointerleave', () => { hoverNode = hoverLink = hoverDot = -1; tip.style.display = 'none'; requestDraw(); });
+  canvas.addEventListener('click', e => { const b = canvas.getBoundingClientRect(), h = hit(e.clientX - b.left, e.clientY - b.top); select(h.node >= 0 ? (h.node === S.sel ? -1 : h.node) : h.dot >= 0 ? dots[h.dot].h.si : h.link >= 0 ? S.sel : -1); });   // a dotted line pins its supplying industry, whose side panel explains it
   function select(i) { S.sel = i >= 0 && act[i] ? i : -1; pickSel.value = S.sel >= 0 ? nodes[S.sel].id : ''; renderDetail(); requestDraw(); syncUrl(); }
 
   // ---------------------------------------------------------------- controls
@@ -855,7 +886,7 @@
     for (const d of nodes.slice().sort((a, b) => a.short.localeCompare(b.short))) { const o = el('option', null, d.short); o.value = d.id; pickSel.append(o); }
   }
   pickSel.addEventListener('change', e => select(nodes.findIndex(n => n.id === e.target.value)));
-  const selects = ['cols', 'lens', 'show', 'measure', 'scale', 'net', 'cover', 'speed'], checks = ['smooth', 'dots', 'inter', 'halo', 'pubonly', 'trace'];
+  const selects = ['cols', 'lens', 'show', 'measure', 'scale', 'net', 'cover', 'speed'], checks = ['smooth', 'dots', 'inter', 'halo', 'pubonly', 'trace', 'vouch'];
   function wording() {                                     // the fixed text that depends on money or goods
     const g = goods();
     $('l-inside').textContent = g ? 'Bought and sold inside the region' : 'Paid inside the region';
@@ -870,6 +901,7 @@
     document.querySelectorAll('input[name=layout]').forEach(r => { r.checked = r.value === S.layout; });
     document.querySelectorAll('input[name=dir]').forEach(r => { r.checked = r.value === S.dir; });
     $('cols').disabled = S.layout !== 'order'; $('halo').disabled = S.measure !== 'value';
+    const nv = D ? vouched().length : 0; $('vouch').disabled = !nv; $('vouch-n').textContent = nv ? ` (${nv} in this region)` : ' (none found in this region)';
     for (const o of pickSel.options) { const n = nodes.find(d => d.id === o.value); o.hidden = o.disabled = !!n && !act[n.i]; }
     pickSel.value = S.sel >= 0 ? nodes[S.sel].id : '';
     $('play').textContent = playing ? 'Pause' : 'Play';
@@ -879,7 +911,7 @@
     if (k === 'inter') { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); moveTo(false); }
     if (k === 'layout' || k === 'cols' || (k === 'lens' && isTies(S.cols))) moveTo(false);
     if (k === 'show') { geoDirty = true; moveTo(false); wording(); }
-    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show', 'layout', 'cols', 'lens', 'trace'].includes(k)) buildKey();
+    if (['measure', 'scale', 'net', 'halo', 'inter', 'smooth', 'pubonly', 'show', 'layout', 'cols', 'lens', 'trace', 'vouch'].includes(k)) buildKey();
     if (k === 'inter') fillChainFacts();
     if (k === 'smooth') updateStripMax();
     reflect(); refresh(); syncUrl();
@@ -958,7 +990,7 @@
       if (playing) { playing = false; $('play').textContent = 'Play'; }
       setData(window.FLOWS_DATA[code]); S.region = code;
       S.t = monthFromParam(keepMonth); S.sel = nodes.findIndex(n => n.id === keepSel);
-      readTheme(); setActive(); updateStripMax(); fillText(); reflect(); wording(); relayout(); renderCompare();
+      readTheme(); setActive(); updateStripMax(); fillText(); reflect(); wording(); relayout(); renderCompare(); renderOutside();
       wrap.classList.remove('loading'); syncUrl();
     };
     if (window.FLOWS_DATA && window.FLOWS_DATA[code]) { arrive(); return; }
@@ -969,6 +1001,109 @@
     document.head.appendChild(sc);
   }
   $('region').addEventListener('change', e => loadRegion(e.target.value));
+
+  // ---------------------------------------------------------------- beyond the payments
+  const outHere = () => (OUT && OUT.regions[S.region]) || null;
+  const fmtBn = v => v == null ? '–' : v < 0.05 ? 'under £0.1bn' : '£' + (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + 'bn';
+  const pct0 = v => v == null ? '–' : (v * 100).toFixed(v > 0 && v < 0.095 ? 1 : 0).replace(/\.0$/, '') + '%';
+  const chLink = (name, no) => Object.assign(el('a', null, name), { href: 'https://find-and-update.company-information.service.gov.uk/company/' + no, target: '_blank', rel: 'noopener' });
+  const kindList = cust => cust.map(c => `${OUT.kinds[c[0]]} (${c[1]})`).join(', ');
+  const nodeOf = id => nodes.findIndex(n => n.id === id);
+  function vouched() {                                    // as pairs of circles on the chart: si supplies, bi buys
+    if (vouchCache) return vouchCache; const o = outHere();
+    const linkOf = (s, b) => { for (let k = 0; k < NL; k++) if (sup[k] === s && buy[k] === b) return k; return -1; };
+    // rk: the link the other way (the supplying industry paying the buying one), where any month of it is published. The chart can draw that one.
+    return (vouchCache = (o ? o.hidden : []).map(h => { const si = nodeOf(h.s), bi = nodeOf(h.b), k = si >= 0 && bi >= 0 ? linkOf(bi, si) : -1;
+      return { ...h, si, bi, rk: k >= 0 && basis[k].includes('p') ? k : -1 }; }).filter(h => h.si >= 0 && h.bi >= 0));
+  }
+  const otherWay = h => h.rk >= 0 ? `The chart shows only the flow the other way, what ${nodes[h.si].short.toLowerCase()} pays ${nodes[h.bi].short.toLowerCase()}.` : 'So the chart draws no link between them.';
+  const hiddenWords = h => h.every ? `every one of the ${h.months} months` : `${h.months - h.published} of the ${h.months} months`;
+  const openOutside = () => { const f = $('outside'); f.open = true; f.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); };
+  // The side panel's block for the pinned industry: its group's figures from ONS and from the accounts, the companies in
+  // its own division, and any hidden link the accounts point to
+  function detailOutside(box, d) {
+    const o = outHere(); if (!o) return;
+    const gk = OUT.group_of[d.id], G = OUT.groups[gk]; if (!G) return;
+    const e = o.edge && o.edge[gk], ac = o.accounts[gk], uk = OUT.uk[gk], wholeGroup = Object.values(OUT.group_of).filter(v => v === gk).length === 1;
+    box.append(el('h3', null, 'Beyond the payments'));
+    box.append(el('p', 'd-small', wholeGroup ? 'From other sources, not from the payments, and not on the same footing.' : `From other sources, not from the payments. The figures are for its group, ${G.words}, not this industry alone.`));
+    if (e) { const parts = [];
+      const two = (a, b) => [a != null ? `${fmtBn(a)} from other UK regions` : '', b != null ? `${fmtBn(b)} from abroad` : ''].filter(Boolean).join(' and ');
+      const gin = two(e.gi_uk, e.gi_ab), gout = two(e.go_uk, e.go_ab).replace(/from/g, 'to');
+      if (gin || gout) parts.push(`ONS estimates the group here ${[gin ? `brings in ${gin} in goods a year` : '', gout ? `sends out ${gout}` : ''].filter(Boolean).join(', and ')}.`);
+      const sv = [e.so_ab != null ? `sells ${fmtBn(e.so_ab)} of services abroad` : '', e.si_ab != null ? `buys ${fmtBn(e.si_ab)}${e.so_ab != null ? '' : ' of services abroad'}` : ''].filter(Boolean).join(' and ');
+      if (sv) parts.push(`It ${sv}.`);
+      if (parts.length) box.append(el('p', 'd-small', parts.join(' ') + ' Figures ONS hides are left out.')); }
+    if (ac) {
+      const p = el('p', 'd-small'); p.append(document.createTextNode(`From the accounts of ${ac.n} large ${ac.n === 1 ? 'company' : 'companies'} in the group registered here: `
+        + (ac.out_med != null ? `${pct0(ac.out_w)} of turnover is sold outside the UK (${pct0(ac.out_med)} for the typical one).` : 'too few give a share of sales abroad to show one.')
+        + (uk && uk.out_med != null ? ` Across Great Britain it is ${pct0(uk.out_w)} (${pct0(uk.out_med)}).` : '') + ` ${ac.buy} of the ${ac.n} say they buy from abroad.`
+        + (ac.cust.length ? ` Main customers named: ${kindList(ac.cust)}.` : '')));
+      box.append(p);
+    }
+    const mine = o.companies.filter(c => c[2] === d.id);
+    if (mine.length) {
+      box.append(el('p', 'd-chainhead', `Large companies in this industry registered here (${mine.length})`));
+      const ul = el('ul', 'd-list d-co');
+      for (const c of mine.slice(0, 6)) { const li = el('li'), bits = [];
+        if (c[3] != null) bits.push(c[3] >= 1000 ? `£${(c[3] / 1000).toFixed(1)}bn turnover` : `£${c[3]}m turnover`);
+        if (c[4] != null) bits.push(c[4] === 0 ? 'all sold in the UK' : `${c[4]}% sold outside the UK`);
+        if (c[5] != null) bits.push(`sells mainly to ${OUT.kinds[c[5]]}`);
+        li.append(chLink(c[0], c[1]), document.createTextNode(bits.length ? ': ' + bits.join('; ') : '')); ul.append(li); }
+      box.append(ul); if (mine.length > 6) box.append(el('p', 'd-small', `And ${mine.length - 6} more, in the section below the chart.`));
+    }
+    const gv = o.gov && o.gov[d.id];
+    if (gv) box.append(el('p', 'd-small', `${gv} of them ${gv === 1 ? 'names' : 'name'} government as ${gv === 1 ? 'its' : 'their'} main customer. Public administration has no region in this data, so that money is not on the chart.`));
+    for (const h of vouched()) { if (h.si !== d.i && h.bi !== d.i) continue;
+      const sn = nodes[h.si].short, bn = nodes[h.bi].short;
+      box.append(el('p', 'd-small d-vouch', `A link that is missing: ONS hides what ${bn.toLowerCase()} pays ${sn.toLowerCase()} here in ${hiddenWords(h)}. ${otherWay(h)} But ${h.n} large ${sn.toLowerCase()} companies registered here, turning over ${fmtBn(h.turnover_bn)} between them, name ${h.kind} as their main customers. ${S.vouch ? 'The dotted line marks it.' : 'Switch on "Hidden links that company accounts point to" to mark it.'}`)); }
+    const more = el('button', 'linklike d-small', 'More on what the payments leave out'); more.type = 'button'; more.addEventListener('click', openOutside); box.append(more);
+  }
+  // The section under the chart
+  function renderOutside() {
+    const box = $('outside-body'); if (!box) return; box.replaceChildren(); const o = outHere();
+    $('outside').hidden = !o; const note = $('note-vouched'); if (note) note.hidden = true;
+    if (!o) return;
+    const keys = Object.keys(OUT.groups), The = D.the_name[0].toUpperCase() + D.the_name.slice(1);
+    const table = (heads, rows, cls) => { const t = el('table', 'out-table' + (cls ? ' ' + cls : '')), tr = el('tr');
+      heads.forEach((h, j) => tr.append(el('th', j ? 'num' : null, h))); const th = el('thead'); th.append(tr); t.append(th);
+      const tb = el('tbody'); for (const r of rows) { const row = el('tr'); r.forEach((c, j) => { const td = el('td', j ? 'num' : null); if (c instanceof Node) td.append(c); else td.textContent = c; row.append(td); }); tb.append(row); }
+      t.append(tb); const w = el('div', 'table-scroll'); w.append(t); return w; };
+    box.append(el('p', null, 'The chart shows payments between businesses in the UK. It can’t show what an industry sells abroad or buys from abroad, what households buy, or anything ONS hides. This section sets other sources beside it. None of them is on the same footing as the payments, so nothing here is added to the chart.'));
+
+    box.append(el('h3', null, 'Goods and services crossing the region’s edge'));
+    box.append(table(['Industry group', 'Goods in from other UK regions', 'Goods in from abroad', 'Goods out to other UK regions', 'Goods out to abroad', 'Services sold abroad', 'Services bought abroad'],
+      keys.filter(k => o.edge && o.edge[k]).map(k => { const e = o.edge[k]; return [OUT.groups[k].name, fmtBn(e.gi_uk), fmtBn(e.gi_ab), fmtBn(e.go_uk), fmtBn(e.go_ab), fmtBn(e.so_ab), fmtBn(e.si_ab)]; })));
+    box.append(el('p', 'd-small', 'ONS estimates, £ billion a year, by the industry of the business that buys or sells. Other countries: 2023. Other UK regions: 2021, goods only, and only for the groups ONS defines the same way in both. A dash is a figure ONS hides or doesn’t give. Trade is placed where a business’s sites are, not at its registered office as the payments are. Both sets are official statistics in development, and the figures between regions are rough: ONS’s services figures between regions are left out because they are partly built from these same payments.'));
+
+    box.append(el('h3', null, 'What large companies’ accounts say'));
+    box.append(table(['Industry group', 'Companies read', 'Turnover with a share', 'Sold outside the UK', 'Typical company', 'Great Britain', 'Typical', 'Say they buy from abroad', 'Main customers named'],
+      keys.filter(k => o.accounts[k]).map(k => { const a = o.accounts[k], u = OUT.uk[k] || {};
+        return [OUT.groups[k].name, String(a.n), a.n_share ? fmtBn(a.turnover_bn) : '–', pct0(a.out_w), pct0(a.out_med), pct0(u.out_w), pct0(u.out_med), `${a.buy} of ${a.n}`, a.cust.length ? kindList(a.cust) : '–']; }), 'wrap-last'));
+    box.append(el('p', 'd-small', `From the latest accounts of the ${o.n} employers of 1,000 or more registered in ${D.the_name} whose accounts could be read, out of ${OUT.accounts_read.toLocaleString()} across Great Britain. “Sold outside the UK” is the share of turnover, over companies whose accounts give it: a table that adds up to their turnover, or a statement that all sales are in the UK. A share is shown where five or more companies give one. “Typical” is the median company. A company’s whole turnover is placed at its registered office, as the payments are. The accounts were read from scans by a language model and checked by rule; errors are possible, and each company’s own accounts are the record. Silence on buying abroad is not a “no”.`));
+
+    const hid = vouched();
+    box.append(el('h3', null, 'Links hidden here that the accounts point to'));
+    if (!hid.length) box.append(el('p', 'd-small', 'None found here. This looks for pairs of industries whose payments inside the region ONS hides in every month or most, where two or more large companies registered here, in the supplying industry, name the other as their main kind of customer.'));
+    else { const ul = el('ul');
+      for (const h of hid) { const li = el('li'), sn = nodes[h.si].short, bn = nodes[h.bi].short;
+        li.append(el('strong', null, `${sn} selling to ${bn.toLowerCase()}. `), document.createTextNode(`ONS hides what ${bn.toLowerCase()} pays ${sn.toLowerCase()} inside ${D.the_name} in ${hiddenWords(h)}. ${otherWay(h)} But ${h.n} large ${sn.toLowerCase()} companies registered here, turning over ${fmtBn(h.turnover_bn)} between them, name it as their main kind of customer: ${h.names.join(', ')}${h.n > h.names.length ? ' and others' : ''}. Pin either industry to see a dotted line between them.`));
+        ul.append(li); }
+      box.append(ul);
+      box.append(el('p', 'd-small', 'A figure is hidden when few organisations are behind it or one dominates. Some of this trade may also never pass through the banks, where a group settles between its own companies. The dotted line says there is a link, not how much.'));
+      if (note) { note.hidden = false; note.replaceChildren(el('strong', null, 'One large link is missing here. '), document.createTextNode(`${hid.map(h => `What ${nodes[h.bi].short.toLowerCase()} pays ${nodes[h.si].short.toLowerCase()}`).join(', and ')} inside the region is hidden by ONS in ${hid.every(h => h.every) ? 'every month' : 'most months'}, so the chart can’t show it${hid.some(h => h.rk >= 0) ? ', and may show only the smaller flow the other way' : ''}. Company accounts say ${hid.length === 1 ? 'it is' : 'they are'} large: see “What the payments leave out” above.`)); } }
+
+    box.append(el('h3', null, `The companies (${o.n})`));
+    box.append(el('p', 'd-small', 'Each links to its page at Companies House, where the accounts can be read. Turnover is from the latest accounts read. “Sold outside the UK” is blank where the accounts don’t give it or the reading failed a check. Main customers are as the accounts describe them, or in brackets where they are only plain from the line of business.'));
+    for (const k of keys) { const list = o.companies.filter(c => OUT.group_of[c[2]] === k); if (!list.length) continue;
+      const dt = el('details', 'out-co'); dt.append(el('summary', null, `${OUT.groups[k].name} (${list.length})`));
+      dt.addEventListener('toggle', () => { if (!dt.open || dt.dataset.done) return; dt.dataset.done = '1';              // built when first opened
+        dt.append(table(['Company', 'Industry', 'Turnover', 'Sold outside the UK', 'Main customers', 'Says it buys abroad'], list.map(c => { const n = nodeOf(c[2]);
+          return [chLink(c[0], c[1]), n >= 0 ? nodes[n].short : c[2], c[3] == null ? '–' : c[3] >= 1000 ? `£${(c[3] / 1000).toFixed(1)}bn` : `£${c[3]}m`, c[4] == null ? '' : c[4] + '%',
+                  c[5] == null ? '' : c[6] ? OUT.kinds[c[5]] : `(${OUT.kinds[c[5]]})`, c[8] ? 'yes' : '']; }), 'co')); });
+      box.append(dt); }
+    box.append(el('p', 'source', 'Sources: Office for National Statistics, subnational trade in goods and in services (2023) and interregional trade in goods and services (2021); Companies House, accounts filed by each company. How these were put together, and what was checked, is in the project folder’s plan for other sources.'));
+  }
 
   // ---- how this region compares with the others (plan section 10.3; figures from data/regions.js)
   function renderCompare() {
@@ -1029,5 +1164,6 @@
   // for the checks in tests/: set state from outside, and read how long a draw takes
   window.ynhFlows = { state: S, load: code => new Promise(res => { loadRegion(code); (function wait() { if (S.region === code && D && D.region === code && !wrap.classList.contains('loading')) res(); else setTimeout(wait, 30); })(); }),
     set(o) { const inter = 'inter' in o && o.inter !== S.inter; Object.assign(S, o); if (inter) { setActive(); for (const key in totalsCache) delete totalsCache[key]; updateStripMax(); buildSpark(); }
-      geoDirty = true; pos = null; moveTo(true); buildKey(); reflect(); wording(); refresh(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, play: setPlaying };
+      geoDirty = true; pos = null; moveTo(true); buildKey(); reflect(); wording(); refresh(); }, scriptMs: () => lastScriptMs, drawnLinks: () => drawn.length, dottedLinks: () => dots.length, dottedMid(j) { const q = dots[j]; return q ? { x: 0.25 * q.ax + 0.5 * q.cx + 0.25 * q.zx, y: 0.25 * q.ay + 0.5 * q.cy + 0.25 * q.zy, supplier: nodes[q.h.si].id } : null; }, play: setPlaying,
+    at(id) { const i = nodeOf(id); return pos && i >= 0 ? { x: pos[i].x, y: pos[i].y } : null; } };       // where an industry's circle is on the canvas, so a test can click it
 })();

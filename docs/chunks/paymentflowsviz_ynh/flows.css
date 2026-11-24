@@ -75,7 +75,7 @@ button.linklike { border: 0; background: none; padding: 0; color: inherit; text-
 select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 6px; padding: 4px 8px; }
 button { cursor: pointer; }
 button:hover, select:hover { border-color: var(--muted); }
-select:disabled { color: var(--muted); }
+select:disabled, label:has(input:disabled) { color: var(--muted); }
 :focus-visible { outline: 2px solid var(--with); outline-offset: 2px; }
 .seg { display: inline-flex; align-items: center; gap: 0; border: 0; padding: 0; margin: 0; }
 .seg legend { float: left; padding: 0; margin-right: 6px; color: var(--ink2); }
@@ -155,6 +155,21 @@ select:disabled { color: var(--muted); }
 .fold { margin: 14px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; }
 .fold summary { cursor: pointer; font-weight: 600; }
 .fold-body { max-width: 92ch; padding: 2px 0 6px; }
+.fold-body.wide { max-width: none; }
+.fold-body.wide > p, .fold-body.wide > ul { max-width: 92ch; }
+.out-table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 4px 0; }
+.out-table th, .out-table td { text-align: left; padding: 4px 12px 4px 0; border-bottom: 1px solid var(--grid); vertical-align: top; }
+.out-table th { color: var(--ink2); font-weight: 600; font-size: 12px; line-height: 1.25; position: sticky; top: 0; background: var(--surface); }
+.out-table td.num, .out-table th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.out-table th.num { white-space: normal; }
+.out-table.wrap-last td:last-child, .out-table.wrap-last th:last-child, .out-table.co td:nth-child(2), .out-table.co td:nth-child(5), .out-table.co th:nth-child(2), .out-table.co th:nth-child(5) { text-align: left; white-space: normal; min-width: 14ch; }
+.out-table a, #detail .d-co a { color: var(--ink); }
+.out-co { margin: 4px 0; }
+.out-co summary { cursor: pointer; color: var(--ink2); font-weight: 600; font-size: 13px; }
+#detail ul.d-co { list-style: none; padding: 0; margin: 2px 0 0; }
+#detail .d-co li { display: block; font-size: 12px; color: var(--ink2); margin: 0 0 3px; }
+#detail .d-vouch { border-left: 2px dotted var(--ink); padding-left: 8px; }
+#detail button.d-small { display: block; margin-top: 6px; font-size: 12px; color: var(--ink2); }
 .fold-body h3 { font-size: 13px; font-weight: 650; color: var(--ink2); margin: 12px 0 4px; }
 .fold-body ul { margin: 0; padding-left: 18px; }
 .fold-body li { margin: 0 0 5px; color: var(--ink2); }

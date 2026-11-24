@@ -14,6 +14,7 @@ It becomes public on GitHub Pages once this folder is committed and pushed to `m
 | `data/flows_<region>.js` | One data file for each region built, loaded when that region is chosen |
 | `data/regions.js` | A small index of all twelve regions: data quality, how alike they are, and how chain-like, loaded with the page |
 | `build_data.R` | Builds those from the three ONS zips and prints checks |
+| `data/outside.js`, `build_outside.R` | What other sources say about links the payments can't show, for the section "What the payments leave out": ONS's estimates of trade across each region's edge, and what large companies' accounts say about where they sell, where they buy and who their customers are. Built in seconds from `tests/outputs/trade_at_the_edge.csv` and the results of `tests/30`, which have to have been run on the same machine. The page works without it |
 | `lib/d3.v7.9.0.min.js` | D3 7.9.0 (ISC licence), kept locally so the page has no outside dependencies |
 | `plan/paymentflowsviz_plan.md` | The plan, the test findings behind each design choice, and the decisions taken |
 | `plan/other_connections_plan.md` | A side plan: other sources for the links the payments can't see (households, other countries, the rest of the UK), with what three tests found |

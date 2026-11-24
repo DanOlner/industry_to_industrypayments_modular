@@ -83,6 +83,42 @@ const problems = [];
   page = await open(390, 844, 'light', '', 2); await shot(page, '18_phone_full'); await shot(page, '18b_phone_chart', '#chartwrap'); await page.close();
   page = await open(900, 1100, 'light'); await shot(page, '19_tablet_full'); await page.close();
 
+  // beyond the payments: the section under the chart, the side panel block, and the dotted line for a hidden link that
+  // company accounts point to (food manufacturing and retail in Yorkshire and the Humber)
+  page = await open(1440, 1000, 'light', '?sel=10');
+  await shot(page, '24_hidden_link_dotted_food_manufacturing', '#chartwrap'); await shot(page, '24b_side_panel_beyond_the_payments', '#detail');
+  await page.evaluate(() => { document.getElementById('outside').open = true; document.querySelectorAll('#outside details.out-co')[1].open = true; }); await new Promise(r => setTimeout(r, 300));
+  await shot(page, '24c_what_the_payments_leave_out', '#outside');
+  await set(page, { vouch: false }); await shot(page, '24d_hidden_link_switched_off', '#chartwrap'); await page.close();
+  page = await open(1440, 1000, 'dark', '?sel=47&show=goods'); await shot(page, '24e_dark_hidden_link_retail_goods', '#chartwrap'); await page.close();
+  // the dotted lines with a real pointer (the hook above never has the pointer over a circle, which once hid them):
+  // all show with nothing pinned; a click that leaves the pointer on the circle shows that industry's; hovering a line
+  // gives a tooltip and clicking it pins the supplying industry; the switch removes them; a region with none greys the box
+  page = await open(1440, 1000, 'dark');
+  { const want = (got, exp, what) => { if (got !== exp) problems.push(`dotted lines, ${what}: expected ${exp}, got ${got}`); };
+    const dotsNow = () => page.evaluate(() => window.ynhFlows.dottedLinks()), wait = ms => new Promise(r => setTimeout(r, ms));
+    await page.$eval('#chart', e => e.scrollIntoView({ block: 'center' })); await wait(300);
+    let b; const box = async () => { b = await (await page.$('#chart')).boundingBox(); };          // asked for again after each screenshot, which can scroll the page
+    want(await dotsNow(), 2, 'nothing pinned'); want(await page.$eval('#vouch-n', e => e.textContent.trim()), '(2 in this region)', 'count on the tick box');
+    await shot(page, '24h_dark_hidden_links_nothing_pinned', '#chartwrap');
+    const f = await page.evaluate(() => window.ynhFlows.at('10')); await box();
+    await page.mouse.move(b.x + f.x, b.y + f.y); await page.mouse.click(b.x + f.x, b.y + f.y); await wait(300);
+    want(await page.$eval('#pick', e => e.value), '10', 'click pins food manufacturing'); want(await dotsNow(), 1, 'pinned by a click, pointer still on the circle');
+    await shot(page, '24i_dark_pinned_by_click_pointer_still_on', '#chartwrap');
+    await box(); await page.mouse.click(b.x + f.x, b.y + f.y); await page.mouse.move(b.x + 4, b.y + 4); await wait(200);        // unpin, and take the pointer away
+    want(await dotsNow(), 2, 'unpinned by a click'); const q = await page.evaluate(() => window.ynhFlows.dottedMid(0));    // food manufacturing to retail: its middle is in the open
+    await page.mouse.move(b.x + q.x, b.y + q.y); await wait(200);
+    want(await page.$eval('#tip', e => e.style.display !== 'none' && /can’t show/.test(e.textContent)), true, 'tooltip on a dotted line');
+    await shot(page, '24j_dark_tooltip_on_dotted_line', '#chartwrap');
+    await box(); await page.mouse.click(b.x + q.x, b.y + q.y); await wait(300); want(await page.$eval('#pick', e => e.value), q.supplier, 'clicking a dotted line pins its supplier');
+    await page.mouse.move(b.x + 4, b.y + 4); await set(page, { sel: -1, vouch: false }); await wait(200); want(await dotsNow(), 0, 'switched off');
+    await set(page, { vouch: true }); await page.evaluate(() => window.ynhFlows.load('TLC')); await wait(400);
+    want(await dotsNow(), 0, 'North East, which has none'); want(await page.$eval('#vouch', e => e.disabled), true, 'tick box greyed out where there are none');
+    want(await page.$eval('#vouch-n', e => e.textContent.trim()), '(none found in this region)', 'words on the tick box where there are none'); }
+  await page.close();
+  page = await open(390, 844, 'light', '?sel=10', 2); await page.evaluate(() => { document.getElementById('outside').open = true; }); await new Promise(r => setTimeout(r, 300)); await shot(page, '24f_phone_what_the_payments_leave_out', '#outside'); await page.close();
+  page = await open(1440, 1000, 'light', '?region=TLL&sel=10'); await page.evaluate(() => { document.getElementById('outside').open = true; }); await new Promise(r => setTimeout(r, 300)); await shot(page, '24g_wales_what_the_payments_leave_out', '#outside'); await page.close();
+
   }
   // ---- 1b. every region that has been built: loads from its own address, with its own text; and switching keeps the view
   page = await open(1440, 1000, 'light');
