@@ -1,0 +1,481 @@
+region,rank,buyer,middle_link,supplier,gbp_m_month,share_of_all_passed_along,runs_down_the_order
+TLC,1,"Real estate","Building construction","Building trades",0.82,0.0277,false
+TLC,2,"Building construction","Building trades","Wholesale",0.49,0.0166,true
+TLC,3,"Building construction","Building trades","Rental & leasing",0.33,0.0111,true
+TLC,4,"Education","Health","Residential care",0.28,0.0094,true
+TLC,5,"Building construction","Civil engineering","Glass, cement & ceramics",0.27,0.0091,true
+TLC,6,"Machinery","Fabricated metal","Wholesale",0.25,0.0085,true
+TLC,7,"Food & drink service","Real estate","Building construction",0.25,0.0085,false
+TLC,8,"Building construction","Building trades","Other manufacturing",0.24,0.0081,false
+TLC,9,"Building construction","Civil engineering","Wholesale",0.23,0.0078,true
+TLC,10,"Education","Building construction","Building trades",0.21,0.0070,true
+TLC,11,"Building construction","Building services & landscaping","Building trades",0.20,0.0069,true
+TLC,12,"Real estate","Building construction","Civil engineering",0.20,0.0067,false
+TLC,13,"Real estate","Building construction","Wholesale",0.19,0.0063,false
+TLC,14,"Building construction","Other manufacturing","Wood products",0.18,0.0062,true
+TLC,15,"Education","Health","Social work",0.14,0.0049,true
+TLC,16,"Health","Residential care","Wholesale",0.14,0.0047,true
+TLC,17,"Chemicals","Warehousing & transport support","Wholesale",0.13,0.0046,true
+TLC,18,"Accommodation","Real estate","Building construction",0.12,0.0042,false
+TLC,19,"Building construction","Building trades","Waste",0.12,0.0040,true
+TLC,20,"Health","Real estate","Building construction",0.12,0.0040,false
+TLC,21,"Building trades","Other manufacturing","Wood products",0.12,0.0040,false
+TLC,22,"Health","Residential care","Employment agencies",0.12,0.0039,true
+TLC,23,"Building construction","Fabricated metal","Wholesale",0.12,0.0039,true
+TLC,24,"Education","Land transport","Wholesale",0.11,0.0037,true
+TLC,25,"Health","Residential care","Machinery repair & install",0.11,0.0037,true
+TLC,26,"Building trades","Rental & leasing","Motor trades",0.11,0.0036,true
+TLC,27,"Building construction","Building trades","Motor trades",0.10,0.0035,true
+TLC,28,"Chemicals","Fabricated metal","Wholesale",0.10,0.0034,true
+TLC,29,"Health","Residential care","Building trades",0.10,0.0034,true
+TLC,30,"Retail","Real estate","Building construction",0.10,0.0034,false
+TLC,31,"Machinery","Fabricated metal","Land transport",0.10,0.0033,true
+TLC,32,"Retail","Food manufacturing","Wholesale",0.10,0.0033,true
+TLC,33,"Real estate","Building construction","Other manufacturing",0.09,0.0031,false
+TLC,34,"Fabricated metal","Basic metals","Wholesale",0.09,0.0031,true
+TLC,35,"Machinery","Fabricated metal","Motor trades",0.09,0.0031,true
+TLC,36,"Food & drink service","Real estate","Building trades",0.09,0.0029,true
+TLC,37,"Head offices & consultancy","Real estate","Building construction",0.08,0.0028,false
+TLC,38,"Food & drink service","Food manufacturing","Wholesale",0.08,0.0027,true
+TLC,39,"Education","Building trades","Wholesale",0.08,0.0027,true
+TLC,40,"Building construction","Civil engineering","Rental & leasing",0.08,0.0027,true
+TLD,1,"Real estate","Building construction","Building trades",3.15,0.0139,false
+TLD,2,"Health","Education","Building trades",2.68,0.0118,true
+TLD,3,"Building construction","Building trades","Wholesale",2.14,0.0094,true
+TLD,4,"Retail","Wholesale","Other manufacturing",1.87,0.0083,false
+TLD,5,"Health","Building construction","Building trades",1.42,0.0063,true
+TLD,6,"Health","Education","Building construction",1.39,0.0061,true
+TLD,7,"Retail","Wholesale","Warehousing & transport support",1.30,0.0057,false
+TLD,8,"Education","Building construction","Building trades",1.24,0.0055,true
+TLD,9,"Health","Education","Employment agencies",1.16,0.0051,true
+TLD,10,"Retail","Real estate","Building trades",1.07,0.0047,true
+TLD,11,"Building construction","Civil engineering","Wholesale",1.00,0.0044,true
+TLD,12,"Health","Education","Wholesale",0.97,0.0043,true
+TLD,13,"Retail","Real estate","Building construction",0.94,0.0042,false
+TLD,14,"Health","Education","IT & software",0.93,0.0041,true
+TLD,15,"Retail","Food manufacturing","Farming",0.87,0.0039,true
+TLD,16,"Food & drink service","Retail","Wholesale",0.85,0.0037,true
+TLD,17,"Health","Residential care","Employment agencies",0.83,0.0037,true
+TLD,18,"Building construction","Civil engineering","Building trades",0.79,0.0035,true
+TLD,19,"Real estate","Building trades","Wholesale",0.78,0.0035,true
+TLD,20,"Employment agencies","Head offices & consultancy","Wholesale",0.70,0.0031,false
+TLD,21,"Building trades","Glass, cement & ceramics","Land transport",0.70,0.0031,false
+TLD,22,"Health","Education","Land transport",0.69,0.0030,true
+TLD,23,"Building construction","Building trades","Glass, cement & ceramics",0.67,0.0030,false
+TLD,24,"Real estate","Waste","Wholesale",0.66,0.0029,true
+TLD,25,"Health","Education","Head offices & consultancy",0.65,0.0029,true
+TLD,26,"Real estate","Building construction","Civil engineering",0.63,0.0028,false
+TLD,27,"Energy supply","Civil engineering","Wholesale",0.62,0.0027,true
+TLD,28,"Head offices & consultancy","Retail","Wholesale",0.61,0.0027,false
+TLD,29,"Personal services","Building trades","Wholesale",0.61,0.0027,true
+TLD,30,"Retail","Other manufacturing","Rubber & plastics",0.58,0.0026,true
+TLD,31,"Employment agencies","Personal services","Building trades",0.58,0.0026,false
+TLD,32,"Health","Retail","Wholesale",0.58,0.0025,true
+TLD,33,"Health","Education","Legal & accounting",0.58,0.0025,true
+TLD,34,"Food & drink service","Real estate","Building trades",0.57,0.0025,true
+TLD,35,"Retail","Textiles","Chemicals",0.56,0.0025,false
+TLD,36,"Health","Residential care","Wholesale",0.55,0.0024,true
+TLD,37,"Retail","Chemicals","Wholesale",0.55,0.0024,true
+TLD,38,"Health","Residential care","Building trades",0.55,0.0024,true
+TLD,39,"Education","Retail","Wholesale",0.54,0.0024,false
+TLD,40,"Retail","Land transport","Wholesale",0.54,0.0024,true
+TLE,1,"Food manufacturing","Retail","Wholesale",2.32,0.0171,false
+TLE,2,"Health","Retail","Wholesale",1.83,0.0134,true
+TLE,3,"Building construction","Building trades","Wholesale",1.53,0.0112,true
+TLE,4,"Head offices & consultancy","Building construction","Building trades",1.25,0.0092,false
+TLE,5,"Real estate","Building construction","Building trades",1.18,0.0087,false
+TLE,6,"Education","Building construction","Building trades",1.06,0.0078,true
+TLE,7,"Rental & leasing","Motor trades","Personal services",0.83,0.0061,false
+TLE,8,"Retail","Wholesale","Warehousing & transport support",0.81,0.0059,true
+TLE,9,"Food manufacturing","Farming","Wholesale",0.76,0.0056,true
+TLE,10,"Building construction","Building trades","Other professional",0.75,0.0055,true
+TLE,11,"Food manufacturing","Farming","Land transport",0.74,0.0054,true
+TLE,12,"Land transport","Motor trades","Personal services",0.67,0.0049,false
+TLE,13,"Building construction","Civil engineering","Rental & leasing",0.60,0.0044,true
+TLE,14,"Food manufacturing","Farming","Building trades",0.59,0.0043,true
+TLE,15,"Retail","Wholesale","Fabricated metal",0.57,0.0042,false
+TLE,16,"Head offices & consultancy","Food manufacturing","Farming",0.57,0.0042,false
+TLE,17,"Retail","Furniture","Wholesale",0.57,0.0042,true
+TLE,18,"Building trades","Motor trades","Personal services",0.53,0.0039,false
+TLE,19,"Health","Other manufacturing","Wholesale",0.51,0.0037,true
+TLE,20,"Head offices & consultancy","Food manufacturing","Wholesale",0.49,0.0036,false
+TLE,21,"Education","Retail","Wholesale",0.49,0.0036,true
+TLE,22,"Retail","Textiles","Wholesale",0.49,0.0036,true
+TLE,23,"Retail","Warehousing & transport support","Land transport",0.49,0.0036,false
+TLE,24,"Food & drink service","Real estate","Building construction",0.45,0.0033,false
+TLE,25,"Retail","Wholesale","IT & software",0.45,0.0033,true
+TLE,26,"Building construction","Building trades","Rental & leasing",0.45,0.0033,true
+TLE,27,"Retail","Wholesale","Insurance & pensions",0.43,0.0031,true
+TLE,28,"Head offices & consultancy","Waste","Land transport",0.43,0.0031,true
+TLE,29,"Food & drink service","Real estate","Building trades",0.42,0.0031,true
+TLE,30,"Health","Other manufacturing","Fabricated metal",0.41,0.0030,true
+TLE,31,"Retail","Real estate","Building construction",0.38,0.0028,false
+TLE,32,"Building construction","Building trades","Motor trades",0.38,0.0028,false
+TLE,33,"Retail","Motor trades","Personal services",0.37,0.0027,true
+TLE,34,"Education","Building trades","Wholesale",0.36,0.0027,true
+TLE,35,"Building construction","Civil engineering","Building trades",0.36,0.0026,true
+TLE,36,"Retail","Real estate","Building trades",0.35,0.0026,true
+TLE,37,"Health","Other manufacturing","Rubber & plastics",0.33,0.0024,true
+TLE,38,"Motor trades","Personal services","Rental & leasing",0.32,0.0023,true
+TLE,39,"Retail","Wholesale","Legal & accounting",0.32,0.0023,true
+TLE,40,"Food & drink service","Food manufacturing","Farming",0.31,0.0023,true
+TLF,1,"Building construction","Civil engineering","Quarrying",2.16,0.0222,true
+TLF,2,"Real estate","Building construction","Building trades",1.27,0.0131,false
+TLF,3,"Building construction","Civil engineering","Land transport",1.23,0.0126,true
+TLF,4,"Civil engineering","Quarrying","Land transport",1.22,0.0125,true
+TLF,5,"Building construction","Building trades","Wholesale",1.02,0.0105,false
+TLF,6,"Education","Building construction","Building trades",1.00,0.0102,true
+TLF,7,"Building construction","Rental & leasing","Motor trades",0.98,0.0101,true
+TLF,8,"Building construction","Civil engineering","Rental & leasing",0.89,0.0092,true
+TLF,9,"Building construction","Civil engineering","Glass, cement & ceramics",0.88,0.0091,true
+TLF,10,"Retail","Wholesale","Farming",0.86,0.0088,true
+TLF,11,"Building construction","Glass, cement & ceramics","Wholesale",0.82,0.0084,true
+TLF,12,"Retail","Food manufacturing","Farming",0.76,0.0078,true
+TLF,13,"Building construction","Glass, cement & ceramics","Land transport",0.58,0.0060,true
+TLF,14,"Building construction","Civil engineering","Building trades",0.50,0.0052,true
+TLF,15,"Building construction","Civil engineering","Wholesale",0.45,0.0046,true
+TLF,16,"Food manufacturing","Farming","Chemicals",0.43,0.0045,false
+TLF,17,"Building construction","Building trades","Rental & leasing",0.43,0.0044,true
+TLF,18,"Real estate","Building construction","Civil engineering",0.43,0.0044,false
+TLF,19,"Food & drink service","Real estate","Building trades",0.41,0.0043,true
+TLF,20,"Food manufacturing","Farming","Employment agencies",0.41,0.0042,true
+TLF,21,"Civil engineering","Quarrying","Glass, cement & ceramics",0.40,0.0041,true
+TLF,22,"Retail","Wholesale","Legal & accounting",0.39,0.0040,true
+TLF,23,"Retail","Wholesale","Land transport",0.39,0.0040,true
+TLF,24,"Retail","Food manufacturing","Paper",0.36,0.0037,true
+TLF,25,"Retail","Food manufacturing","Wholesale",0.36,0.0037,true
+TLF,26,"Food & drink service","Real estate","Building construction",0.35,0.0036,false
+TLF,27,"Education","Building construction","Civil engineering",0.33,0.0034,true
+TLF,28,"Building construction","Civil engineering","Other manufacturing",0.33,0.0034,true
+TLF,29,"Retail","Wholesale","Chemicals",0.33,0.0033,true
+TLF,30,"Civil engineering","Rental & leasing","Motor trades",0.32,0.0033,true
+TLF,31,"Retail","Clothing","Wholesale",0.32,0.0033,true
+TLF,32,"Food manufacturing","Farming","Motor trades",0.32,0.0033,true
+TLF,33,"Food manufacturing","Wholesale","Farming",0.32,0.0032,true
+TLF,34,"Building construction","Civil engineering","Mining support",0.31,0.0032,true
+TLF,35,"Retail","Real estate","Building trades",0.31,0.0032,true
+TLF,36,"Health","Building construction","Building trades",0.31,0.0032,false
+TLF,37,"Food & drink service","Real estate","Legal & accounting",0.31,0.0032,true
+TLF,38,"Residential care","Building construction","Building trades",0.31,0.0031,true
+TLF,39,"Retail","Clothing","Textiles",0.30,0.0031,true
+TLF,40,"Retail","Wholesale","Motor trades",0.29,0.0030,true
+TLG,1,"Retail","Wholesale","Electrical equipment",2.99,0.0189,true
+TLG,2,"Retail","Wholesale","Fabricated metal",2.29,0.0145,true
+TLG,3,"Retail","Food manufacturing","Warehousing & transport support",2.29,0.0145,true
+TLG,4,"Retail","Food manufacturing","Wholesale",2.11,0.0133,true
+TLG,5,"Retail","Wholesale","Land transport",1.91,0.0121,true
+TLG,6,"Real estate","Building construction","Building trades",1.39,0.0088,false
+TLG,7,"Head offices & consultancy","Food & drink service","Wholesale",1.33,0.0084,true
+TLG,8,"Education","Building construction","Building trades",1.28,0.0081,true
+TLG,9,"Retail","Food manufacturing","Farming",1.14,0.0072,true
+TLG,10,"Retail","Wholesale","Drinks manufacturing",1.01,0.0064,true
+TLG,11,"Retail","Wholesale","IT & software",1.00,0.0063,true
+TLG,12,"Building construction","Building trades","Wholesale",0.97,0.0062,false
+TLG,13,"Retail","Food manufacturing","Land transport",0.87,0.0055,true
+TLG,14,"Health","Building construction","Building trades",0.69,0.0044,true
+TLG,15,"Food & drink service","Wholesale","Electrical equipment",0.58,0.0037,true
+TLG,16,"Education","Building trades","Wholesale",0.57,0.0036,false
+TLG,17,"Head offices & consultancy","Food & drink service","Drinks manufacturing",0.53,0.0034,true
+TLG,18,"Retail","Food manufacturing","Fabricated metal",0.52,0.0033,true
+TLG,19,"Retail","Food manufacturing","Architecture & engineering",0.52,0.0033,true
+TLG,20,"Retail","Real estate","Building construction",0.52,0.0033,false
+TLG,21,"Retail","Food & drink service","Wholesale",0.52,0.0033,true
+TLG,22,"Motor vehicles","Basic metals","Wholesale",0.47,0.0030,true
+TLG,23,"Rental & leasing","Motor trades","IT & software",0.46,0.0029,false
+TLG,24,"Head offices & consultancy","Retail","Wholesale",0.46,0.0029,false
+TLG,25,"Basic metals","Wholesale","Electrical equipment",0.46,0.0029,true
+TLG,26,"Fabricated metal","Basic metals","Wholesale",0.46,0.0029,false
+TLG,27,"Real estate","Building construction","Wholesale",0.46,0.0029,false
+TLG,28,"Food & drink service","Wholesale","Fabricated metal",0.45,0.0028,true
+TLG,29,"Retail","Wholesale","Warehousing & transport support",0.43,0.0027,true
+TLG,30,"Retail","Wholesale","Chemicals",0.43,0.0027,true
+TLG,31,"Retail","Real estate","Building trades",0.43,0.0027,true
+TLG,32,"Health","Wholesale","Electrical equipment",0.42,0.0027,true
+TLG,33,"Education","Building construction","Wholesale",0.42,0.0027,true
+TLG,34,"Retail","Wholesale","Legal & accounting",0.42,0.0026,true
+TLG,35,"Motor trades","Motor vehicles","Other manufacturing",0.42,0.0026,false
+TLG,36,"Machinery","Basic metals","Wholesale",0.42,0.0026,true
+TLG,37,"Real estate","Building trades","Wholesale",0.41,0.0026,false
+TLG,38,"Rental & leasing","Motor trades","Motor vehicles",0.41,0.0026,false
+TLG,39,"Head offices & consultancy","Retail","Food manufacturing",0.40,0.0025,false
+TLG,40,"Retail","Wholesale","Wood products",0.40,0.0025,true
+TLH,1,"Retail","Wholesale","Farming",5.03,0.0304,false
+TLH,2,"Retail","Wholesale","Land transport",4.54,0.0275,true
+TLH,3,"Education","Building construction","Building trades",3.65,0.0221,true
+TLH,4,"Retail","Food manufacturing","Wholesale",3.54,0.0215,true
+TLH,5,"Building construction","Building trades","Wholesale",2.77,0.0168,false
+TLH,6,"Real estate","Building construction","Building trades",2.65,0.0160,false
+TLH,7,"Health","Building construction","Building trades",2.28,0.0138,true
+TLH,8,"Retail","Wholesale","Warehousing & transport support",2.17,0.0132,true
+TLH,9,"Wholesale","Land transport","Motor trades",1.37,0.0083,false
+TLH,10,"Retail","Food & drink service","Wholesale",1.27,0.0077,true
+TLH,11,"Retail","Food manufacturing","Land transport",1.25,0.0076,true
+TLH,12,"Retail","Food manufacturing","Farming",0.95,0.0058,true
+TLH,13,"Retail","Food manufacturing","Employment agencies",0.92,0.0056,true
+TLH,14,"Retail","Real estate","Building construction",0.92,0.0056,false
+TLH,15,"Residential care","Building construction","Building trades",0.91,0.0055,true
+TLH,16,"Building construction","Civil engineering","Building trades",0.84,0.0051,true
+TLH,17,"Residential care","Health","Building construction",0.84,0.0051,true
+TLH,18,"Retail","Head offices & consultancy","Employment agencies",0.79,0.0048,true
+TLH,19,"Retail","Wholesale","Head offices & consultancy",0.76,0.0046,false
+TLH,20,"Wholesale","Land transport","Warehousing & transport support",0.75,0.0046,true
+TLH,21,"Building construction","Rental & leasing","Motor trades",0.69,0.0041,true
+TLH,22,"Building construction","Building trades","Motor trades",0.66,0.0040,true
+TLH,23,"Wholesale","Farming","Motor trades",0.64,0.0039,false
+TLH,24,"Wholesale","Land transport","Employment agencies",0.61,0.0037,true
+TLH,25,"Building construction","Building trades","Fabricated metal",0.61,0.0037,true
+TLH,26,"Motor trades","Real estate","Building construction",0.58,0.0035,false
+TLH,27,"Retail","Building construction","Building trades",0.58,0.0035,true
+TLH,28,"Retail","Food manufacturing","Warehousing & transport support",0.57,0.0035,true
+TLH,29,"Wholesale","Farming","Building trades",0.57,0.0034,false
+TLH,30,"Retail","Wholesale","Employment agencies",0.56,0.0034,true
+TLH,31,"Retail","Head offices & consultancy","Land transport",0.56,0.0034,true
+TLH,32,"Building construction","Building trades","Employment agencies",0.55,0.0034,true
+TLH,33,"Retail","Wholesale","Chemicals",0.52,0.0031,false
+TLH,34,"Health","Real estate","Building construction",0.50,0.0030,false
+TLH,35,"Retail","Real estate","Building trades",0.49,0.0030,true
+TLH,36,"Retail","Wholesale","Scientific R&D",0.48,0.0029,false
+TLH,37,"Education","Building construction","Wholesale",0.47,0.0028,true
+TLH,38,"Retail","Wholesale","Drinks manufacturing",0.46,0.0028,false
+TLH,39,"Education","Food & drink service","Wholesale",0.45,0.0027,true
+TLH,40,"Civil engineering","Rental & leasing","Motor trades",0.45,0.0027,true
+TLI,1,"Retail","Real estate","Building trades",12.93,0.0139,true
+TLI,2,"Retail","Wholesale","Advertising & market research",11.27,0.0121,false
+TLI,3,"Retail","Wholesale","IT & software",11.26,0.0121,true
+TLI,4,"Retail","Real estate","Building construction",10.78,0.0116,false
+TLI,5,"Real estate","Building construction","Building trades",9.89,0.0107,false
+TLI,6,"Retail","Wholesale","Drinks manufacturing",9.32,0.0100,true
+TLI,7,"Retail","Advertising & market research","IT & software",8.11,0.0087,true
+TLI,8,"Retail","Wholesale","Warehousing & transport support",7.11,0.0077,false
+TLI,9,"Retail","Real estate","Energy supply",6.36,0.0068,true
+TLI,10,"Retail","Food manufacturing","IT & software",6.18,0.0067,true
+TLI,11,"Retail","Advertising & market research","Film, TV & music",5.71,0.0062,false
+TLI,12,"Retail","Head offices & consultancy","IT & software",5.58,0.0060,true
+TLI,13,"Retail","Warehousing & transport support","Land transport",5.24,0.0056,false
+TLI,14,"Retail","Real estate","Building services & landscaping",4.94,0.0053,true
+TLI,15,"Retail","Food manufacturing","Advertising & market research",4.90,0.0053,true
+TLI,16,"Retail","Food manufacturing","Head offices & consultancy",4.76,0.0051,true
+TLI,17,"Retail","Real estate","Civil engineering",4.53,0.0049,true
+TLI,18,"Wholesale","Advertising & market research","IT & software",4.37,0.0047,false
+TLI,19,"Food & drink service","Real estate","Building trades",4.12,0.0044,true
+TLI,20,"Retail","Wholesale","Oil & gas extraction",3.85,0.0041,false
+TLI,21,"Retail","Real estate","Architecture & engineering",3.70,0.0040,true
+TLI,22,"Real estate","Building construction","Architecture & engineering",3.67,0.0039,false
+TLI,23,"Employment agencies","Head offices & consultancy","IT & software",3.49,0.0038,false
+TLI,24,"Food & drink service","Real estate","Building construction",3.44,0.0037,false
+TLI,25,"Wholesale","Oil & gas extraction","Mining support",3.40,0.0037,false
+TLI,26,"Advertising & market research","Film, TV & music","Real estate",3.17,0.0034,false
+TLI,27,"Wholesale","Warehousing & transport support","Land transport",3.15,0.0034,false
+TLI,28,"Wholesale","Advertising & market research","Film, TV & music",3.08,0.0033,false
+TLI,29,"Real estate","Building construction","Civil engineering",3.07,0.0033,false
+TLI,30,"Retail","Real estate","Legal & accounting",2.93,0.0032,true
+TLI,31,"Retail","Arts & entertainment","Advertising & market research",2.84,0.0031,false
+TLI,32,"Retail","Wholesale","Insurance & pensions",2.78,0.0030,true
+TLI,33,"Retail","Personal services","IT & software",2.71,0.0029,true
+TLI,34,"Advertising & market research","Film, TV & music","Legal & accounting",2.68,0.0029,false
+TLI,35,"Building construction","Building trades","IT & software",2.64,0.0028,false
+TLI,36,"Education","Head offices & consultancy","IT & software",2.55,0.0027,true
+TLI,37,"Telecoms","Head offices & consultancy","IT & software",2.55,0.0027,true
+TLI,38,"Building construction","Civil engineering","Architecture & engineering",2.52,0.0027,true
+TLI,39,"Film, TV & music","Real estate","Building trades",2.33,0.0025,true
+TLI,40,"Retail","Real estate","Insurance & pensions",2.33,0.0025,true
+TLJ,1,"Education","Food & drink service","Wholesale",6.39,0.0168,true
+TLJ,2,"Building construction","Building trades","Wholesale",3.40,0.0089,true
+TLJ,3,"Education","Building construction","Building trades",2.87,0.0075,true
+TLJ,4,"Motor trades","Head offices & consultancy","IT & software",2.75,0.0072,false
+TLJ,5,"Real estate","Building construction","Building trades",2.48,0.0065,false
+TLJ,6,"Rental & leasing","Motor trades","Head offices & consultancy",2.41,0.0063,false
+TLJ,7,"Health","Head offices & consultancy","IT & software",2.28,0.0060,true
+TLJ,8,"Food & drink service","Wholesale","Electronics",2.17,0.0057,true
+TLJ,9,"Food & drink service","Wholesale","Food manufacturing",2.06,0.0054,false
+TLJ,10,"Telecoms","Rental & leasing","Motor trades",1.82,0.0048,true
+TLJ,11,"Retail","Wholesale","Electronics",1.80,0.0047,true
+TLJ,12,"Building construction","Building trades","Retail",1.73,0.0045,false
+TLJ,13,"Retail","Wholesale","Food manufacturing",1.70,0.0045,false
+TLJ,14,"Building trades","Retail","Wholesale",1.60,0.0042,false
+TLJ,15,"Building construction","Building trades","Motor trades",1.59,0.0042,true
+TLJ,16,"Rental & leasing","Motor trades","IT & software",1.48,0.0039,true
+TLJ,17,"Food & drink service","Wholesale","Farming",1.29,0.0034,true
+TLJ,18,"Land transport","Rental & leasing","Motor trades",1.28,0.0033,false
+TLJ,19,"Head offices & consultancy","Rental & leasing","Motor trades",1.25,0.0033,true
+TLJ,20,"Building trades","Rental & leasing","Motor trades",1.24,0.0032,true
+TLJ,21,"Employment agencies","Head offices & consultancy","IT & software",1.17,0.0031,false
+TLJ,22,"Retail","Head offices & consultancy","IT & software",1.14,0.0030,true
+TLJ,23,"Telecoms","Retail","Wholesale",1.13,0.0030,false
+TLJ,24,"Retail","Wholesale","Farming",1.07,0.0028,true
+TLJ,25,"Civil engineering","Rental & leasing","Motor trades",1.04,0.0027,true
+TLJ,26,"Rental & leasing","Motor trades","Land transport",0.99,0.0026,true
+TLJ,27,"Food & drink service","Wholesale","Post & courier",0.97,0.0025,true
+TLJ,28,"Health","Retail","Wholesale",0.92,0.0024,true
+TLJ,29,"Wholesale","Rental & leasing","Motor trades",0.91,0.0024,false
+TLJ,30,"Food & drink service","Wholesale","Employment agencies",0.89,0.0023,false
+TLJ,31,"Telecoms","Head offices & consultancy","IT & software",0.87,0.0023,true
+TLJ,32,"Health","Building construction","Building trades",0.85,0.0022,true
+TLJ,33,"Health","Other manufacturing","IT & software",0.84,0.0022,true
+TLJ,34,"Retail","Arts & entertainment","Wholesale",0.83,0.0022,true
+TLJ,35,"Building construction","Civil engineering","Building trades",0.83,0.0022,true
+TLJ,36,"Health","Wholesale","Electronics",0.82,0.0021,true
+TLJ,37,"Health","Rental & leasing","Motor trades",0.82,0.0021,true
+TLJ,38,"Retail","Film, TV & music","Wholesale",0.82,0.0021,true
+TLJ,39,"Retail","Wholesale","Post & courier",0.80,0.0021,true
+TLJ,40,"Food & drink service","Wholesale","Advertising & market research",0.78,0.0020,true
+TLK,1,"Real estate","Building construction","Building trades",2.63,0.0295,false
+TLK,2,"Building construction","Building trades","Wholesale",1.12,0.0125,true
+TLK,3,"Education","Building construction","Building trades",1.04,0.0116,true
+TLK,4,"Food & drink service","Retail","Wholesale",0.83,0.0093,true
+TLK,5,"Retail","Wholesale","Warehousing & transport support",0.76,0.0085,true
+TLK,6,"Building trades","Rental & leasing","Motor trades",0.45,0.0050,false
+TLK,7,"Health","Residential care","Wholesale",0.44,0.0050,true
+TLK,8,"Building construction","Building trades","Rental & leasing",0.44,0.0049,false
+TLK,9,"Food & drink service","Building construction","Building trades",0.42,0.0048,true
+TLK,10,"Accommodation","Building construction","Building trades",0.42,0.0047,true
+TLK,11,"Real estate","Building construction","Wholesale",0.40,0.0045,false
+TLK,12,"Building trades","Rental & leasing","Wholesale",0.40,0.0045,false
+TLK,13,"Health","Residential care","Building trades",0.40,0.0045,true
+TLK,14,"Building construction","Rental & leasing","Motor trades",0.40,0.0045,true
+TLK,15,"Health","Residential care","Building construction",0.39,0.0044,false
+TLK,16,"Education","Retail","Wholesale",0.38,0.0043,true
+TLK,17,"Building construction","Rental & leasing","Wholesale",0.36,0.0040,true
+TLK,18,"Building construction","Building trades","Motor trades",0.36,0.0040,true
+TLK,19,"Accommodation","Retail","Wholesale",0.35,0.0040,true
+TLK,20,"Health","Social work","Building trades",0.35,0.0039,true
+TLK,21,"Libraries & museums","Building construction","Building trades",0.35,0.0039,true
+TLK,22,"Health","Residential care","Retail",0.33,0.0037,false
+TLK,23,"Education","Food & drink service","Wholesale",0.31,0.0035,true
+TLK,24,"Building construction","Building trades","Glass, cement & ceramics",0.31,0.0035,true
+TLK,25,"Motor trades","Building construction","Building trades",0.31,0.0034,false
+TLK,26,"Health","Residential care","Personal services",0.30,0.0034,true
+TLK,27,"Real estate","Building construction","Civil engineering",0.30,0.0034,false
+TLK,28,"Food manufacturing","Land transport","Wholesale",0.29,0.0033,true
+TLK,29,"Food & drink service","Wholesale","Warehousing & transport support",0.28,0.0031,true
+TLK,30,"Food & drink service","Food manufacturing","Land transport",0.28,0.0031,true
+TLK,31,"Real estate","Building trades","Wholesale",0.28,0.0031,true
+TLK,32,"Residential care","Retail","Wholesale",0.27,0.0030,false
+TLK,33,"Education","Employment agencies","IT & software",0.27,0.0030,true
+TLK,34,"Rental & leasing","Motor trades","Wholesale",0.27,0.0030,true
+TLK,35,"Residential care","Building construction","Building trades",0.26,0.0029,false
+TLK,36,"Building construction","Building trades","Fabricated metal",0.26,0.0029,true
+TLK,37,"Health","Building construction","Building trades",0.26,0.0029,true
+TLK,38,"Rental & leasing","Motor trades","Building construction",0.25,0.0029,false
+TLK,39,"Farming","Veterinary","Wholesale",0.25,0.0028,false
+TLK,40,"Retail","Wholesale","Rubber & plastics",0.25,0.0028,true
+TLL,1,"Health","Retail","Wholesale",1.32,0.0371,true
+TLL,2,"Health","Retail","Food manufacturing",1.17,0.0330,true
+TLL,3,"Health","Residential care","Building trades",1.02,0.0286,true
+TLL,4,"Health","Residential care","Other professional",0.62,0.0174,true
+TLL,5,"Building construction","Building trades","Wholesale",0.54,0.0150,true
+TLL,6,"Building construction","Civil engineering","Building trades",0.34,0.0095,true
+TLL,7,"Building construction","Civil engineering","Wholesale",0.27,0.0075,true
+TLL,8,"Health","Retail","Machinery repair & install",0.27,0.0075,true
+TLL,9,"Legal & accounting","Health","Retail",0.26,0.0073,false
+TLL,10,"Food & drink service","Retail","Wholesale",0.23,0.0066,true
+TLL,11,"Health","Residential care","Civil engineering",0.23,0.0064,true
+TLL,12,"Real estate","Building construction","Building trades",0.23,0.0064,false
+TLL,13,"Food manufacturing","Land transport","Wholesale",0.22,0.0062,false
+TLL,14,"Retail","Food manufacturing","Land transport",0.21,0.0059,false
+TLL,15,"Food & drink service","Retail","Food manufacturing",0.21,0.0059,true
+TLL,16,"Health","Retail","Motor trades",0.19,0.0054,true
+TLL,17,"Health","Residential care","Education",0.19,0.0053,false
+TLL,18,"Legal & accounting","Health","Residential care",0.19,0.0053,false
+TLL,19,"Building construction","Building trades","Fabricated metal",0.19,0.0053,true
+TLL,20,"Real estate","Legal & accounting","Health",0.16,0.0044,false
+TLL,21,"Health","Residential care","Personal services",0.15,0.0042,true
+TLL,22,"Health","Building construction","Building trades",0.15,0.0041,true
+TLL,23,"Health","Residential care","Building services & landscaping",0.14,0.0039,true
+TLL,24,"Residential care","Building trades","Wholesale",0.13,0.0038,true
+TLL,25,"Health","Residential care","Legal & accounting",0.13,0.0036,true
+TLL,26,"Health","Residential care","Retail",0.12,0.0035,true
+TLL,27,"Health","Residential care","Building construction",0.12,0.0032,false
+TLL,28,"Food & drink service","Wholesale","Food manufacturing",0.11,0.0031,false
+TLL,29,"Health","Retail","Other manufacturing",0.11,0.0031,true
+TLL,30,"Health","Retail","Legal & accounting",0.10,0.0029,true
+TLL,31,"Building construction","Civil engineering","Rental & leasing",0.10,0.0029,true
+TLL,32,"Building construction","Building trades","Motor trades",0.10,0.0029,true
+TLL,33,"Building construction","Basic metals","Wholesale",0.10,0.0028,true
+TLL,34,"Health","Residential care","Motor trades",0.10,0.0028,true
+TLL,35,"Food & drink service","Farming","Wholesale",0.10,0.0027,true
+TLL,36,"Health","Retail","Security",0.10,0.0027,true
+TLL,37,"Health","Retail","Real estate",0.10,0.0027,true
+TLL,38,"Residential care","Civil engineering","Building trades",0.09,0.0026,true
+TLL,39,"Health","Residential care","Real estate",0.09,0.0026,true
+TLL,40,"Building construction","Civil engineering","Fabricated metal",0.09,0.0025,true
+TLM,1,"Building construction","Building trades","Wholesale",2.06,0.0184,true
+TLM,2,"Food manufacturing","Farming","Wholesale",1.77,0.0159,true
+TLM,3,"Real estate","Building construction","Building trades",1.41,0.0126,false
+TLM,4,"Building construction","Civil engineering","Building trades",1.01,0.0090,true
+TLM,5,"Education","Building construction","Building trades",0.96,0.0086,true
+TLM,6,"Drinks manufacturing","Land transport","Wholesale",0.92,0.0082,true
+TLM,7,"Food & drink service","Drinks manufacturing","Land transport",0.79,0.0070,true
+TLM,8,"Food & drink service","Retail","Wholesale",0.65,0.0058,true
+TLM,9,"Building construction","Civil engineering","Wholesale",0.62,0.0055,true
+TLM,10,"Building construction","Wood products","Forestry",0.58,0.0051,true
+TLM,11,"Drinks manufacturing","Building construction","Building trades",0.55,0.0049,false
+TLM,12,"Building construction","Building services & landscaping","Building trades",0.51,0.0046,true
+TLM,13,"Food & drink service","Real estate","Building construction",0.49,0.0044,false
+TLM,14,"Food & drink service","Drinks manufacturing","Warehousing & transport support",0.48,0.0043,true
+TLM,15,"Retail","Wholesale","Drinks manufacturing",0.47,0.0042,false
+TLM,16,"Food & drink service","Real estate","Building trades",0.47,0.0042,true
+TLM,17,"Wholesale","Drinks manufacturing","Land transport",0.46,0.0041,false
+TLM,18,"Food & drink service","Drinks manufacturing","Fabricated metal",0.43,0.0038,true
+TLM,19,"Civil engineering","Building trades","Wholesale",0.43,0.0038,true
+TLM,20,"Building construction","Land transport","Wholesale",0.43,0.0038,true
+TLM,21,"Building construction","Wood products","Land transport",0.42,0.0037,false
+TLM,22,"Building construction","Retail","Wholesale",0.40,0.0036,true
+TLM,23,"Drinks manufacturing","Warehousing & transport support","Civil engineering",0.40,0.0035,false
+TLM,24,"Food & drink service","Wholesale","Drinks manufacturing",0.37,0.0033,false
+TLM,25,"Food & drink service","Drinks manufacturing","Energy supply",0.36,0.0032,true
+TLM,26,"Drinks manufacturing","Land transport","Motor trades",0.35,0.0032,true
+TLM,27,"Building construction","Building trades","Rental & leasing",0.35,0.0032,true
+TLM,28,"Building construction","Building trades","Insurance & pensions",0.35,0.0031,true
+TLM,29,"Building construction","Building trades","Fabricated metal",0.34,0.0030,true
+TLM,30,"Retail","Real estate","Building construction",0.33,0.0030,false
+TLM,31,"Accommodation","Building construction","Building trades",0.33,0.0029,true
+TLM,32,"Real estate","Building services & landscaping","Building trades",0.33,0.0029,true
+TLM,33,"Education","Building trades","Wholesale",0.33,0.0029,true
+TLM,34,"Building construction","Building trades","Motor trades",0.32,0.0029,true
+TLM,35,"Retail","Real estate","Building trades",0.31,0.0028,true
+TLM,36,"Building construction","Building trades","Machinery repair & install",0.30,0.0027,true
+TLM,37,"Retail","Food manufacturing","Wholesale",0.29,0.0026,false
+TLM,38,"Real estate","Building trades","Wholesale",0.28,0.0025,true
+TLM,39,"Wholesale","Drinks manufacturing","Warehousing & transport support",0.28,0.0025,false
+TLM,40,"Food manufacturing","Wholesale","Drinks manufacturing",0.28,0.0025,false
+TLN,1,"Food manufacturing","Land transport","Wholesale",2.07,0.0281,true
+TLN,2,"Water supply","Civil engineering","Building trades",1.30,0.0176,true
+TLN,3,"Food & drink service","Retail","Wholesale",1.25,0.0170,true
+TLN,4,"Building construction","Building trades","Wholesale",1.25,0.0170,true
+TLN,5,"Legal & accounting","Building construction","Building trades",1.13,0.0154,false
+TLN,6,"Real estate","Building construction","Building trades",1.00,0.0136,false
+TLN,7,"Food manufacturing","Farming","Wholesale",0.85,0.0115,true
+TLN,8,"Food manufacturing","Land transport","Motor trades",0.68,0.0092,true
+TLN,9,"Civil engineering","Building trades","Wholesale",0.63,0.0086,true
+TLN,10,"Retail","Wholesale","Head offices & consultancy",0.57,0.0078,false
+TLN,11,"Food & drink service","Food manufacturing","Farming",0.57,0.0077,true
+TLN,12,"Retail","Food manufacturing","Farming",0.53,0.0072,true
+TLN,13,"Building trades","Retail","Wholesale",0.52,0.0070,false
+TLN,14,"Building construction","Retail","Wholesale",0.50,0.0068,false
+TLN,15,"Food & drink service","Food manufacturing","Land transport",0.47,0.0064,true
+TLN,16,"Retail","Wholesale","Water transport",0.45,0.0061,true
+TLN,17,"Land transport","Retail","Wholesale",0.44,0.0060,false
+TLN,18,"Retail","Food manufacturing","Land transport",0.44,0.0060,true
+TLN,19,"Retail","Wholesale","Paper",0.43,0.0058,true
+TLN,20,"Building construction","Quarrying","Wholesale",0.32,0.0043,true
+TLN,21,"Building construction","Glass, cement & ceramics","Wholesale",0.31,0.0042,true
+TLN,22,"Civil engineering","Retail","Wholesale",0.31,0.0042,false
+TLN,23,"Rubber & plastics","Land transport","Wholesale",0.30,0.0041,true
+TLN,24,"Retail","Legal & accounting","Building construction",0.30,0.0040,false
+TLN,25,"Food manufacturing","Land transport","Building construction",0.29,0.0040,false
+TLN,26,"Building construction","Building trades","Retail",0.29,0.0040,false
+TLN,27,"Accommodation","Retail","Wholesale",0.28,0.0039,true
+TLN,28,"Land transport","Building construction","Building trades",0.28,0.0037,false
+TLN,29,"Quarrying","Land transport","Wholesale",0.27,0.0037,true
+TLN,30,"Food manufacturing","Farming","Building trades",0.26,0.0036,false
+TLN,31,"Building construction","Civil engineering","Building trades",0.26,0.0035,false
+TLN,32,"Machinery","Fabricated metal","Wholesale",0.25,0.0034,true
+TLN,33,"Food manufacturing","Land transport","Retail",0.24,0.0033,false
+TLN,34,"Food manufacturing","Farming","Building construction",0.24,0.0032,false
+TLN,35,"Machinery","Civil engineering","Building trades",0.24,0.0032,true
+TLN,36,"Legal & accounting","Real estate","Building construction",0.23,0.0031,false
+TLN,37,"Waste","Retail","Wholesale",0.23,0.0031,false
+TLN,38,"Building construction","Other manufacturing","Wholesale",0.23,0.0031,true
+TLN,39,"Building construction","Quarrying","Land transport",0.22,0.0030,true
+TLN,40,"Building construction","Quarrying","Building trades",0.22,0.0030,true

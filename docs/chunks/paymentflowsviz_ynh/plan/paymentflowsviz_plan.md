@@ -427,6 +427,7 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 - **`[-]` in the five-digit file** is unexplained. It only matters if the national panel is ever built.
 - **Revisions.** When ONS issues the next edition, re-run and compare the levels before updating the page.
 - **Bringing public administration's payments in.** They have no region, so they can't go in the inside or outside totals as they stand. See section 11.11.
+- **Showing an industry's local links without losing its wider role.** Wholesale is the test case: a middle link nationally, an end of the line in every region's payments. Scoped in section 13.10, with one idea tested and found not to work.
 - **Who the payers of unknown industry are.** They account for about half of what a region's industries are paid. Nothing here says who they are; ONS's own notes on the data would be the place to look.
 
 ## 9. Files
@@ -444,6 +445,9 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/14` to `16` | Scoping tests for section 10: all regions' data, links, and how alike regions are |
 | `tests/17` to `20` | Scoping tests for section 11: the foundational economy list, how it fits divisions, how it sits against tradeable, and whether the input-output table could fill what the payments leave out |
 | `tests/21_ties_columns.cjs` | The test behind the columns "by ties to what is highlighted" (section 11.13) |
+| `tests/22_local_columns.cjs` | The test behind the columns "by trade inside the region", and whether that goes with the order (section 12) |
+| `tests/23_middle_links.cjs`, `23b_middle_links_io.R` | The check on Other manufacturing as a middle link, and scoping for a chain measure, with the same measure on the input-output table (section 13) |
+| `tests/24_chains_across_the_edge.R` | Scoping: whether counting payments across the region's edge makes the chain measure match an industry's wider role (section 13.10) |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
@@ -1068,3 +1072,363 @@ Results are in `tests/outputs/io_estimates_by_industry.csv` and `io_estimates_re
 - **"Buys from" the public services says little:** the middle industry makes 1% of its purchases from them, because they sell so little to other businesses in this data.
 - **Checks:** all 7 column choices come back from the address; no page or console errors; 60 frames a second on the opening view and 54 with every link drawn. Screenshots `06f` and `06g`.
 
+## 12. Built: columns by trade inside the region
+
+*Built 24 November 2026. No new data: the page's data files already held everything it needs, so nothing was rebuilt.*
+
+**What was asked.** Another set of column choices beside the ties ones: industries left to right by how much of their buying and selling is inside the region against outside it, in the same three versions (both together, sales, purchases). And, out of interest, whether that goes with the supplier-to-buyer order up the page.
+
+### 12.1 The measure
+
+- **Trade inside the region:** of everything an industry pays to and is paid by industries anywhere in the UK, over the whole period, the share that is with industries in its own region.
+- **Sales inside** counts only what it is paid. **Purchases inside** counts only what it pays.
+- **Where the sums come from:** the links (inside, between different industries), the payments within each industry inside the region, and the rest-of-the-UK series behind the halo. All were already in the data files.
+- **It follows the intermediaries switch,** as the rest of the page does.
+- **It needs no highlight,** and any highlight can be laid over it: the foundational economy zones on columns by sales inside, for example. That is not the view section 11.10 recommended, which would take who an industry sells to from the input-output table.
+
+**Payments within an industry are treated like any others:** inside if both firms are in the region, outside if one is elsewhere. This needs saying only because of how the page's data is cut:
+
+- **The links leave them out.** A link joins two different industries, so a health body paying another health body in the same region is in no link. Those payments are held separately in the data file.
+- **The rest-of-the-UK figures keep them in.** They are a total for each industry over every industry elsewhere, its own included, and can't be split without a rebuild.
+- **So a measure built only from what the page draws** (links against the halo) would count within-industry payments when they leave the region and drop them when they stay. The measure adds the within-industry payments inside the region back, so both sides are counted the same way.
+
+**What adding them back changes.**
+
+- **It matters for some industries.** In Yorkshire and the Humber, health's sales inside go from 7% without them to 26% with them, education's from 10% to 25%, retail's from 16% to 31%. In Wales health goes from 15% to 56%.
+- **It moves the ranking a little in most regions and a lot in two.** The rank correlation between the two versions is 0.88 to 0.96 in Yorkshire and the Humber. For sales it falls to 0.73 in the West Midlands and 0.76 in Wales.
+- **The side panel's bars had the mismatch, and now don't** (changed 24 November 2026, on request). Their "inside" segment used to be other industries here only, while the London and rest-of-the-UK segments included the same industry elsewhere. The inside segment now includes payments within the industry, its label is "Industries here", and the line beneath says how much of it that is. So an industry's monthly total and its inside percentage in the side panel are higher than before. Land transport in Yorkshire and the Humber, three months to September 2026: it pays £19.0m a month to other industries here and £9.5m within the industry, so inside goes from 16% of what it pays to 23%.
+- **Not changed:** the circle's area and the hover box, which still count payments with other industries here, as the links do.
+
+### 12.2 This is the measure section 11.10 called weak
+
+"Sales inside" is section 11.10's measure A turned round, and section 2.5's ring gauge, which was dropped. What was said there still holds:
+
+- **It covers about a third of what industries are paid.** Households, payers of unknown industry and public administration are on neither side.
+- **No abroad,** so an exporter's sales abroad don't count as outside.
+- **Registered offices,** so a chain run from elsewhere looks as if it trades outside. Veterinary practices come out least inside of all in Yorkshire and the Humber (10%).
+- **An industry's place changes from region to region** (rank correlation 0.38 on average, section 11.10).
+
+**Why it is still worth having as columns, where it wasn't as a gauge.**
+
+- **A ranking spreads out anything.** The ring gauge failed because every ring looked alike. Columns in rank order always fill the width.
+- **The cost is that small gaps look large.** In Yorkshire and the Humber half the industries sit between 21% and 34% (both together), 22% and 31% (sales) and 22% and 33% (purchases), so half the width of the chart covers about ten points. The percentages along the top show this.
+- **So the page describes it as where the recorded payments go,** not as how local or how tradeable an industry is. The key and a note at the foot say what is left out.
+
+**Spread** (`tests/22_local_columns.cjs`; a tenth of industries below, the middle, a tenth above):
+
+| | Both together | Sales inside | Purchases inside |
+|----|----|----|----|
+| Yorkshire and the Humber | 17%, 26%, 37% | 15%, 26%, 41% | 17%, 28%, 40% |
+| Middle industry, lowest region (East Midlands) | 20% | 21% | 22% |
+| Middle industry, Scotland | 35% | 40% | 34% |
+| Middle industry, London | 44% | 48% | 43% |
+| Middle industry, Northern Ireland | 62% | 65% | 57% |
+
+The other eight regions' middle industries are between 22% and 31% on all three.
+
+### 12.3 Does it go with the supplier-to-buyer order?
+
+**Barely.** Rank correlation with the level (buyers have high levels), across the industries placed in each region:
+
+| Measure | Lowest region | Middle | Highest region | Regions above zero |
+|----|----|----|----|----|
+| Both together | -0.10 | 0.10 | 0.30 | 9 of 12 |
+| Sales inside | -0.32 | -0.01 | 0.12 | 6 of 12 |
+| Purchases inside | 0.06 | 0.28 | 0.46 | 12 of 12 |
+
+Yorkshire and the Humber: 0.08, -0.08 and 0.27.
+
+- **Purchases inside go weakly with being a buyer,** in every region. Industries towards the top of the page buy a little more of what they buy inside the region.
+- **Sales inside and the two together don't go with the order.**
+- **Part of the purchases link is built in.** Levels are worked out on payments inside the region alone. An industry that buys here and sells elsewhere is a net buyer here, so it sits high. Motor vehicles in Yorkshire and the Humber is the clear case: 50% of purchases inside, 17% of sales, and sixth of 66 from the top of the order.
+- **But that is not all of it.** If it were, "purchases inside less sales inside" would track the level much better than purchases alone. It tracks it only slightly better: 0.15 to 0.56 across regions, about 0.32 in the middle.
+- **Sales and purchases are related but not the same thing:** their rank correlation is 0.42 to 0.76 across regions, 0.50 in Yorkshire and the Humber.
+- **For the chart this is good news.** Left-to-right position adds something height doesn't already show.
+
+The correlation isn't shown on the page. It could be worked out there for whichever region is showing.
+
+### 12.4 What it shows in Yorkshire and the Humber
+
+- **Most inside, both together:** quarrying (63%), fishing (61%), farming (46%), libraries and museums (41%), remediation (39%), drinks manufacturing (38%), social work, legal and accounting, motor vehicles (37% each).
+- **Least inside:** veterinary (10%), travel agencies (11%), insurance and pensions, energy supply, pharmaceuticals (13% each), IT and software, health (17% each).
+- **Sells most inside:** libraries and museums (64%), fishing (60%), quarrying (58%), farming (50%), building construction (49%), repair of goods (48%). **Least:** pharmaceuticals (3%), veterinary (6%), energy supply (11%), travel agencies (12%), electronics, chemicals (14% each), food manufacturing (15%).
+- **Buys most inside:** quarrying (73%), fishing (65%), motor vehicles (50%), textiles (48%), glass, cement and ceramics (46%). **Least:** insurance and pensions (7%), travel agencies (10%), IT and software (14%), health, rental and leasing (15% each).
+- **Sales and purchases pull apart for some:** building construction sells 49% inside and buys 29%; retail 31% and 18%; motor vehicles 17% and 50%; food manufacturing 15% and 23%.
+
+Figures for every industry and region are in `tests/outputs/local_by_industry.csv`.
+
+### 12.5 On the page
+
+- **Columns menu:** "By trade inside the region", "By sales inside the region", "By purchases inside the region", after the three ties choices. In the address: `cols=inside`, `sellsinside`, `buysinside`.
+- **Axis wording:** "trades least inside the region" to "trades most"; "sells least inside the region" to "sells most"; "buys least inside the region" to "buys most".
+- **Laid out like the ties columns:** rank order, percentages along the top, small industries in a strip on the right, height still the place in the order.
+- **Ticks:** round tens first, then fives where there is room. Ticks on all the ranked columns now need at least 30 pixels between them, so they no longer touch on a narrow screen.
+- **Key:** the definition for whichever of the three is chosen, and what is left out.
+- **Side panel:** under the inside, London and rest-of-the-UK bars, one sentence with all three whole-period figures and the industry's place in the ranking. It shows whatever columns are chosen. The bars themselves now count payments within the industry as inside (section 12.1).
+- **A note at the foot of the page** gives the three cautions: only the payments the page can place, registered offices, no abroad.
+
+### 12.6 Checks, and what isn't done
+
+**Checks** (`tests/13_page_checks.cjs`, `tests/15_url_roundtrip.cjs`).
+
+- **No page or console errors** in any of the twelve regions, and no gaps in the text.
+- **The address** carries the new settings: all 10 column choices and all 26 highlights come back.
+- **Speed is unchanged:** 60 frames a second on the opening view and with every link drawn.
+- **Screenshots:** `tests/outputs/page/06h` to `06j`. All three choices were also drawn for every region, and on a narrow screen, in the dark theme, with intermediaries in and in the goods view, with no errors. London's and Northern Ireland's were looked at; the rest were not.
+
+**Not done.**
+
+- **The correlation with the order isn't on the page.**
+- **The axis wording** is a first go, as the ties wording was.
+
+## 13. A note: Other manufacturing as a middle link, and how a chain might be shown
+
+*24 November 2026. Tests `tests/23_middle_links.cjs` and `tests/23b_middle_links_io.R`. Sections 13.1 to 13.8 were written before anything was built; section 13.9 records what was then built.*
+
+### 13.1 What was noticed
+
+With columns by trade inside the region, Other manufacturing (division 32) in Yorkshire and the Humber sits in the middle left to right and in the middle of the supplier-to-buyer order. Its links come down to it from industries above and go on down to industries below. That looks like one stage in a chain. The order is known to be loose, so the question was how much the picture means.
+
+**In short:** it is a real middle link, and the input-output table agrees. The default view makes it look cleaner than it is.
+
+### 13.2 What holds up
+
+All figures are for payments with other industries in the region, over the whole period, intermediaries left out.
+
+- **It is balanced.** It pays £16.0m a month and is paid £17.5m.
+- **Its buyers and its suppliers are different industries.**
+
+| Paid most by | Pays it, a month | It pays back |
+|----|----|----|
+| Health | £4.1m | £0.2m |
+| Retail | £2.4m | £1.1m |
+| Building construction | £1.7m | £0.3m |
+| Motor vehicles | £0.7m | £0.0m |
+
+| Pays most to | It pays, a month | Paid back |
+|----|----|----|
+| Wholesale | £2.6m | £1.4m |
+| Building trades | £1.5m | £1.0m |
+| Fabricated metal | £1.4m | £0.4m |
+| Rubber and plastics | £1.0m | £0.3m |
+
+- **The jobs fit.** 57% of the division's jobs in the region are in medical and dental instruments (49% across Great Britain). Another 26% are in the catch-all "manufacturing not elsewhere classified", and the rest in sports goods, jewellery and toys. Jobs from the Business Register and Employment Survey 2023.
+- **Its place is steady.** Worked out on the 12 months to each month, its level stays between -0.02 and 0.04.
+- **The view the page opens on shows the same.** In the three months to September 2026 health pays it £5.1m a month net, and 97% of its net value runs down the order.
+
+### 13.3 What makes it look cleaner than it is
+
+| Measure | Other manufacturing | Middle industry of 66 |
+|----|----|----|
+| Value running down the order, one net link a pair | 98% (third highest) | 87% |
+| Value running down the order, both directions counted | 75% (18th highest) | 70% |
+| Payments that are two-way with the same partner | 48% | 46% |
+
+- **The page draws one net link a pair.** Wholesale pays it £1.4m a month and it pays wholesale £2.6m, and the page draws one link for the difference. Nearly half of its payments are two-way like this. Switching Links to both directions shows them.
+- **The level is fitted from these same payments.** Each industry is placed so that its buyers sit above it and its suppliers below, as far as the rest allow. Some agreement between an industry's links and its height is therefore automatic.
+- **What isn't automatic** is how well the fit works for it: its buyers are industries that buy from nearly everyone, and its suppliers are ones that supply nearly everyone.
+- **19 of its 152 links** in the region were never published.
+
+### 13.4 Other regions, and the input-output table
+
+- **Its level is near the middle in every region** (-0.21 to 0.14).
+- **The clean picture is mostly Yorkshire and the Humber's.** Net value running down the order goes from 65% in the North West to 98% here, the highest of the twelve.
+- **Health is its largest payer** only here and in the South East. Elsewhere it is building construction, wholesale, retail or, in the West Midlands, motor vehicles.
+- **The UK input-output table has the same chain.** It has the division sell most to health and building construction, and buy most from wholesale, retail, fabricated metal, land transport and basic metals. On the table's own figures it is 16th of 69 industries by share passed along (section 13.6).
+
+### 13.5 Not vertical integration
+
+Vertical integration means one firm owning several stages of a chain. Payments between separate businesses show something closer to the opposite: stages done by different firms that pay each other. "A middle link in a chain" is the better description.
+
+### 13.6 Scoped: a chain measure for every industry
+
+**The idea.** Everything an industry pays to and is paid by other industries in the region splits exactly three ways. The split doesn't use the levels, so it isn't circular in the way section 13.3 describes.
+
+| Part | What it is |
+|----|----|
+| Two-way | Paid to a partner that pays the same back: twice the smaller direction, pair by pair |
+| Passed along | What remains is net: some partners pay it, it pays others. Twice the smaller of those two totals is money that comes in from one industry and goes on to another |
+| End of the line | The rest. More paid out than in is a buyer end: money enters the picture here, from households, public money, payers of unknown industry and other regions. More in than out is a supplier end: money leaves the picture here, to wages, taxes, profit, imports and other regions |
+
+Other manufacturing in Yorkshire and the Humber: 48% two-way, 47% passed along, 4% end of the line. Ninth of 66 by share passed along.
+
+**What it shows.**
+
+- **About a fifth of payments between industries are passed along inside a region:** 21% in Yorkshire and the Humber, between 19% (Northern Ireland) and 28% (Wales) across the twelve. Between 34% and 52% are two-way.
+- **The input-output table passes along nearly twice as much:** 39%, with 27% two-way and 34% end of the line. Payments inside a region have more two-way money and shorter chains than the national supply chain. Part of that is the region's edge cutting chains off, and part is what payments include that sales don't (rent, refunds, money moving within groups).
+- **Most passed along in Yorkshire and the Humber:** drinks manufacturing (69%), textiles (60%), air transport (58%), glass, cement and ceramics (56%), publishing, veterinary and clothing (51% each), furniture (49%), other manufacturing and civil engineering (47% each).
+- **Least:** education (1%, a buyer end), legal and accounting (2%, mostly two-way), food and drink service and pharmaceuticals (5%, buyer ends), telecoms, IT and software and wholesale (5% to 7%, supplier ends).
+- **Spread:** a tenth of industries are below 6%, the middle is 27% and a tenth are above 51%.
+
+**Three weaknesses, which is why it shouldn't be a headline measure.**
+
+- **It mostly restates height.** Passed along is what is left after two-way and the imbalance between paid and received, and the level is worked out from that same imbalance. Its rank correlation with closeness to the average level is 0.63 to 0.80 across regions. Columns or a highlight by it would largely show the middle of the page again.
+- **It doesn't belong firmly to the industry.** The rank correlation between two regions' values for the same industries is 0.35 in the middle (0.06 to 0.64). The level manages 0.64 and two-way 0.52.
+- **It agrees only loosely with the input-output table.** The same split on the table gives a rank correlation of 0.44 with the payments when each division takes its middle value across regions, and 0.30 for Yorkshire and the Humber alone. Balance agrees much better (0.66), which is the level's agreement seen again.
+
+**What is new in it is the two-way share,** which the page shows nowhere for an industry, and which is steadier from region to region than passed along.
+
+### 13.7 Scoped: finding the chains themselves
+
+**Three-step chains** (net buyer, middle link, net supplier). What a middle link passes along is shared among its net buyers and net suppliers in proportion.
+
+- **Chains are many and thin.** Yorkshire and the Humber has 42,240 of them carrying £136m a month. The ten largest carry 9% and the forty largest 19%. Across regions the ten largest carry 8% to 18%.
+- **The largest are recognisable.** Health to retail to wholesale (£1.8m a month). Building construction to building trades to wholesale (£1.5m). Head offices, real estate and education each to building construction to building trades (£1.1m to £1.2m). Food manufacturing to farming to wholesale and land transport (£0.7m to £0.8m).
+- **Only about half run down the order at both steps:** 54% here, 47% (London) to 68% (East Midlands) elsewhere. The largest of all, food manufacturing to retail to wholesale (£2.3m), runs up at its first step.
+- **The largest through Other manufacturing is small:** health to other manufacturing to wholesale, £0.5m a month, then to fabricated metal (£0.4m) and rubber and plastics (£0.3m).
+
+**Tracing from one industry** answers "who is in this chain" more directly. Follow net links worth a tenth or more of the industry's net receipts upwards, and of its net payments downwards, two steps each way. From Other manufacturing:
+
+- **Up:** health (42% of its net receipts), building construction (16%), retail (14%).
+- **Up again, the trail runs out.** Health's own net receipts from industries here are small (its largest net payer is head offices, at £0.7m a month), because public money and households aren't in the data. Any chain that reaches a public service or a shop stops there.
+- **Down:** wholesale (15% of its net payments) and fabricated metal (12%).
+- **Down again:** fabricated metal pays rubber and plastics, basic metals and employment agencies; wholesale pays warehousing, fabricated metal, IT and insurance.
+- **So one reading of the chain** is basic metals, fabricated metal, other manufacturing, health. The amounts at the far end are small (£0.5m a month net from fabricated metal to basic metals).
+
+**A chain is not a payment group.** Other manufacturing sits firmly in no payment group (loosely with Engineering and metals in 6 of 8 years). Its chain crosses four: health is in Local and public services, building construction in Construction, retail and wholesale in Distribution, fabricated metal and basic metals in Engineering and metals. Groups say who trades together; a chain runs through them.
+
+**Published methods, if something heavier is wanted.**
+
+- **Average propagation lengths** were built to pick production chains out of an input-output table: Dietzenbacher, Romero and Bosma (2005), [Using average propagation lengths to identify production chains in the Andalusian economy](https://real.web.illinois.edu/wp-content/uploads/2022/01/05-T-6.pdf), Estudios de Economía Aplicada 23(2). The three-step chains above are a cut-down relative of it: one step each way, on net payments. The measure has critics: [Oosterhaven and Bouwmeester (2013)](https://ideas.repec.org/a/sae/inrsre/v36y2013i4p481-491.html) argue it is of little use for comparing single industries. Not tried here.
+- **Upstreamness,** the average distance from final use, is the closest published relative of the page's vertical order: Antràs, Chor, Fally and Hillberry (2012), [Measuring the upstreamness of production and trade flows](https://www.nber.org/papers/w17819), American Economic Review Papers and Proceedings 102(3).
+
+### 13.8 What I'd put on the page, and what I wouldn't
+
+| Option | What the reader gets | Recommendation |
+|----|----|----|
+| **Side panel, for the pinned industry:** a three-part bar (two-way, passed along, end of the line), and the share of its value running down the order, net and with both directions counted | The check in sections 13.2 and 13.3, for any industry, with the caution built in | Yes. Small, and nothing else on the page shows two-way trade for an industry |
+| **"Trace its chain" when an industry is pinned:** also draw the main net links of its main partners, a second step up and down | Who is in the chain, as a picture, including where the trail runs out | Yes, as a switch. Needs a look at how busy it gets |
+| **Columns or a highlight by share passed along** | A ranking of middle links | No. It mostly repeats height, and an industry's place changes from region to region |
+| **The input-output table's split as a fixed fact about each industry** | The national chain position, the same in every region, to set beside what the payments show | Maybe, with the other input-output attributes parked in sections 11.10 and 11.12 |
+| **A line in the notes:** about a fifth of payments between industries here are passed on to a third industry inside the region, against two fifths in the national supply chain | The scale of chains inside a region | Yes, if the side panel bar goes in |
+
+**To keep in mind for any of these.**
+
+- **Inside the region only.** Most of an industry's trade leaves the region (section 12), so a chain that crosses the edge shows only its local stretch.
+- **A buyer end is often a missing payer.** Health, education and shops end chains because who pays them isn't in the data.
+- **Divisions are broad.** Two firms in the same pair of divisions can be at different stages, which shows as two-way trade when it is really two one-way trades.
+- **A payment is not always a purchase.**
+
+Figures for every industry and region are in `tests/outputs/middle_links_by_industry.csv`, region totals in `middle_links_regions.csv`, the forty largest chains in each region in `middle_links_chains.csv`, and the comparison with the input-output table in `middle_links_payments_vs_io.csv`.
+
+### 13.9 Built: the side panel bar, the trace, and columns by how much is passed along
+
+*Built 24 November 2026, on request: the first two rows of the table in section 13.8, and columns by share passed along, which that table advised against. No data files were rebuilt; the page works all of it out from the links it already has.*
+
+**Side panel, for the pinned industry** ("Chain or two-way trade, whole period").
+
+- **A three-part bar:** two-way, passed along, and buyer end or supplier end, with the percentages.
+- **A sentence saying what each part is,** and for an end, whether money enters or leaves the picture there.
+- **Which way its payments run:** the share running down the order with one net link a pair, and with both directions counted, beside the same two figures for the middle industry in the region. Left out for industries too small to place.
+- **It matches the test.** Other manufacturing in Yorkshire and the Humber shows 48%, 47% and 4.5%, then 98% and 75% against 87% and 70%.
+
+**"Trace the pinned industry's chain"** (a new tick box; `trace=1` in the address).
+
+- **The rule is section 13.7's:** net payments worth a tenth or more of what an industry is paid net (upwards) or pays net (downwards), two steps each way, worked out on the whole period so the chain holds still while the months play.
+- **On the chart:** the chain's links are drawn strongly, second-step links fainter, and every other link almost invisible. Industries outside the chain are greyed. A chain's links are drawn even when they fall below the "Show" cut-off. Widths and dots are still the month's.
+- **Hovering over another industry** shows that industry's own links, as before.
+- **In the side panel:** the chain as a list, each step with its pounds a month and its share, and a line saying where trails stop.
+- **How busy it gets:** Other manufacturing's chain is 19 links and building construction's 13. Both read clearly (screenshots `06m` and `06n`).
+- **The tenth and the two steps are fixed,** not controls.
+
+**Columns "By how much it passes along"** (`cols=passed`).
+
+- **The same ranked axis** as the other measures: "passes least along to another industry" to "passes most", percentages along the top.
+- **The picture is a sideways V,** as section 13.6 predicted. Buyer ends (education, health, food and drink service) are top left, supplier ends (wholesale, legal and accounting, IT) bottom left, and the middle links run out to the right along the average line. That is the repeat of height made visible. The key and the note say so.
+- **What it adds over height:** among industries at the same height it separates those that pass money on (drinks manufacturing, textiles, other manufacturing) from those that trade it back and forth (real estate, machinery).
+- **A different measure would be less tied to height:** one that also counted an industry as in a chain when it starts or ends one. Education starts several of the largest chains and sits at the far left here. Not tried.
+
+**A note at the foot of the page** ("Chains") explains the three parts, gives the region's share passed along and two-way (worked out by the page, so it follows the intermediaries switch), sets them beside the input-output table's 39% and 27%, and lists the four cautions from section 13.8.
+
+**Checks** (`tests/13_page_checks.cjs`, `tests/15_url_roundtrip.cjs`).
+
+- **No page or console errors** in any of the twelve regions.
+- **The address** carries the new settings: all 11 column choices come back, and the trace switch on and off.
+- **Speed is unchanged:** 60 frames a second on the opening view and with every link drawn.
+- **The note's figures match the test:** 21% and 45% in Yorkshire and the Humber, 19% and 34% in Northern Ireland, 28% and 40% in Wales.
+- **The trace was also loaded** in the goods view, with intermediaries in, and in London, with no errors.
+- **Screenshots:** `tests/outputs/page/06k` to `06n`.
+
+**Not done.** Only Yorkshire and the Humber's traces were looked at. The side panel is now long when the trace is on.
+
+**Added afterwards: the chain wording follows "Flows of"** (24 November 2026).
+
+- **The question.** In the goods view wholesale sits at the "passes least along" end although its goods outflows are huge. Is the measure about money, and does it need a goods version?
+- **It is one figure either way.** Passed along takes the smaller of what comes in and what goes out. Turning every payment round swaps the two, and the smaller is still the smaller. So there is no separate goods version to build, only wording.
+- **Why wholesale is at that end.** Passing along needs both an in and an out inside the region. In Yorkshire and the Humber wholesale sells £142m a month to other industries here and buys £47m from them, so most of what it sells here was not bought here. Of its purchases from UK industries, 18% are inside the region, and imports aren't in the data at all. It comes out 7% passed along and 51% supplier end.
+- **It is a supplier end in all twelve regions.** In the national input-output table wholesale passes along 53%. The region's edge is only part of the gap: section 13.10 counts payments across the edge and wholesale still comes out low.
+- **What changed on the page.** With "Flows of" set to goods and services, the key, the side panel and the trace now speak of goods and services bought from one industry and sold on to another, measured by what was paid, and of the directions as they are on the flipped chart (suppliers above, customers below). With money, they speak of payments, as before.
+- **The note at the foot** now gives both readings, says a buyer end is where chains finish and a supplier end where they start, and uses wholesale as the example.
+- **Screenshots:** `06o` (goods view, wholesale pinned, columns by how much is passed along) and `06p` (trace in the goods view).
+
+### 13.10 To come back to: an industry's local links and its wider role
+
+*Scoped 24 November 2026, not built. Test `tests/24_chains_across_the_edge.R`.*
+
+**The problem.** The page is good evidence on what an industry does with other industries in its region. It is poor evidence on the industry's place in the wider economy, and the chain measure makes that gap visible.
+
+- **Wholesale is the test case.** Everyone's picture of a supply chain has wholesale in the middle: it buys from makers and sells to shops and other businesses. The national input-output table agrees (53% passed along, 28% two-way, 18% supplier end).
+- **In every region's payments it is an end of the line.** In Yorkshire and the Humber: 7% passed along, 43% two-way, 51% supplier end. It sells £142m a month to other industries here and buys £47m from them.
+- **So the chart shows its local links faithfully and its role wrongly.** A reader in the goods view sees a large circle at the supplier end with goods pouring out and nothing coming in, and reasonably asks where the goods came from.
+- **The same will be true of other industries** whose inputs or customers lie mostly outside the region or outside the data: food manufacturing, retail, anything that imports.
+
+**What is already on the page that bears on it.**
+
+- **"By purchases inside the region"** (section 12): wholesale buys 18% of what it buys from UK industries inside the region, and sells 25% inside. Those two figures already say its trade is mostly across the edge.
+- **The halo** shows the amounts paid to and from the rest of the UK.
+- **Neither is tied to the chain bar or the trace,** so the reader has to join them up.
+
+**The idea that was floated: count payments across the edge, by partner industry.** The data files hold rest-of-the-UK payments as one total per industry. The monthly data the build caches has them by partner industry and region. A rebuild could carry them, and the chain measure could then treat an industry elsewhere as a partner like any other.
+
+**Tested, and it doesn't do the job** (`tests/24_chains_across_the_edge.R`; partners are the other industries in the region, plus every industry elsewhere in the UK, the industry's own included).
+
+| Wholesale | Two-way | Passed along | End of the line |
+|----|----|----|----|
+| Yorkshire and the Humber, inside the region | 43% | 7% | 51%, supplier |
+| Yorkshire and the Humber, UK-wide | 58% | 12% | 30%, supplier |
+| Twelve regions, UK-wide | 46% to 61% | 9% to 43% | up to 40% |
+| Input-output table | 28% | 53% | 18%, supplier |
+
+- **Wholesale's share passed along rises in seven regions and falls in five.** It is a clear middle link only in Wales (43%) and the East Midlands (40%).
+- **Payments as a whole get no more chain-like.** UK-wide, 19% to 29% of payments are passed along and 43% to 55% are two-way, against 19% to 28% and 34% to 52% inside. The input-output table has 39% and 27%.
+- **Agreement with the input-output table doesn't improve.** With each division at its middle value across regions the rank correlation of passed along falls from 0.44 to 0.38. Region by region it rises in four, is level in one and falls in seven.
+- **It reshuffles industries.** The rank correlation between the inside and UK-wide versions is 0.39 to 0.74. In Yorkshire and the Humber pharmaceuticals goes from 5% to 63% and motor vehicles from 9% to 42%, which is sensible for makers that sell elsewhere. Veterinary goes from 51% to 17% and motor trades from 44% to 12%.
+- **It leans on the weaker half of the data.** Payments across the edge are 1.0 (Northern Ireland) to 5.4 (East Midlands) times those inside. Between 15% and 37% of their value is held, not published, against 7% to 20% inside. They are also where registered offices mislead most, which is why the page was built on the inside half (section 5).
+
+**Why it fails for wholesale.**
+
+- **Much of what wholesale buys isn't in the data at all:** imports, and payees whose industry isn't recorded. UK-wide it is still paid far more by industries than it pays to them.
+- **At the level of whole industries its trade is mostly two-way.** The industries it buys from are largely the ones it sells to: between 46% and 61% of its UK-wide payments net off against the same partner, depending on the region. Which partners those are hasn't been looked at.
+- **So the gap between 7% and 53% is mostly about what payments are,** not about where the region's edge falls.
+
+**Where the region's edge does matter: a first look at roles.** Of what Yorkshire and the Humber's industries pass along UK-wide, shared out in proportion to where it was bought and sold:
+
+| Industry | Bought here, sold here | Brought in (bought elsewhere, sold here) | Sent out (bought here, sold elsewhere) | Through (both elsewhere) |
+|----|----|----|----|----|
+| Building construction | 13% | 48% | 9% | 30% |
+| Retail | 9% | 49% | 6% | 36% |
+| Wholesale | 3% | 27% | 8% | 62% |
+| Other manufacturing | 9% | 15% | 28% | 48% |
+| Food manufacturing | 1% | 4% | 25% | 70% |
+
+This is the more promising use of the across-the-edge data: not a better chain score, but a description of what an industry does at the region's edge. Builders and shops bring in. Makers send out. It is rough: sharing in proportion assumes any pound in could be any pound out.
+
+**Ways forward, cheapest first.**
+
+| Option | What it shows | Needs | View |
+|----|----|----|----|
+| **A sentence in the side panel** when an industry is an end of the line: how much of what it buys, or sells, is outside the region | Why this industry looks like an end here | Nothing new: the figures are section 12's | Do first. It answers the reader's question at the moment they ask it |
+| **Stubs on the trace:** where a trail reaches an industry that buys or sells mostly elsewhere, draw a short link off towards the edge with the share | The chain leaving the region, not just stopping | Nothing new: the rest-of-the-UK totals behind the halo | Worth trying. Needs a look at how it reads |
+| **The national role beside the local one:** for each industry, the input-output table's three-way split, and who it sells to (other businesses, households, government, abroad) | The wider role, stated as national and fixed, next to what the payments show locally | A small lookup from tests 19 and 23b. No payments rebuild | The real answer to the question. Wholesale would read: here 7% passed along, nationally 53%; nationally a third of what it sells goes abroad and half to other businesses |
+| **Roles at the edge** (the table above) as a side panel line or a highlight: brings in, sends out, local, through | What the industry does for the region | A rebuild carrying across-the-edge payments by partner industry, whole-period totals only (about 13,000 numbers a region) | Later. Interesting, rough, and on the weaker data |
+| **A UK-wide chain measure** | Meant to be the wider role | The same rebuild | No. Tested above |
+
+**The principle these point to.** Keep two things apart on the page and show them side by side: what the payments show an industry doing here, and what the national tables say it does in the economy. Don't try to make the payments yield the second.
+
+**Open.**
+
+- **The input-output table is national, for 2019, and by product.** It can't say that wholesale in one region differs from wholesale in another.
+- **Whether a fixed national fact belongs on a page about regional payments** was left open in sections 11.10 and 11.12, for tradeable and for filling gaps. This is the third time it has come up, and the strongest case for it.
+- **Imports can't be recovered from this data** by any route.
+
+Figures by industry and region are in `tests/outputs/chains_across_the_edge.csv`.

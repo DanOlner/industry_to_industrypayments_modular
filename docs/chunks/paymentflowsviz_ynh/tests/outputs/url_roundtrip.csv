@@ -1,6 +1,6 @@
 control,kind,values_tried,came_back,problems
 region,select,12,12,""
-cols,select,7,7,""
+cols,select,11,11,""
 lens,select,26,26,""
 pick,select,78,78,""
 show,select,2,2,""
@@ -16,4 +16,5 @@ dots,check,2,2,""
 inter,check,2,2,""
 halo,check,2,2,""
 pubonly,check,2,2,""
+trace,check,2,2,""
 month (step buttons),buttons,1,1,""

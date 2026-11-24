@@ -45,7 +45,16 @@ const problems = [];
   await set(page, { lens: 'fe:both', cols: 'ties' }); await shot(page, '06d_columns_by_ties_foundational', '#chartwrap');
   await set(page, { lens: 'none', cols: 'ties' }); await shot(page, '06e_columns_by_ties_no_highlight', '#chartwrap');
   await set(page, { lens: 'fe:providential', cols: 'sells' }); await shot(page, '06f_columns_by_sales_to_providential', '#chartwrap');
-  await set(page, { lens: 'fe:both', cols: 'buys' }); await shot(page, '06g_columns_by_purchases_from_foundational', '#chartwrap'); await set(page, { lens: 'none', cols: 'group' });
+  await set(page, { lens: 'fe:both', cols: 'buys' }); await shot(page, '06g_columns_by_purchases_from_foundational', '#chartwrap');
+  await set(page, { lens: 'none', cols: 'inside' }); await shot(page, '06h_columns_by_trade_inside', '#chartwrap');
+  await set(page, { cols: 'sellsinside', sel: 39 }); await shot(page, '06i_columns_by_sales_inside_pinned', '.stage'); await set(page, { sel: -1 });
+  await set(page, { cols: 'buysinside', lens: 'fe:both' }); await shot(page, '06j_columns_by_purchases_inside_foundational', '#chartwrap');
+  await set(page, { lens: 'none', cols: 'passed' }); await shot(page, '06k_columns_by_passed_along', '#chartwrap');
+  await set(page, { cols: 'inside', sel: 26 }); await shot(page, '06l_pinned_other_manufacturing', '.stage');              // 26: Other manufacturing in Yorkshire and the Humber
+  await set(page, { trace: true }); await shot(page, '06m_trace_chain_other_manufacturing', '.stage');
+  await set(page, { cols: 'group', sel: 33 }); await shot(page, '06n_trace_chain_building_construction', '#chartwrap'); await set(page, { trace: false, sel: -1 });
+  await set(page, { cols: 'passed', show: 'goods', sel: 37 }); await shot(page, '06o_passed_along_goods_view_wholesale', '.stage'); await set(page, { trace: true, sel: 26 }); await shot(page, '06p_trace_goods_view', '.stage'); await set(page, { show: 'money', trace: false, sel: -1 });      // 37: Wholesale
+  await set(page, { lens: 'none', cols: 'group' });
   await set(page, { lens: 'none', layout: 'hybrid' }); await shot(page, '07_hybrid', '#chartwrap');
   await set(page, { layout: 'force' }); await shot(page, '08_connections', '#chartwrap');
   await set(page, { layout: 'order', inter: true }); await shot(page, '09_intermediaries_in', '#chartwrap');
