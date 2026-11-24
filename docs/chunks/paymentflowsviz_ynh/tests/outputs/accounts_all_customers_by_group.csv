@@ -1,0 +1,127 @@
+group,group_name,main_customer,companies,of_which_stated,share_of_group,turnover_gbp_bn
+prod,Non-manufacturing production,households and consumers,33,27,0.266,91.69
+prod,Non-manufacturing production,central or local government,24,23,0.194,22.55
+prod,Non-manufacturing production,"energy, water and waste companies",22,18,0.177,25.85
+prod,Non-manufacturing production,own group companies,15,15,0.121,18.22
+prod,Non-manufacturing production,construction and housebuilders,11,7,0.089,8.76
+prod,Non-manufacturing production,retailers and supermarkets,4,4,0.032,1.58
+prod,Non-manufacturing production,property owners and landlords,4,2,0.032,1.32
+prod,Non-manufacturing production,other or mixed businesses,3,3,0.024,2.27
+prod,Non-manufacturing production,transport and logistics companies,3,2,0.024,12.63
+prod,Non-manufacturing production,manufacturers,2,1,0.016,
+prod,Non-manufacturing production,"schools, colleges and universities",2,1,0.016,
+prod,Non-manufacturing production,farmers and growers,1,1,0.008,
+manuf,Manufacturing,retailers and supermarkets,55,53,0.247,68.83
+manuf,Manufacturing,manufacturers,32,22,0.143,56.31
+manuf,Manufacturing,own group companies,30,30,0.135,30.31
+manuf,Manufacturing,households and consumers,23,12,0.103,26.38
+manuf,Manufacturing,central or local government,15,14,0.067,53.47
+manuf,Manufacturing,wholesalers and distributors,13,12,0.058,10.31
+manuf,Manufacturing,construction and housebuilders,9,3,0.04,5.84
+manuf,Manufacturing,health and social care bodies,8,6,0.036,5.5
+manuf,Manufacturing,other or mixed businesses,8,5,0.036,5.84
+manuf,Manufacturing,transport and logistics companies,6,5,0.027,3.37
+manuf,Manufacturing,"hotels, restaurants, pubs and caterers",6,5,0.027,2.63
+manuf,Manufacturing,motor dealers,5,5,0.022,22.39
+manuf,Manufacturing,defence,4,3,0.018,2.45
+manuf,Manufacturing,farmers and growers,2,2,0.009,
+manuf,Manufacturing,"energy, water and waste companies",2,0,0.009,
+manuf,Manufacturing,professional and business services firms,1,0,0.004,
+manuf,Manufacturing,property owners and landlords,1,1,0.004,
+manuf,Manufacturing,"schools, colleges and universities",1,1,0.004,
+manuf,Manufacturing,"technology, media and telecoms companies",1,1,0.004,
+manuf,Manufacturing,"banks, insurers and financial firms",1,1,0.004,
+whole,Wholesale and motor trades,households and consumers,47,24,0.395,58.94
+whole,Wholesale and motor trades,retailers and supermarkets,19,19,0.16,23.62
+whole,Wholesale and motor trades,construction and housebuilders,12,9,0.101,17.78
+whole,Wholesale and motor trades,other or mixed businesses,7,5,0.059,8.59
+whole,Wholesale and motor trades,motor dealers,7,3,0.059,4.02
+whole,Wholesale and motor trades,"hotels, restaurants, pubs and caterers",5,5,0.042,9.4
+whole,Wholesale and motor trades,own group companies,5,5,0.042,3.13
+whole,Wholesale and motor trades,manufacturers,4,3,0.034,0.89
+whole,Wholesale and motor trades,health and social care bodies,3,3,0.025,3.08
+whole,Wholesale and motor trades,wholesalers and distributors,3,3,0.025,4.77
+whole,Wholesale and motor trades,professional and business services firms,2,2,0.017,
+whole,Wholesale and motor trades,"banks, insurers and financial firms",2,2,0.017,
+whole,Wholesale and motor trades,transport and logistics companies,1,1,0.008,
+whole,Wholesale and motor trades,"technology, media and telecoms companies",1,1,0.008,
+whole,Wholesale and motor trades,central or local government,1,1,0.008,
+retail,Retail,households and consumers,118,30,0.901,288.4
+retail,Retail,health and social care bodies,4,3,0.031,1.65
+retail,Retail,own group companies,4,3,0.031,1.87
+retail,Retail,construction and housebuilders,1,1,0.008,
+retail,Retail,"banks, insurers and financial firms",1,1,0.008,
+retail,Retail,central or local government,1,1,0.008,
+retail,Retail,retailers and supermarkets,1,1,0.008,
+retail,Retail,transport and logistics companies,1,1,0.008,
+transp,"Transport, storage, accommodation and food",households and consumers,125,44,0.579,79.96
+transp,"Transport, storage, accommodation and food",central or local government,18,17,0.083,7.33
+transp,"Transport, storage, accommodation and food",other or mixed businesses,17,13,0.079,10.2
+transp,"Transport, storage, accommodation and food",own group companies,14,13,0.065,4.08
+transp,"Transport, storage, accommodation and food",transport and logistics companies,11,9,0.051,5.67
+transp,"Transport, storage, accommodation and food","schools, colleges and universities",11,11,0.051,1.6
+transp,"Transport, storage, accommodation and food",manufacturers,7,4,0.032,2.7
+transp,"Transport, storage, accommodation and food",retailers and supermarkets,4,3,0.019,2.68
+transp,"Transport, storage, accommodation and food","hotels, restaurants, pubs and caterers",2,2,0.009,
+transp,"Transport, storage, accommodation and food","banks, insurers and financial firms",1,1,0.005,
+transp,"Transport, storage, accommodation and food","energy, water and waste companies",1,0,0.005,
+transp,"Transport, storage, accommodation and food",property owners and landlords,1,1,0.005,
+transp,"Transport, storage, accommodation and food","technology, media and telecoms companies",1,1,0.005,
+transp,"Transport, storage, accommodation and food",professional and business services firms,1,1,0.005,
+transp,"Transport, storage, accommodation and food",wholesalers and distributors,1,1,0.005,
+transp,"Transport, storage, accommodation and food",health and social care bodies,1,1,0.005,
+info,Information and communication,other or mixed businesses,24,18,0.22,26.23
+info,Information and communication,households and consumers,21,15,0.193,66.99
+info,Information and communication,central or local government,19,18,0.174,11.02
+info,Information and communication,own group companies,18,18,0.165,8.26
+info,Information and communication,"technology, media and telecoms companies",8,6,0.073,4.1
+info,Information and communication,health and social care bodies,3,2,0.028,0.49
+info,Information and communication,"schools, colleges and universities",3,1,0.028,1.47
+info,Information and communication,"energy, water and waste companies",3,3,0.028,0.84
+info,Information and communication,retailers and supermarkets,3,1,0.028,1.3
+info,Information and communication,"banks, insurers and financial firms",2,1,0.018,
+info,Information and communication,professional and business services firms,2,2,0.018,
+info,Information and communication,wholesalers and distributors,1,1,0.009,
+info,Information and communication,manufacturers,1,0,0.009,
+info,Information and communication,motor dealers,1,1,0.009,
+fin,Finance and insurance,households and consumers,60,36,0.488,199.19
+fin,Finance and insurance,own group companies,26,26,0.211,10.38
+fin,Finance and insurance,"banks, insurers and financial firms",16,10,0.13,6.55
+fin,Finance and insurance,other or mixed businesses,13,11,0.106,8.56
+fin,Finance and insurance,central or local government,2,2,0.016,
+fin,Finance and insurance,retailers and supermarkets,2,2,0.016,
+fin,Finance and insurance,construction and housebuilders,1,1,0.008,
+fin,Finance and insurance,manufacturers,1,1,0.008,
+fin,Finance and insurance,transport and logistics companies,1,1,0.008,
+fin,Finance and insurance,"hotels, restaurants, pubs and caterers",1,1,0.008,
+prof,"Professional, scientific and technical",own group companies,34,34,0.279,34.52
+prof,"Professional, scientific and technical",households and consumers,31,16,0.254,33.58
+prof,"Professional, scientific and technical",central or local government,18,17,0.148,11.52
+prof,"Professional, scientific and technical",other or mixed businesses,10,7,0.082,8.29
+prof,"Professional, scientific and technical","energy, water and waste companies",6,4,0.049,3.74
+prof,"Professional, scientific and technical",manufacturers,5,4,0.041,3.42
+prof,"Professional, scientific and technical",construction and housebuilders,5,2,0.041,0.81
+prof,"Professional, scientific and technical",retailers and supermarkets,3,2,0.025,0.46
+prof,"Professional, scientific and technical",wholesalers and distributors,2,1,0.016,
+prof,"Professional, scientific and technical",property owners and landlords,2,1,0.016,
+prof,"Professional, scientific and technical","banks, insurers and financial firms",2,2,0.016,
+prof,"Professional, scientific and technical",professional and business services firms,1,1,0.008,
+prof,"Professional, scientific and technical","technology, media and telecoms companies",1,1,0.008,
+prof,"Professional, scientific and technical",transport and logistics companies,1,1,0.008,
+prof,"Professional, scientific and technical","schools, colleges and universities",1,1,0.008,
+other,Other services,households and consumers,196,92,0.295,59.99
+other,Other services,central or local government,189,130,0.285,19.67
+other,Other services,own group companies,103,102,0.155,65.06
+other,Other services,other or mixed businesses,63,38,0.095,18.23
+other,Other services,health and social care bodies,41,39,0.062,12.66
+other,Other services,property owners and landlords,14,11,0.021,5.39
+other,Other services,"schools, colleges and universities",12,11,0.018,0.34
+other,Other services,manufacturers,11,7,0.017,2.16
+other,Other services,"banks, insurers and financial firms",7,6,0.011,6.14
+other,Other services,"hotels, restaurants, pubs and caterers",5,5,0.008,1.1
+other,Other services,professional and business services firms,5,3,0.008,1.85
+other,Other services,construction and housebuilders,4,3,0.006,1.11
+other,Other services,"energy, water and waste companies",4,3,0.006,2.58
+other,Other services,retailers and supermarkets,4,3,0.006,0.38
+other,Other services,"technology, media and telecoms companies",3,2,0.005,0.92
+other,Other services,transport and logistics companies,3,1,0.005,0.56

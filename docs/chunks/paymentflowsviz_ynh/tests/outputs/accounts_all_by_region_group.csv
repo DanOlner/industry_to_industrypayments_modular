@@ -1,0 +1,118 @@
+region,group,group_name,companies,with_a_share,turnover_with_a_share_gbp_bn,outside_uk_weighted,outside_uk_median,sell_over_a_quarter_abroad,largest_company_share_of_turnover,say_they_buy_abroad,customers_stated
+UK,prod,Non-manufacturing production,127,80,110.53,0.055,0,2,0.18,27,104
+UK,manuf,Manufacturing,231,177,204.8,0.359,0.049,45,0.14,113,181
+UK,whole,Wholesale and motor trades,121,89,87.22,0.018,0,4,0.07,60,86
+UK,retail,Retail,131,103,190.48,0.07,0,7,0.28,82,41
+UK,transp,"Transport, storage, accommodation and food",221,173,70.85,0.166,0,5,0.14,45,122
+UK,info,Information and communication,111,69,50.36,0.319,0.055,15,0.24,34,87
+UK,fin,Finance and insurance,131,39,48.25,0.033,0,3,0.34,23,91
+UK,prof,"Professional, scientific and technical",140,88,54.58,0.181,0,12,0.19,24,94
+UK,other,Other services,694,368,128.21,0.071,0,12,0.06,69,456
+TLI,all,All industries,624,374,312.08,0.175,0,33,0.09,152,403
+TLG,all,All industries,157,97,78.07,0.256,0,11,0.25,40,98
+TLK,all,All industries,114,56,27.1,0.102,0,8,0.18,28,74
+TLJ,all,All industries,264,175,160.56,0.142,0,22,0.12,74,186
+TLH,all,All industries,163,98,143.02,0.15,0,10,0.38,41,119
+TLC,all,All industries,64,44,15.76,0.032,0,3,0.14,13,39
+TLD,all,All industries,179,132,72.12,0.167,0,7,0.18,42,116
+TLE,all,All industries,125,76,54.77,0.046,0,6,0.16,31,74
+TLF,all,All industries,137,79,52.1,0.059,0,3,0.12,39,80
+TLL,all,All industries,20,13,7.91,0.078,0,2,0.52,6,16
+TLM,all,All industries,88,51,33.93,0.181,0,6,0.3,18,61
+TLC,prod,Non-manufacturing production,7,5,3.21,0.004,0,0,0.32,1,7
+TLC,manuf,Manufacturing,7,3,,,,,,6,5
+TLC,whole,Wholesale and motor trades,3,0,,,,,,,
+TLC,retail,Retail,2,2,,,,,,,
+TLC,transp,"Transport, storage, accommodation and food",21,20,5.04,0,0,0,0.4,1,11
+TLC,info,Information and communication,2,2,,,,,,,
+TLC,fin,Finance and insurance,1,0,,,,,,,
+TLC,prof,"Professional, scientific and technical",2,1,,,,,,,
+TLC,other,Other services,19,11,3.33,0.041,0,1,0.2,3,12
+TLD,prod,Non-manufacturing production,7,3,,,,,,0,5
+TLD,manuf,Manufacturing,20,18,6.99,0.072,0.035,1,0.26,6,12
+TLD,whole,Wholesale and motor trades,12,9,10.65,0.001,0,0,0.32,4,9
+TLD,retail,Retail,24,20,26.47,0.382,0,3,0.48,16,13
+TLD,transp,"Transport, storage, accommodation and food",28,24,3.92,0,0,0,0.14,4,25
+TLD,info,Information and communication,3,3,,,,,,,
+TLD,fin,Finance and insurance,4,2,,,,,,,
+TLD,prof,"Professional, scientific and technical",20,15,4.2,0.062,0,1,0.18,4,12
+TLD,other,Other services,59,37,15.47,0.075,0,2,0.18,6,35
+TLE,prod,Non-manufacturing production,13,9,5.93,0.004,0,0,0.28,4,11
+TLE,manuf,Manufacturing,25,22,17.4,0.118,0.049,5,0.19,11,20
+TLE,whole,Wholesale and motor trades,8,7,4.95,0.017,0,0,0.29,5,4
+TLE,retail,Retail,10,8,18.41,0.001,0,0,0.46,3,3
+TLE,transp,"Transport, storage, accommodation and food",10,9,4.37,0.019,0,0,0.42,2,2
+TLE,info,Information and communication,2,1,,,,,,,
+TLE,fin,Finance and insurance,2,0,,,,,,,
+TLE,prof,"Professional, scientific and technical",6,3,,,,,,2,3
+TLE,other,Other services,48,16,2.45,0,0,0,0.33,4,27
+TLF,prod,Non-manufacturing production,5,2,,,,,,2,5
+TLF,manuf,Manufacturing,19,16,9.39,0.152,0.015,1,0.19,10,13
+TLF,whole,Wholesale and motor trades,16,8,11.53,0.004,0,1,0.55,6,12
+TLF,retail,Retail,15,11,16.34,0.07,0,0,0.35,10,5
+TLF,transp,"Transport, storage, accommodation and food",14,12,3.23,0.02,0,0,0.28,4,8
+TLF,info,Information and communication,3,2,,,,,,,
+TLF,fin,Finance and insurance,5,1,,,,,,1,3
+TLF,prof,"Professional, scientific and technical",4,3,,,,,,,
+TLF,other,Other services,55,23,3.78,0.003,0,0,0.25,5,29
+TLG,prod,Non-manufacturing production,10,6,6.46,0.003,0,0,0.39,0,4
+TLG,manuf,Manufacturing,28,25,42.24,0.46,0.138,10,0.45,12,23
+TLG,whole,Wholesale and motor trades,22,16,14.69,0.002,0,0,0.13,14,17
+TLG,retail,Retail,6,4,,,,,,5,1
+TLG,transp,"Transport, storage, accommodation and food",14,8,2.22,0.021,0,0,0.24,1,6
+TLG,info,Information and communication,6,4,,,,,,2,5
+TLG,fin,Finance and insurance,7,0,,,,,,0,4
+TLG,prof,"Professional, scientific and technical",11,7,1.18,0.161,0,1,0.2,2,8
+TLG,other,Other services,51,25,5.76,0.018,0,0,0.19,4,29
+TLH,prod,Non-manufacturing production,12,6,3.74,0,0,0,0.28,3,12
+TLH,manuf,Manufacturing,23,17,22.36,0.455,0.05,4,0.56,10,21
+TLH,whole,Wholesale and motor trades,11,10,12.88,0.04,0.01,1,0.42,8,10
+TLH,retail,Retail,6,5,59.39,0,0,0,0.9,3,2
+TLH,transp,"Transport, storage, accommodation and food",20,13,21.71,0.46,0,2,0.46,3,10
+TLH,info,Information and communication,5,4,,,,,,2,5
+TLH,fin,Finance and insurance,7,4,,,,,,4,7
+TLH,prof,"Professional, scientific and technical",14,7,2.34,0.029,0,1,0.35,2,11
+TLH,other,Other services,63,32,13.07,0.019,0,1,0.49,6,41
+TLI,prod,Non-manufacturing production,25,18,24.23,0.012,0,1,0.4,7,20
+TLI,manuf,Manufacturing,26,19,48.6,0.498,0.028,3,0.58,16,24
+TLI,whole,Wholesale and motor trades,18,15,9.67,0.042,0.001,1,0.17,10,12
+TLI,retail,Retail,44,34,53.78,0.035,0,3,0.55,29,10
+TLI,transp,"Transport, storage, accommodation and food",66,52,17.34,0.016,0,1,0.07,18,28
+TLI,info,Information and communication,58,35,34.79,0.422,0.109,9,0.35,16,41
+TLI,fin,Finance and insurance,70,20,33.8,0.039,0,2,0.49,10,53
+TLI,prof,"Professional, scientific and technical",55,31,20.15,0.192,0.027,4,0.15,7,35
+TLI,other,Other services,232,137,57.42,0.075,0,3,0.14,29,167
+TLJ,prod,Non-manufacturing production,20,16,53.55,0.104,0,1,0.36,5,17
+TLJ,manuf,Manufacturing,44,30,35.1,0.286,0.064,10,0.27,21,31
+TLJ,whole,Wholesale and motor trades,22,19,17.91,0.011,0,0,0.14,7,15
+TLJ,retail,Retail,11,9,6,0.006,0,0,0.64,7,4
+TLJ,transp,"Transport, storage, accommodation and food",28,21,7.08,0.183,0,2,0.14,7,22
+TLJ,info,Information and communication,23,12,5.74,0.082,0.073,2,0.19,7,21
+TLJ,fin,Finance and insurance,13,6,5.04,0,0,0,0.68,6,10
+TLJ,prof,"Professional, scientific and technical",18,14,11.59,0.26,0.094,4,0.29,7,13
+TLJ,other,Other services,84,48,18.56,0.115,0,3,0.11,7,53
+TLK,prod,Non-manufacturing production,10,6,2.27,0,0,0,0.27,1,10
+TLK,manuf,Manufacturing,19,11,8.13,0.161,0.041,4,0.61,10,14
+TLK,whole,Wholesale and motor trades,6,3,,,,,,5,5
+TLK,retail,Retail,9,6,2.8,0.071,0.011,1,0.61,5,2
+TLK,transp,"Transport, storage, accommodation and food",8,7,2.84,0.007,0,0,0.59,2,3
+TLK,info,Information and communication,4,2,,,,,,,
+TLK,fin,Finance and insurance,5,0,,,,,,0,2
+TLK,prof,"Professional, scientific and technical",4,4,,,,,,,
+TLK,other,Other services,46,15,4.93,0.162,0,1,0.21,3,30
+TLL,prod,Non-manufacturing production,4,1,,,,,,,
+TLL,manuf,Manufacturing,4,4,,,,,,,
+TLL,whole,Wholesale and motor trades,1,1,,,,,,,
+TLL,retail,Retail,2,2,,,,,,,
+TLL,transp,"Transport, storage, accommodation and food",1,0,,,,,,,
+TLL,fin,Finance and insurance,2,1,,,,,,,
+TLL,other,Other services,6,4,,,,,,1,6
+TLM,prod,Non-manufacturing production,11,7,3.2,0.058,0,0,0.35,3,7
+TLM,manuf,Manufacturing,12,10,9.42,0.365,0.119,4,0.24,6,10
+TLM,whole,Wholesale and motor trades,2,1,,,,,,,
+TLM,retail,Retail,2,2,,,,,,,
+TLM,transp,"Transport, storage, accommodation and food",10,6,2.97,0,0,0,0.86,3,5
+TLM,info,Information and communication,4,3,,,,,,,
+TLM,fin,Finance and insurance,12,2,,,,,,1,7
+TLM,prof,"Professional, scientific and technical",5,2,,,,,,0,2
+TLM,other,Other services,29,18,2.72,0.055,0,1,0.21,1,26

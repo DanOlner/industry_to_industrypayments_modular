@@ -450,7 +450,7 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | `tests/24_chains_across_the_edge.R` | Scoping: whether counting payments across the region's edge makes the chain measure match an industry's wider role (section 13.10) |
 | `tests/25_unknown_industry.R` | Whether payers and payees with no industry also have no region, as ONS's method implies (section 14) |
 | `plan/chains_deck_plan.md`, `slides/` | A slide deck explaining local links and wider roles through three industries: its plan, its source (`chains_deck.qmd`), the script that takes its screenshots, and the built deck (`chains_deck.html`) |
-| `plan/other_connections_plan.md`, `tests/26_card_takings.R`, `tests/27_trade_at_the_edge.R`, `tests/28_accounts_geography.R`, `tests/29_accounts_reading.R` | A side plan on other sources for the links the payments can't see (households, other countries, the rest of the UK on a better footing), with three tests: card takings inside the payments, ONS's regional trade figures beside the payments, and turnover by geography read from large companies' accounts |
+| `plan/other_connections_plan.md`, `tests/26_card_takings.R`, `tests/27_trade_at_the_edge.R`, `tests/28_accounts_geography.R`, `tests/29_accounts_reading.R`, `tests/30_accounts_reading_all.R` | A side plan on other sources for the links the payments can't see (households, other countries, the rest of the UK on a better footing), with three tests: card takings inside the payments, ONS's regional trade figures beside the payments, and turnover by geography read from large companies' accounts |
 | `tests/lookups/` | Division names and sections; industrial strategy shares by division; the foundational economy list |
 | `tests/outputs/` | Result tables as CSV; `screens/` holds 20 prototype screenshots |
 | `tests/prototype/` | `prototype.html` and its data file `ynh_flows.js` |
@@ -485,6 +485,13 @@ The prototype (`tests/prototype/prototype.html`) already does a rough version of
 | Month | `m` = `2021-06` | 1 | 1 |
 
 All 17 settings together also came back from one address of 190 characters. A mangled address falls back to the opening view without an error. `#order-note` on the end opens the note.
+
+**Checked again on 24 November 2026,** after the columns, chain and side panel work, by running `tests/15` on the page as it stands.
+
+- **Everything added since is in the address and comes back:** the region (`region`, 12 of 12), the seven newer column choices (`cols`, now 11 of 11: `ties`, `sells`, `buys`, `inside`, `sellsinside`, `buysinside` and `passed` added), the foundational economy highlights (`lens`, now 26 of 26) and the chain trace (`trace`, 2 of 2).
+- **One thing wasn't, and now is:** the side panel's "Show table" button, which swaps the partners chart for the two lists. It is `ptable=1`. The test now presses the button, reloads the address and presses it back.
+- **All 19 settings together** come back from one address of 207 characters.
+- **Still not in the address, as before:** whether the table of links, the note on the order or the comparison of regions is open, and whether it is playing.
 
 **What's missing.**
 
@@ -1517,12 +1524,12 @@ Figures by industry and region are in `tests/outputs/chains_across_the_edge.csv`
 - **It shows the month on the slider,** like the bars above it, and follows the three-month average and published-only switches. The deck's version is the whole period.
 - **Hidden months** held at an average are drawn faint with a dashed outline, as held links are on the main chart, and the caption says so when there are any. A first version called them "paler", which was backwards in the dark theme, where the bars are light and a faint one looks darker.
 - **Hovering over a bar** gives the amount and the number of payments. The number of payments is otherwise only in the table.
-- **The choice of chart or table lasts while the page is open.** It isn't in the address.
+- **The choice of chart or table is in the address** as `ptable=1`, so a link can open on the table. (At first it only lasted while the page was open. Changed later the same day, when the address was checked against everything added since.)
 - **Checks:** no page or console errors; 60 frames a second. Screenshots `06q` (goods view), `06r` (money view) and `06s` (table) in `tests/outputs/page/`.
 
 ## 16. Other sources for the links the payments can't see
 
-*24 November 2026. Scoped in its own file, [`other_connections_plan.md`](other_connections_plan.md), with tests 26 to 29. Nothing from it is on the page.*
+*24 November 2026. Scoped in its own file, [`other_connections_plan.md`](other_connections_plan.md), with tests 26 to 30. Nothing from it is on the page.*
 
 It follows section 13.10. The short version:
 
@@ -1531,4 +1538,6 @@ It follows section 13.10. The short version:
 - **Retail's large payments to London finance are not card spending.** They are a few very large payments by retailers registered in three regions, starting in 2023.
 - **Large companies' accounts state turnover by geography,** and a pilot read it from 324 of 1,956 sets of accounts. A model then read 66 Yorkshire and the Humber companies' accounts in full (test 29): 55 give a checked share of sales abroad.
 - **The accounts show a chain the payments hide.** Food manufacturers registered in the region say their main customers are supermarkets, and ONS has never published a month of retail paying food manufacturing inside the region, so the page draws no link there.
+- **The reading was then run over all 1,956 large employers' accounts across Great Britain** (test 30). It gives sales abroad, whether a company says it buys from abroad, and its main kind of customer, by industry group and region of registration. Yorkshire and the Humber is the only region where the food manufacturing to retail link is never published.
+- **A feature is scoped, not built** (the side plan's section 7.1): a section under the chart for what the payments leave out, a side panel block from the accounts, and a dotted line for a hidden link the accounts vouch for.
 - **The side plan's section 8 gives an order of work, and its section 9 the decisions.**

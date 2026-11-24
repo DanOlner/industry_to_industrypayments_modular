@@ -1,0 +1,351 @@
+la_name,la_code,itl1
+County Durham,E06000047,TLC
+Darlington,E06000005,TLC
+Gateshead,E08000037,TLC
+Hartlepool,E06000001,TLC
+Middlesbrough,E06000002,TLC
+Newcastle upon Tyne,E08000021,TLC
+North Tyneside,E08000022,TLC
+Northumberland,E06000057,TLC
+Redcar and Cleveland,E06000003,TLC
+South Tyneside,E08000023,TLC
+Stockton-on-Tees,E06000004,TLC
+Sunderland,E08000024,TLC
+Blackburn with Darwen,E06000008,TLD
+Blackpool,E06000009,TLD
+Bolton,E08000001,TLD
+Burnley,E07000117,TLD
+Bury,E08000002,TLD
+Cheshire East,E06000049,TLD
+Cheshire West and Chester,E06000050,TLD
+Chorley,E07000118,TLD
+Cumberland,E06000063,TLD
+Fylde,E07000119,TLD
+Halton,E06000006,TLD
+Hyndburn,E07000120,TLD
+Knowsley,E08000011,TLD
+Lancaster,E07000121,TLD
+Liverpool,E08000012,TLD
+Manchester,E08000003,TLD
+Oldham,E08000004,TLD
+Pendle,E07000122,TLD
+Preston,E07000123,TLD
+Ribble Valley,E07000124,TLD
+Rochdale,E08000005,TLD
+Rossendale,E07000125,TLD
+Salford,E08000006,TLD
+Sefton,E08000014,TLD
+South Ribble,E07000126,TLD
+St. Helens,E08000013,TLD
+Stockport,E08000007,TLD
+Tameside,E08000008,TLD
+Trafford,E08000009,TLD
+Warrington,E06000007,TLD
+West Lancashire,E07000127,TLD
+Westmorland and Furness,E06000064,TLD
+Wigan,E08000010,TLD
+Wirral,E08000015,TLD
+Wyre,E07000128,TLD
+Barnsley,E08000016,TLE
+Bradford,E08000032,TLE
+Calderdale,E08000033,TLE
+Doncaster,E08000017,TLE
+East Riding of Yorkshire,E06000011,TLE
+"Kingston upon Hull, City of",E06000010,TLE
+Kirklees,E08000034,TLE
+Leeds,E08000035,TLE
+North East Lincolnshire,E06000012,TLE
+North Lincolnshire,E06000013,TLE
+North Yorkshire,E06000065,TLE
+Rotherham,E08000018,TLE
+Sheffield,E08000019,TLE
+Wakefield,E08000036,TLE
+York,E06000014,TLE
+Amber Valley,E07000032,TLF
+Ashfield,E07000170,TLF
+Bassetlaw,E07000171,TLF
+Blaby,E07000129,TLF
+Bolsover,E07000033,TLF
+Boston,E07000136,TLF
+Broxtowe,E07000172,TLF
+Charnwood,E07000130,TLF
+Chesterfield,E07000034,TLF
+Derby,E06000015,TLF
+Derbyshire Dales,E07000035,TLF
+East Lindsey,E07000137,TLF
+Erewash,E07000036,TLF
+Gedling,E07000173,TLF
+Harborough,E07000131,TLF
+High Peak,E07000037,TLF
+Hinckley and Bosworth,E07000132,TLF
+Leicester,E06000016,TLF
+Lincoln,E07000138,TLF
+Mansfield,E07000174,TLF
+Melton,E07000133,TLF
+Newark and Sherwood,E07000175,TLF
+North East Derbyshire,E07000038,TLF
+North Kesteven,E07000139,TLF
+North Northamptonshire,E06000061,TLF
+North West Leicestershire,E07000134,TLF
+Nottingham,E06000018,TLF
+Oadby and Wigston,E07000135,TLF
+Rushcliffe,E07000176,TLF
+Rutland,E06000017,TLF
+South Derbyshire,E07000039,TLF
+South Holland,E07000140,TLF
+South Kesteven,E07000141,TLF
+West Lindsey,E07000142,TLF
+West Northamptonshire,E06000062,TLF
+Birmingham,E08000025,TLG
+Bromsgrove,E07000234,TLG
+Cannock Chase,E07000192,TLG
+Coventry,E08000026,TLG
+Dudley,E08000027,TLG
+East Staffordshire,E07000193,TLG
+"Herefordshire, County of",E06000019,TLG
+Lichfield,E07000194,TLG
+Malvern Hills,E07000235,TLG
+Newcastle-under-Lyme,E07000195,TLG
+North Warwickshire,E07000218,TLG
+Nuneaton and Bedworth,E07000219,TLG
+Redditch,E07000236,TLG
+Rugby,E07000220,TLG
+Sandwell,E08000028,TLG
+Shropshire,E06000051,TLG
+Solihull,E08000029,TLG
+South Staffordshire,E07000196,TLG
+Stafford,E07000197,TLG
+Staffordshire Moorlands,E07000198,TLG
+Stoke-on-Trent,E06000021,TLG
+Stratford-on-Avon,E07000221,TLG
+Tamworth,E07000199,TLG
+Telford and Wrekin,E06000020,TLG
+Walsall,E08000030,TLG
+Warwick,E07000222,TLG
+Wolverhampton,E08000031,TLG
+Worcester,E07000237,TLG
+Wychavon,E07000238,TLG
+Wyre Forest,E07000239,TLG
+Babergh,E07000200,TLH
+Basildon,E07000066,TLH
+Bedford,E06000055,TLH
+Braintree,E07000067,TLH
+Breckland,E07000143,TLH
+Brentwood,E07000068,TLH
+Broadland,E07000144,TLH
+Broxbourne,E07000095,TLH
+Cambridge,E07000008,TLH
+Castle Point,E07000069,TLH
+Central Bedfordshire,E06000056,TLH
+Chelmsford,E07000070,TLH
+Colchester,E07000071,TLH
+Dacorum,E07000096,TLH
+East Cambridgeshire,E07000009,TLH
+East Hertfordshire,E07000242,TLH
+East Suffolk,E07000244,TLH
+Epping Forest,E07000072,TLH
+Fenland,E07000010,TLH
+Great Yarmouth,E07000145,TLH
+Harlow,E07000073,TLH
+Hertsmere,E07000098,TLH
+Huntingdonshire,E07000011,TLH
+Ipswich,E07000202,TLH
+King's Lynn and West Norfolk,E07000146,TLH
+Luton,E06000032,TLH
+Maldon,E07000074,TLH
+Mid Suffolk,E07000203,TLH
+North Hertfordshire,E07000099,TLH
+North Norfolk,E07000147,TLH
+Norwich,E07000148,TLH
+Peterborough,E06000031,TLH
+Rochford,E07000075,TLH
+South Cambridgeshire,E07000012,TLH
+South Norfolk,E07000149,TLH
+Southend-on-Sea,E06000033,TLH
+St Albans,E07000240,TLH
+Stevenage,E07000243,TLH
+Tendring,E07000076,TLH
+Three Rivers,E07000102,TLH
+Thurrock,E06000034,TLH
+Uttlesford,E07000077,TLH
+Watford,E07000103,TLH
+Welwyn Hatfield,E07000241,TLH
+West Suffolk,E07000245,TLH
+Barking and Dagenham,E09000002,TLI
+Barnet,E09000003,TLI
+Bexley,E09000004,TLI
+Brent,E09000005,TLI
+Bromley,E09000006,TLI
+Camden,E09000007,TLI
+City of London,E09000001,TLI
+Croydon,E09000008,TLI
+Ealing,E09000009,TLI
+Enfield,E09000010,TLI
+Greenwich,E09000011,TLI
+Hackney,E09000012,TLI
+Hammersmith and Fulham,E09000013,TLI
+Haringey,E09000014,TLI
+Harrow,E09000015,TLI
+Havering,E09000016,TLI
+Hillingdon,E09000017,TLI
+Hounslow,E09000018,TLI
+Islington,E09000019,TLI
+Kensington and Chelsea,E09000020,TLI
+Kingston upon Thames,E09000021,TLI
+Lambeth,E09000022,TLI
+Lewisham,E09000023,TLI
+Merton,E09000024,TLI
+Newham,E09000025,TLI
+Redbridge,E09000026,TLI
+Richmond upon Thames,E09000027,TLI
+Southwark,E09000028,TLI
+Sutton,E09000029,TLI
+Tower Hamlets,E09000030,TLI
+Waltham Forest,E09000031,TLI
+Wandsworth,E09000032,TLI
+Westminster,E09000033,TLI
+Adur,E07000223,TLJ
+Arun,E07000224,TLJ
+Ashford,E07000105,TLJ
+Basingstoke and Deane,E07000084,TLJ
+Bracknell Forest,E06000036,TLJ
+Brighton and Hove,E06000043,TLJ
+Buckinghamshire,E06000060,TLJ
+Canterbury,E07000106,TLJ
+Cherwell,E07000177,TLJ
+Chichester,E07000225,TLJ
+Crawley,E07000226,TLJ
+Dartford,E07000107,TLJ
+Dover,E07000108,TLJ
+East Hampshire,E07000085,TLJ
+Eastbourne,E07000061,TLJ
+Eastleigh,E07000086,TLJ
+Elmbridge,E07000207,TLJ
+Epsom and Ewell,E07000208,TLJ
+Fareham,E07000087,TLJ
+Folkestone and Hythe,E07000112,TLJ
+Gosport,E07000088,TLJ
+Gravesham,E07000109,TLJ
+Guildford,E07000209,TLJ
+Hart,E07000089,TLJ
+Hastings,E07000062,TLJ
+Havant,E07000090,TLJ
+Horsham,E07000227,TLJ
+Isle of Wight,E06000046,TLJ
+Lewes,E07000063,TLJ
+Maidstone,E07000110,TLJ
+Medway,E06000035,TLJ
+Mid Sussex,E07000228,TLJ
+Milton Keynes,E06000042,TLJ
+Mole Valley,E07000210,TLJ
+New Forest,E07000091,TLJ
+Oxford,E07000178,TLJ
+Portsmouth,E06000044,TLJ
+Reading,E06000038,TLJ
+Reigate and Banstead,E07000211,TLJ
+Rother,E07000064,TLJ
+Runnymede,E07000212,TLJ
+Rushmoor,E07000092,TLJ
+Sevenoaks,E07000111,TLJ
+Slough,E06000039,TLJ
+South Oxfordshire,E07000179,TLJ
+Southampton,E06000045,TLJ
+Spelthorne,E07000213,TLJ
+Surrey Heath,E07000214,TLJ
+Swale,E07000113,TLJ
+Tandridge,E07000215,TLJ
+Test Valley,E07000093,TLJ
+Thanet,E07000114,TLJ
+Tonbridge and Malling,E07000115,TLJ
+Tunbridge Wells,E07000116,TLJ
+Vale of White Horse,E07000180,TLJ
+Waverley,E07000216,TLJ
+Wealden,E07000065,TLJ
+West Berkshire,E06000037,TLJ
+West Oxfordshire,E07000181,TLJ
+Winchester,E07000094,TLJ
+Windsor and Maidenhead,E06000040,TLJ
+Woking,E07000217,TLJ
+Wokingham,E06000041,TLJ
+Worthing,E07000229,TLJ
+Bath and North East Somerset,E06000022,TLK
+"Bournemouth, Christchurch and Poole",E06000058,TLK
+"Bristol, City of",E06000023,TLK
+Cheltenham,E07000078,TLK
+Cornwall,E06000052,TLK
+Cotswold,E07000079,TLK
+Dorset,E06000059,TLK
+East Devon,E07000040,TLK
+Exeter,E07000041,TLK
+Forest of Dean,E07000080,TLK
+Gloucester,E07000081,TLK
+Isles of Scilly,E06000053,TLK
+Mid Devon,E07000042,TLK
+North Devon,E07000043,TLK
+North Somerset,E06000024,TLK
+Plymouth,E06000026,TLK
+Somerset,E06000066,TLK
+South Gloucestershire,E06000025,TLK
+South Hams,E07000044,TLK
+Stroud,E07000082,TLK
+Swindon,E06000030,TLK
+Teignbridge,E07000045,TLK
+Tewkesbury,E07000083,TLK
+Torbay,E06000027,TLK
+Torridge,E07000046,TLK
+West Devon,E07000047,TLK
+Wiltshire,E06000054,TLK
+Blaenau Gwent,W06000019,TLL
+Bridgend,W06000013,TLL
+Caerphilly,W06000018,TLL
+Cardiff,W06000015,TLL
+Carmarthenshire,W06000010,TLL
+Ceredigion,W06000008,TLL
+Conwy,W06000003,TLL
+Denbighshire,W06000004,TLL
+Flintshire,W06000005,TLL
+Gwynedd,W06000002,TLL
+Isle of Anglesey,W06000001,TLL
+Merthyr Tydfil,W06000024,TLL
+Monmouthshire,W06000021,TLL
+Neath Port Talbot,W06000012,TLL
+Newport,W06000022,TLL
+Pembrokeshire,W06000009,TLL
+Powys,W06000023,TLL
+Rhondda Cynon Taf,W06000016,TLL
+Swansea,W06000011,TLL
+Torfaen,W06000020,TLL
+Vale of Glamorgan,W06000014,TLL
+Wrexham,W06000006,TLL
+Aberdeen City,S12000033,TLM
+Aberdeenshire,S12000034,TLM
+Angus,S12000041,TLM
+Argyll and Bute,S12000035,TLM
+City of Edinburgh,S12000036,TLM
+Clackmannanshire,S12000005,TLM
+Dumfries and Galloway,S12000006,TLM
+Dundee City,S12000042,TLM
+East Ayrshire,S12000008,TLM
+East Dunbartonshire,S12000045,TLM
+East Lothian,S12000010,TLM
+East Renfrewshire,S12000011,TLM
+Falkirk,S12000014,TLM
+Fife,S12000047,TLM
+Glasgow City,S12000049,TLM
+Highland,S12000017,TLM
+Inverclyde,S12000018,TLM
+Midlothian,S12000019,TLM
+Moray,S12000020,TLM
+Na h-Eileanan Siar,S12000013,TLM
+North Ayrshire,S12000021,TLM
+North Lanarkshire,S12000050,TLM
+Orkney Islands,S12000023,TLM
+Perth and Kinross,S12000048,TLM
+Renfrewshire,S12000038,TLM
+Scottish Borders,S12000026,TLM
+Shetland Islands,S12000027,TLM
+South Ayrshire,S12000028,TLM
+South Lanarkshire,S12000029,TLM
+Stirling,S12000030,TLM
+West Dunbartonshire,S12000039,TLM
+West Lothian,S12000040,TLM

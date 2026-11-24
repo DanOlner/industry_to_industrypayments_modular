@@ -36,14 +36,14 @@
   const regionOf = code => IDX.regions.find(r => r.code === code);
   let wantMonth = q.get('m'), wantSel = q.get('sel');     // resolved once the region's data has arrived
   const DEFAULTS = { region: IDX.default, layout: 'order', cols: 'group', lens: 'none', show: 'money', dir: 'both', measure: 'value', scale: 'share', net: 'net', cover: '0.8',
-                     smooth: true, dots: true, inter: false, halo: false, pubonly: false, trace: false, speed: '3' };
+                     smooth: true, dots: true, inter: false, halo: false, pubonly: false, trace: false, ptable: false, speed: '3' };
   const S = { region: (regionOf(q.get('region')) || {}).built ? q.get('region') : IDX.default, layout: pick(q.get('layout'), ['order', 'hybrid', 'force'], DEFAULTS.layout), cols: pick(q.get('cols'), ['group', 'paygroup', 'shift', 'ties', 'sells', 'buys', 'inside', 'sellsinside', 'buysinside', 'passed', 'free'], DEFAULTS.cols),
               lens: q.get('lens') || 'none', measure: pick(q.get('measure'), ['value', 'count'], DEFAULTS.measure),
               scale: pick(q.get('scale'), ['share', 'amount'], DEFAULTS.scale), net: pick(q.get('net'), ['net', 'gross'], DEFAULTS.net),
               cover: pick(q.get('cover'), ['0.5', '0.8', '0.9', '1'], DEFAULTS.cover), speed: pick(q.get('speed'), ['1.5', '3', '6', '12'], DEFAULTS.speed),
               show: pick(q.get('show'), ['money', 'goods'], DEFAULTS.show), dir: pick(q.get('dir'), ['both', 'down', 'up'], DEFAULTS.dir),
               smooth: q.get('smooth') !== '0', dots: q.get('dots') !== '0', inter: q.get('inter') === '1', halo: q.get('halo') === '1',
-              pubonly: q.get('pubonly') === '1', trace: q.get('trace') === '1', t: 0, sel: -1 };
+              pubonly: q.get('pubonly') === '1', trace: q.get('trace') === '1', ptable: q.get('ptable') === '1', t: 0, sel: -1 };
 
   // ---------------------------------------------------------------- colours, from the stylesheet so light and dark both work
   let C = {};
@@ -656,7 +656,6 @@
     for (let k = 0; k < NL; k++) if (lact[k] && curV[k] > 0 && (asPayer ? buy[k] : sup[k]) === i) out.push({ name: nodes[asPayer ? sup[k] : buy[k]].short, v: curV[k], n: curN[k], held: !S.pubonly && basis[k][Math.round(S.t)] === 'h' });
     return out.sort((a, b) => b.v - a.v).slice(0, n);
   }
-  let partnerTable = false;                                // the side panel's partners: a chart, or the two lists behind "Show table"
   function renderDetail() {
     const box = $('detail'); box.replaceChildren();
     if (S.sel < 0) { box.append(el('h2', null, 'Pick an industry'), el('p', 'd-hint', 'Click a circle to pin it. Its payments, partners and place in the order appear here. Hover over a circle or a link for its figures.')); return; }
@@ -692,9 +691,9 @@
     // above in the goods view). "Show table" swaps it for the two lists, which also give the number of payments.
     { const g = goods(), count = n => (n >= 50 ? d3.format(',')(Math.round(n / 100) * 100) : 'under 50') + ' payments';
       const head = el('h3', 'd-headrow'); head.append(document.createTextNode('Its main partners here'));
-      const tog = el('button', 'd-toggle', partnerTable ? 'Show chart' : 'Show table'); tog.type = 'button'; tog.addEventListener('click', () => { partnerTable = !partnerTable; renderDetail(); });
+      const tog = el('button', 'd-toggle', S.ptable ? 'Show chart' : 'Show table'); tog.type = 'button'; tog.addEventListener('click', () => { S.ptable = !S.ptable; renderDetail(); syncUrl(); });   // the partners as a chart, or as the two lists; in the address as ptable
       head.append(tog); box.append(head);
-      if (partnerTable) for (const [title, asPayer] of [[g ? 'It buys most from' : 'It pays most to', true], [g ? 'It sells most to' : 'It is paid most by', false]]) {
+      if (S.ptable) for (const [title, asPayer] of [[g ? 'It buys most from' : 'It pays most to', true], [g ? 'It sells most to' : 'It is paid most by', false]]) {
         box.append(el('p', 'd-chainhead', title)); const list = partners(i, asPayer);
         if (!list.length) box.append(el('p', 'd-small', 'Nothing published.'));
         for (const p of list) { const r = el('div', 'd-row'); r.append(el('span', 'n', p.name + (p.held ? ' (held)' : '')), el('span', 'v', `${fmtMoney(p.v)}, ${count(p.n)}`)); box.append(r); } }
@@ -916,7 +915,7 @@
     if (!D) return;
     const p = new URLSearchParams();
     for (const k of ['region', ...selects, 'layout', 'dir']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k]);
-    for (const k of checks) if (S[k] !== DEFAULTS[k]) p.set(k, S[k] ? '1' : '0');
+    for (const k of [...checks, 'ptable']) if (S[k] !== DEFAULTS[k]) p.set(k, S[k] ? '1' : '0');      // ptable has no checkbox: it is the side panel's "Show table" button
     if (Math.round(S.t) !== NM - 1) p.set('m', D.months[Math.round(S.t)]);
     if (S.sel >= 0) p.set('sel', nodes[S.sel].id);
     try { history.replaceState(null, '', p.toString() ? '?' + p : location.pathname); } catch (err) { /* opened from disk in a browser that forbids it */ }

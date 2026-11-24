@@ -1,0 +1,808 @@
+region,supplier,supplier_name,buyer,buyer_name,customer_kind,divisions_in_kind,companies,of_which_stated,turnover_gbp_bn,status,months_published,months
+TLK,85,Education,84,Public administration,central or local government,1,15,6,0.27,hidden in most months,19,93
+TLE,85,Education,84,Public administration,central or local government,1,10,2,0.12,hidden in most months,23,93
+TLE,10,Food manufacturing,47,Retail,retailers and supermarkets,1,9,8,12.03,hidden in every month,0,93
+TLJ,87,Residential care,84,Public administration,central or local government,1,9,9,0.41,hidden in most months,7,93
+TLJ,85,Education,84,Public administration,central or local government,1,6,3,0.26,hidden in most months,10,93
+TLC,85,Education,84,Public administration,central or local government,1,5,3,0.04,hidden in every month,0,87
+TLH,87,Residential care,84,Public administration,central or local government,1,5,5,0.37,hidden in most months,10,80
+TLC,49,Land transport,84,Public administration,central or local government,1,4,4,1.28,hidden in every month,0,89
+TLD,78,Employment agencies,12,Tobacco,manufacturers,24,4,3,0.38,hidden in every month,0,3
+TLD,78,Employment agencies,15,Leather,manufacturers,24,4,3,0.38,hidden in every month,0,9
+TLD,78,Employment agencies,19,Coke & refined petroleum,manufacturers,24,4,3,0.38,hidden in every month,0,63
+TLD,78,Employment agencies,24,Basic metals,manufacturers,24,4,3,0.38,hidden in most months,19,93
+TLD,78,Employment agencies,30,Other transport equipment,manufacturers,24,4,3,0.38,hidden in most months,17,93
+TLD,49,Land transport,84,Public administration,central or local government,1,4,4,0.67,hidden in most months,12,91
+TLI,59,"Film, TV & music",61,Telecoms,"technology, media and telecoms companies",6,4,2,2.06,hidden in most months,21,93
+TLJ,30,Other transport equipment,84,Public administration,central or local government,1,4,4,12.83,hidden in most months,1,93
+TLK,35,Energy supply,36,Water supply,"energy, water and waste companies",5,4,4,1.98,hidden in every month,0,92
+TLK,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,4,4,1.98,hidden in every month,0,93
+TLK,35,Energy supply,38,Waste,"energy, water and waste companies",5,4,4,1.98,hidden in every month,0,93
+TLK,35,Energy supply,39,Remediation,"energy, water and waste companies",5,4,4,1.98,hidden in most months,4,93
+TLE,01,Farming,47,Retail,retailers and supermarkets,1,3,3,1.24,hidden in every month,0,93
+TLE,87,Residential care,84,Public administration,central or local government,1,3,3,0.17,hidden in every month,0,60
+TLI,86,Health,65,Insurance & pensions,"banks, insurers and financial firms",3,3,3,2.63,hidden in every month,0,93
+TLI,96,Personal services,84,Public administration,central or local government,1,3,3,0.65,hidden in most months,1,93
+TLJ,20,Chemicals,11,Drinks manufacturing,manufacturers,24,3,2,2.03,hidden in most months,18,93
+TLJ,20,Chemicals,12,Tobacco,manufacturers,24,3,2,2.03,hidden in every month,0,41
+TLJ,20,Chemicals,13,Textiles,manufacturers,24,3,2,2.03,hidden in most months,3,93
+TLJ,20,Chemicals,14,Clothing,manufacturers,24,3,2,2.03,hidden in most months,1,90
+TLJ,20,Chemicals,15,Leather,manufacturers,24,3,2,2.03,hidden in every month,0,50
+TLJ,20,Chemicals,19,Coke & refined petroleum,manufacturers,24,3,2,2.03,hidden in most months,6,93
+TLJ,20,Chemicals,21,Pharmaceuticals,manufacturers,24,3,2,2.03,hidden in most months,10,93
+TLJ,20,Chemicals,24,Basic metals,manufacturers,24,3,2,2.03,hidden in every month,0,93
+TLJ,20,Chemicals,29,Motor vehicles,manufacturers,24,3,2,2.03,hidden in most months,11,93
+TLK,87,Residential care,84,Public administration,central or local government,1,3,3,0.08,hidden in every month,0,89
+TLM,09,Mining support,35,Energy supply,"energy, water and waste companies",5,3,2,1.81,hidden in every month,0,91
+TLM,09,Mining support,36,Water supply,"energy, water and waste companies",5,3,2,1.81,hidden in every month,0,67
+TLM,09,Mining support,37,Sewerage,"energy, water and waste companies",5,3,2,1.81,hidden in every month,0,19
+TLM,09,Mining support,38,Waste,"energy, water and waste companies",5,3,2,1.81,hidden in most months,14,89
+TLM,09,Mining support,39,Remediation,"energy, water and waste companies",5,3,2,1.81,hidden in every month,0,62
+TLC,35,Energy supply,36,Water supply,"energy, water and waste companies",5,2,2,,hidden in every month,0,93
+TLC,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,2,2,,hidden in every month,0,93
+TLC,35,Energy supply,38,Waste,"energy, water and waste companies",5,2,2,,hidden in every month,0,72
+TLC,35,Energy supply,39,Remediation,"energy, water and waste companies",5,2,2,,hidden in every month,0,47
+TLD,78,Employment agencies,75,Veterinary,professional and business services firms,13,2,1,,hidden in every month,0,89
+TLF,52,Warehousing & transport support,11,Drinks manufacturing,manufacturers,24,2,1,,hidden in every month,0,93
+TLF,52,Warehousing & transport support,15,Leather,manufacturers,24,2,1,,hidden in most months,2,93
+TLF,52,Warehousing & transport support,19,Coke & refined petroleum,manufacturers,24,2,1,,hidden in every month,0,2
+TLF,52,Warehousing & transport support,21,Pharmaceuticals,manufacturers,24,2,1,,hidden in most months,13,71
+TLF,52,Warehousing & transport support,24,Basic metals,manufacturers,24,2,1,,hidden in most months,3,93
+TLF,52,Warehousing & transport support,27,Electrical equipment,manufacturers,24,2,1,,hidden in most months,14,93
+TLF,52,Warehousing & transport support,30,Other transport equipment,manufacturers,24,2,1,,hidden in most months,9,93
+TLF,08,Quarrying,41,Building construction,construction and housebuilders,3,2,2,,hidden in every month,0,93
+TLG,29,Motor vehicles,10,Food manufacturing,manufacturers,24,2,2,,hidden in every month,0,60
+TLG,30,Other transport equipment,10,Food manufacturing,manufacturers,24,2,1,,hidden in every month,0,88
+TLG,29,Motor vehicles,11,Drinks manufacturing,manufacturers,24,2,2,,hidden in every month,0,13
+TLG,30,Other transport equipment,11,Drinks manufacturing,manufacturers,24,2,1,,hidden in every month,0,36
+TLG,32,Other manufacturing,11,Drinks manufacturing,manufacturers,24,2,2,,hidden in every month,0,93
+TLG,32,Other manufacturing,12,Tobacco,manufacturers,24,2,2,,hidden in every month,0,4
+TLG,29,Motor vehicles,13,Textiles,manufacturers,24,2,2,,hidden in every month,0,67
+TLG,30,Other transport equipment,13,Textiles,manufacturers,24,2,1,,hidden in every month,0,60
+TLG,32,Other manufacturing,13,Textiles,manufacturers,24,2,2,,hidden in most months,15,93
+TLG,29,Motor vehicles,14,Clothing,manufacturers,24,2,2,,hidden in every month,0,79
+TLG,30,Other transport equipment,14,Clothing,manufacturers,24,2,1,,hidden in every month,0,21
+TLG,29,Motor vehicles,15,Leather,manufacturers,24,2,2,,hidden in every month,0,92
+TLG,32,Other manufacturing,15,Leather,manufacturers,24,2,2,,hidden in every month,0,93
+TLG,29,Motor vehicles,16,Wood products,manufacturers,24,2,2,,hidden in most months,1,85
+TLG,30,Other transport equipment,16,Wood products,manufacturers,24,2,1,,hidden in every month,0,43
+TLG,29,Motor vehicles,17,Paper,manufacturers,24,2,2,,hidden in every month,0,32
+TLG,30,Other transport equipment,17,Paper,manufacturers,24,2,1,,hidden in every month,0,4
+TLG,29,Motor vehicles,18,Printing,manufacturers,24,2,2,,hidden in every month,0,18
+TLG,30,Other transport equipment,18,Printing,manufacturers,24,2,1,,hidden in every month,0,49
+TLG,29,Motor vehicles,19,Coke & refined petroleum,manufacturers,24,2,2,,hidden in every month,0,12
+TLG,30,Other transport equipment,19,Coke & refined petroleum,manufacturers,24,2,1,,hidden in every month,0,8
+TLG,32,Other manufacturing,19,Coke & refined petroleum,manufacturers,24,2,2,,hidden in every month,0,34
+TLG,29,Motor vehicles,20,Chemicals,manufacturers,24,2,2,,hidden in every month,0,53
+TLG,30,Other transport equipment,20,Chemicals,manufacturers,24,2,1,,hidden in every month,0,44
+TLG,29,Motor vehicles,21,Pharmaceuticals,manufacturers,24,2,2,,hidden in every month,0,1
+TLG,32,Other manufacturing,21,Pharmaceuticals,manufacturers,24,2,2,,hidden in every month,0,71
+TLG,30,Other transport equipment,22,Rubber & plastics,manufacturers,24,2,1,,hidden in most months,1,93
+TLG,29,Motor vehicles,23,"Glass, cement & ceramics",manufacturers,24,2,2,,hidden in most months,1,89
+TLG,30,Other transport equipment,23,"Glass, cement & ceramics",manufacturers,24,2,1,,hidden in every month,0,10
+TLG,29,Motor vehicles,24,Basic metals,manufacturers,24,2,2,,hidden in most months,5,91
+TLG,30,Other transport equipment,24,Basic metals,manufacturers,24,2,1,,hidden in every month,0,88
+TLG,29,Motor vehicles,26,Electronics,manufacturers,24,2,2,,hidden in every month,0,72
+TLG,30,Other transport equipment,26,Electronics,manufacturers,24,2,1,,hidden in every month,0,41
+TLG,29,Motor vehicles,27,Electrical equipment,manufacturers,24,2,2,,hidden in every month,0,90
+TLG,30,Other transport equipment,27,Electrical equipment,manufacturers,24,2,1,,hidden in every month,0,63
+TLG,29,Motor vehicles,28,Machinery,manufacturers,24,2,2,,hidden in most months,4,93
+TLG,32,Other manufacturing,29,Motor vehicles,manufacturers,24,2,2,,hidden in most months,1,93
+TLG,29,Motor vehicles,31,Furniture,manufacturers,24,2,2,,hidden in every month,0,37
+TLG,30,Other transport equipment,31,Furniture,manufacturers,24,2,1,,hidden in every month,0,19
+TLG,35,Energy supply,36,Water supply,"energy, water and waste companies",5,2,1,,hidden in every month,0,86
+TLG,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,2,1,,hidden in every month,0,39
+TLG,35,Energy supply,38,Waste,"energy, water and waste companies",5,2,1,,hidden in most months,15,92
+TLG,35,Energy supply,39,Remediation,"energy, water and waste companies",5,2,1,,hidden in most months,8,84
+TLG,11,Drinks manufacturing,47,Retail,retailers and supermarkets,1,2,2,,hidden in most months,14,93
+TLG,62,IT & software,84,Public administration,central or local government,1,2,2,,hidden in most months,9,93
+TLG,87,Residential care,84,Public administration,central or local government,1,2,2,,hidden in most months,18,89
+TLI,42,Civil engineering,36,Water supply,"energy, water and waste companies",5,2,2,,hidden in every month,0,91
+TLI,42,Civil engineering,37,Sewerage,"energy, water and waste companies",5,2,2,,hidden in every month,0,30
+TLI,42,Civil engineering,39,Remediation,"energy, water and waste companies",5,2,2,,hidden in every month,0,84
+TLI,49,Land transport,52,Warehousing & transport support,transport and logistics companies,5,2,1,,hidden in most months,10,93
+TLI,80,Security,65,Insurance & pensions,"banks, insurers and financial firms",3,2,1,,hidden in most months,1,93
+TLI,52,Warehousing & transport support,84,Public administration,central or local government,1,2,1,,hidden in most months,4,93
+TLJ,38,Waste,84,Public administration,central or local government,1,2,2,,hidden in most months,16,93
+TLK,30,Other transport equipment,10,Food manufacturing,manufacturers,24,2,1,,hidden in every month,0,67
+TLK,30,Other transport equipment,11,Drinks manufacturing,manufacturers,24,2,1,,hidden in every month,0,55
+TLK,30,Other transport equipment,13,Textiles,manufacturers,24,2,1,,hidden in every month,0,15
+TLK,30,Other transport equipment,14,Clothing,manufacturers,24,2,1,,hidden in every month,0,18
+TLK,30,Other transport equipment,15,Leather,manufacturers,24,2,1,,hidden in every month,0,8
+TLK,30,Other transport equipment,16,Wood products,manufacturers,24,2,1,,hidden in every month,0,24
+TLK,30,Other transport equipment,17,Paper,manufacturers,24,2,1,,hidden in every month,0,3
+TLK,30,Other transport equipment,18,Printing,manufacturers,24,2,1,,hidden in every month,0,4
+TLK,30,Other transport equipment,20,Chemicals,manufacturers,24,2,1,,hidden in every month,0,3
+TLK,30,Other transport equipment,21,Pharmaceuticals,manufacturers,24,2,1,,hidden in every month,0,1
+TLK,30,Other transport equipment,22,Rubber & plastics,manufacturers,24,2,1,,hidden in every month,0,37
+TLK,30,Other transport equipment,23,"Glass, cement & ceramics",manufacturers,24,2,1,,hidden in every month,0,76
+TLK,30,Other transport equipment,24,Basic metals,manufacturers,24,2,1,,hidden in every month,0,2
+TLK,30,Other transport equipment,25,Fabricated metal,manufacturers,24,2,1,,hidden in most months,12,92
+TLK,30,Other transport equipment,26,Electronics,manufacturers,24,2,1,,hidden in every month,0,37
+TLK,30,Other transport equipment,27,Electrical equipment,manufacturers,24,2,1,,hidden in every month,0,77
+TLK,30,Other transport equipment,28,Machinery,manufacturers,24,2,1,,hidden in most months,2,89
+TLK,30,Other transport equipment,29,Motor vehicles,manufacturers,24,2,1,,hidden in most months,2,85
+TLK,30,Other transport equipment,31,Furniture,manufacturers,24,2,1,,hidden in every month,0,80
+TLK,30,Other transport equipment,32,Other manufacturing,manufacturers,24,2,1,,hidden in most months,15,93
+TLL,87,Residential care,84,Public administration,central or local government,1,2,2,,hidden in every month,0,93
+TLC,25,Fabricated metal,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,1,83
+TLC,52,Warehousing & transport support,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,93
+TLC,25,Fabricated metal,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,8
+TLC,52,Warehousing & transport support,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,51
+TLC,25,Fabricated metal,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,5
+TLC,52,Warehousing & transport support,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,4
+TLC,25,Fabricated metal,15,Leather,manufacturers,24,1,1,,hidden in every month,0,16
+TLC,25,Fabricated metal,16,Wood products,manufacturers,24,1,1,,hidden in most months,3,93
+TLC,52,Warehousing & transport support,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,93
+TLC,25,Fabricated metal,17,Paper,manufacturers,24,1,1,,hidden in every month,0,89
+TLC,52,Warehousing & transport support,17,Paper,manufacturers,24,1,1,,hidden in every month,0,84
+TLC,52,Warehousing & transport support,18,Printing,manufacturers,24,1,1,,hidden in every month,0,74
+TLC,25,Fabricated metal,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,3,93
+TLC,52,Warehousing & transport support,22,Rubber & plastics,manufacturers,24,1,1,,hidden in every month,0,93
+TLC,25,Fabricated metal,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,2,93
+TLC,52,Warehousing & transport support,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,1,88
+TLC,52,Warehousing & transport support,24,Basic metals,manufacturers,24,1,1,,hidden in most months,1,92
+TLC,52,Warehousing & transport support,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,78
+TLC,52,Warehousing & transport support,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,3,92
+TLC,52,Warehousing & transport support,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,93
+TLC,25,Fabricated metal,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,2,93
+TLC,52,Warehousing & transport support,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,92
+TLC,25,Fabricated metal,31,Furniture,manufacturers,24,1,1,,hidden in most months,19,92
+TLC,52,Warehousing & transport support,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,87
+TLC,27,Electrical equipment,35,Energy supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,83
+TLC,27,Electrical equipment,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,93
+TLC,27,Electrical equipment,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,93
+TLC,27,Electrical equipment,38,Waste,"energy, water and waste companies",5,1,0,,hidden in every month,0,32
+TLC,58,Publishing,69,Legal & accounting,professional and business services firms,13,1,1,,hidden in most months,8,93
+TLC,58,Publishing,71,Architecture & engineering,professional and business services firms,13,1,1,,hidden in most months,8,87
+TLC,58,Publishing,72,Scientific R&D,professional and business services firms,13,1,1,,hidden in every month,0,22
+TLC,58,Publishing,73,Advertising & market research,professional and business services firms,13,1,1,,hidden in every month,0,80
+TLC,58,Publishing,74,Other professional,professional and business services firms,13,1,1,,hidden in most months,10,93
+TLC,58,Publishing,75,Veterinary,professional and business services firms,13,1,1,,hidden in every month,0,12
+TLC,58,Publishing,77,Rental & leasing,professional and business services firms,13,1,1,,hidden in every month,0,62
+TLC,58,Publishing,78,Employment agencies,professional and business services firms,13,1,1,,hidden in every month,0,61
+TLC,58,Publishing,79,Travel agencies,professional and business services firms,13,1,1,,hidden in every month,0,70
+TLC,58,Publishing,80,Security,professional and business services firms,13,1,1,,hidden in every month,0,34
+TLC,58,Publishing,81,Building services & landscaping,professional and business services firms,13,1,1,,hidden in most months,4,92
+TLC,41,Building construction,84,Public administration,central or local government,1,1,1,,hidden in every month,0,33
+TLC,43,Building trades,84,Public administration,central or local government,1,1,1,,hidden in every month,0,83
+TLC,70,Head offices & consultancy,84,Public administration,central or local government,1,1,1,,hidden in most months,1,93
+TLC,81,Building services & landscaping,84,Public administration,central or local government,1,1,1,,hidden in every month,0,67
+TLC,82,Office & business support,84,Public administration,central or local government,1,1,1,,hidden in most months,1,93
+TLC,87,Residential care,84,Public administration,central or local government,1,1,1,,hidden in every month,0,19
+TLD,27,Electrical equipment,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,62
+TLD,42,Civil engineering,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,87
+TLD,38,Waste,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,5
+TLD,45,Motor trades,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,8
+TLD,46,Wholesale,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,72
+TLD,42,Civil engineering,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,71
+TLD,27,Electrical equipment,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,58
+TLD,42,Civil engineering,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,61
+TLD,27,Electrical equipment,15,Leather,manufacturers,24,1,1,,hidden in every month,0,8
+TLD,38,Waste,15,Leather,manufacturers,24,1,0,,hidden in every month,0,92
+TLD,45,Motor trades,15,Leather,manufacturers,24,1,1,,hidden in every month,0,43
+TLD,46,Wholesale,15,Leather,manufacturers,24,1,1,,hidden in most months,1,93
+TLD,27,Electrical equipment,16,Wood products,manufacturers,24,1,1,,hidden in most months,1,71
+TLD,42,Civil engineering,16,Wood products,manufacturers,24,1,1,,hidden in most months,6,88
+TLD,27,Electrical equipment,17,Paper,manufacturers,24,1,1,,hidden in most months,11,93
+TLD,42,Civil engineering,17,Paper,manufacturers,24,1,1,,hidden in every month,0,90
+TLD,27,Electrical equipment,18,Printing,manufacturers,24,1,1,,hidden in every month,0,92
+TLD,42,Civil engineering,18,Printing,manufacturers,24,1,1,,hidden in every month,0,43
+TLD,27,Electrical equipment,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,89
+TLD,38,Waste,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in most months,2,93
+TLD,42,Civil engineering,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,91
+TLD,45,Motor trades,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in most months,9,93
+TLD,27,Electrical equipment,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,1,91
+TLD,38,Waste,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,90
+TLD,42,Civil engineering,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,87
+TLD,45,Motor trades,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,57
+TLD,27,Electrical equipment,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,12,92
+TLD,27,Electrical equipment,24,Basic metals,manufacturers,24,1,1,,hidden in most months,16,93
+TLD,42,Civil engineering,24,Basic metals,manufacturers,24,1,1,,hidden in most months,17,93
+TLD,42,Civil engineering,26,Electronics,manufacturers,24,1,1,,hidden in most months,1,69
+TLD,42,Civil engineering,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,2,89
+TLD,27,Electrical equipment,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,8,93
+TLD,42,Civil engineering,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,77
+TLD,27,Electrical equipment,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,15,92
+TLD,42,Civil engineering,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,51
+TLD,27,Electrical equipment,31,Furniture,manufacturers,24,1,1,,hidden in most months,3,92
+TLD,42,Civil engineering,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,60
+TLD,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,60
+TLD,74,Other professional,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in most months,7,93
+TLD,78,Employment agencies,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,84
+TLD,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,76
+TLD,74,Other professional,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in most months,1,87
+TLD,78,Employment agencies,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,57
+TLD,35,Energy supply,38,Waste,"energy, water and waste companies",5,1,0,,hidden in most months,18,93
+TLD,35,Energy supply,39,Remediation,"energy, water and waste companies",5,1,0,,hidden in every month,0,80
+TLD,78,Employment agencies,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,90
+TLD,58,Publishing,45,Motor trades,motor dealers,1,1,1,,hidden in every month,0,93
+TLD,51,Air transport,49,Land transport,transport and logistics companies,5,1,1,,hidden in most months,10,93
+TLD,51,Air transport,50,Water transport,transport and logistics companies,5,1,1,,hidden in most months,13,77
+TLD,70,Head offices & consultancy,51,Air transport,transport and logistics companies,5,1,1,,hidden in most months,11,93
+TLD,51,Air transport,53,Post & courier,transport and logistics companies,5,1,1,,hidden in most months,1,76
+TLD,93,Sport & recreation,60,Broadcasting,"technology, media and telecoms companies",6,1,0,,hidden in most months,3,93
+TLD,93,Sport & recreation,63,Information services,"technology, media and telecoms companies",6,1,0,,hidden in most months,14,93
+TLD,42,Civil engineering,84,Public administration,central or local government,1,1,1,,hidden in every month,0,74
+TLD,71,Architecture & engineering,84,Public administration,central or local government,1,1,1,,hidden in every month,0,93
+TLE,13,Textiles,10,Food manufacturing,manufacturers,24,1,1,,hidden in most months,7,91
+TLE,23,"Glass, cement & ceramics",10,Food manufacturing,manufacturers,24,1,0,,hidden in most months,12,93
+TLE,72,Scientific R&D,10,Food manufacturing,manufacturers,24,1,1,,hidden in every month,0,93
+TLE,13,Textiles,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,1,89
+TLE,72,Scientific R&D,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,9
+TLE,23,"Glass, cement & ceramics",13,Textiles,manufacturers,24,1,0,,hidden in every month,0,41
+TLE,72,Scientific R&D,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,4
+TLE,23,"Glass, cement & ceramics",14,Clothing,manufacturers,24,1,0,,hidden in every month,0,28
+TLE,72,Scientific R&D,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,33
+TLE,13,Textiles,15,Leather,manufacturers,24,1,1,,hidden in every month,0,91
+TLE,23,"Glass, cement & ceramics",15,Leather,manufacturers,24,1,0,,hidden in every month,0,29
+TLE,72,Scientific R&D,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,31
+TLE,13,Textiles,17,Paper,manufacturers,24,1,1,,hidden in every month,0,86
+TLE,23,"Glass, cement & ceramics",17,Paper,manufacturers,24,1,0,,hidden in most months,1,44
+TLE,72,Scientific R&D,17,Paper,manufacturers,24,1,1,,hidden in every month,0,16
+TLE,13,Textiles,18,Printing,manufacturers,24,1,1,,hidden in most months,12,93
+TLE,23,"Glass, cement & ceramics",18,Printing,manufacturers,24,1,0,,hidden in every month,0,65
+TLE,72,Scientific R&D,18,Printing,manufacturers,24,1,1,,hidden in every month,0,11
+TLE,13,Textiles,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,16
+TLE,23,"Glass, cement & ceramics",19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,1
+TLE,72,Scientific R&D,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,2
+TLE,13,Textiles,20,Chemicals,manufacturers,24,1,1,,hidden in most months,5,91
+TLE,23,"Glass, cement & ceramics",20,Chemicals,manufacturers,24,1,0,,hidden in most months,9,93
+TLE,72,Scientific R&D,20,Chemicals,manufacturers,24,1,1,,hidden in every month,0,93
+TLE,13,Textiles,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,42
+TLE,23,"Glass, cement & ceramics",21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,6
+TLE,72,Scientific R&D,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,34
+TLE,13,Textiles,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,18,88
+TLE,72,Scientific R&D,22,Rubber & plastics,manufacturers,24,1,1,,hidden in every month,0,19
+TLE,13,Textiles,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in every month,0,59
+TLE,13,Textiles,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,76
+TLE,23,"Glass, cement & ceramics",24,Basic metals,manufacturers,24,1,0,,hidden in most months,1,93
+TLE,72,Scientific R&D,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,15
+TLE,72,Scientific R&D,25,Fabricated metal,manufacturers,24,1,1,,hidden in most months,2,91
+TLE,13,Textiles,26,Electronics,manufacturers,24,1,1,,hidden in most months,3,93
+TLE,23,"Glass, cement & ceramics",26,Electronics,manufacturers,24,1,0,,hidden in every month,0,93
+TLE,72,Scientific R&D,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,73
+TLE,23,"Glass, cement & ceramics",27,Electrical equipment,manufacturers,24,1,0,,hidden in most months,1,92
+TLE,72,Scientific R&D,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,1,77
+TLE,13,Textiles,28,Machinery,manufacturers,24,1,1,,hidden in most months,16,93
+TLE,23,"Glass, cement & ceramics",28,Machinery,manufacturers,24,1,0,,hidden in most months,21,93
+TLE,72,Scientific R&D,28,Machinery,manufacturers,24,1,1,,hidden in most months,1,57
+TLE,23,"Glass, cement & ceramics",29,Motor vehicles,manufacturers,24,1,0,,hidden in most months,2,85
+TLE,72,Scientific R&D,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,22
+TLE,13,Textiles,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,47
+TLE,23,"Glass, cement & ceramics",30,Other transport equipment,manufacturers,24,1,0,,hidden in every month,0,8
+TLE,72,Scientific R&D,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,4
+TLE,72,Scientific R&D,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,24
+TLE,72,Scientific R&D,32,Other manufacturing,manufacturers,24,1,1,,hidden in most months,3,89
+TLE,23,"Glass, cement & ceramics",33,Machinery repair & install,manufacturers,24,1,0,,hidden in most months,10,89
+TLE,72,Scientific R&D,33,Machinery repair & install,manufacturers,24,1,1,,hidden in every month,0,85
+TLE,37,Sewerage,35,Energy supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,32
+TLE,42,Civil engineering,35,Energy supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,90
+TLE,49,Land transport,35,Energy supply,"energy, water and waste companies",5,1,0,,hidden in most months,1,93
+TLE,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,86
+TLE,37,Sewerage,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,90
+TLE,42,Civil engineering,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLE,49,Land transport,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,93
+TLE,71,Architecture & engineering,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,91
+TLE,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in most months,1,92
+TLE,42,Civil engineering,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,49
+TLE,49,Land transport,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,82
+TLE,71,Architecture & engineering,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,87
+TLE,37,Sewerage,38,Waste,"energy, water and waste companies",5,1,1,,hidden in every month,0,68
+TLE,42,Civil engineering,38,Waste,"energy, water and waste companies",5,1,1,,hidden in most months,20,93
+TLE,37,Sewerage,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,70
+TLE,42,Civil engineering,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in most months,3,82
+TLE,71,Architecture & engineering,39,Remediation,"energy, water and waste companies",5,1,0,,hidden in most months,18,88
+TLE,17,Paper,47,Retail,retailers and supermarkets,1,1,1,,hidden in every month,0,93
+TLE,42,Civil engineering,49,Land transport,transport and logistics companies,5,1,1,,hidden in most months,18,93
+TLE,25,Fabricated metal,50,Water transport,transport and logistics companies,5,1,0,,hidden in every month,0,93
+TLE,42,Civil engineering,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,8
+TLE,25,Fabricated metal,51,Air transport,transport and logistics companies,5,1,0,,hidden in every month,0,89
+TLE,42,Civil engineering,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,15
+TLE,42,Civil engineering,52,Warehousing & transport support,transport and logistics companies,5,1,1,,hidden in most months,11,89
+TLE,25,Fabricated metal,53,Post & courier,transport and logistics companies,5,1,0,,hidden in most months,1,90
+TLE,42,Civil engineering,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,26
+TLE,71,Architecture & engineering,84,Public administration,central or local government,1,1,1,,hidden in every month,0,72
+TLE,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in every month,0,52
+TLF,17,Paper,10,Food manufacturing,manufacturers,24,1,0,,hidden in most months,4,93
+TLF,17,Paper,11,Drinks manufacturing,manufacturers,24,1,0,,hidden in every month,0,93
+TLF,78,Employment agencies,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,50
+TLF,46,Wholesale,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,30
+TLF,17,Paper,13,Textiles,manufacturers,24,1,0,,hidden in every month,0,79
+TLF,78,Employment agencies,13,Textiles,manufacturers,24,1,1,,hidden in most months,12,92
+TLF,17,Paper,14,Clothing,manufacturers,24,1,0,,hidden in every month,0,28
+TLF,78,Employment agencies,14,Clothing,manufacturers,24,1,1,,hidden in most months,1,75
+TLF,78,Employment agencies,15,Leather,manufacturers,24,1,1,,hidden in every month,0,57
+TLF,17,Paper,16,Wood products,manufacturers,24,1,0,,hidden in every month,0,65
+TLF,78,Employment agencies,16,Wood products,manufacturers,24,1,1,,hidden in most months,15,91
+TLF,78,Employment agencies,17,Paper,manufacturers,24,1,1,,hidden in most months,12,90
+TLF,46,Wholesale,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,76
+TLF,78,Employment agencies,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,7
+TLF,17,Paper,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,84
+TLF,78,Employment agencies,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,1,64
+TLF,17,Paper,22,Rubber & plastics,manufacturers,24,1,0,,hidden in every month,0,93
+TLF,17,Paper,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in every month,0,75
+TLF,78,Employment agencies,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,21,93
+TLF,17,Paper,24,Basic metals,manufacturers,24,1,0,,hidden in most months,6,90
+TLF,78,Employment agencies,24,Basic metals,manufacturers,24,1,1,,hidden in most months,10,91
+TLF,17,Paper,26,Electronics,manufacturers,24,1,0,,hidden in every month,0,87
+TLF,17,Paper,27,Electrical equipment,manufacturers,24,1,0,,hidden in every month,0,70
+TLF,78,Employment agencies,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,15,88
+TLF,17,Paper,29,Motor vehicles,manufacturers,24,1,0,,hidden in every month,0,81
+TLF,78,Employment agencies,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,78
+TLF,17,Paper,30,Other transport equipment,manufacturers,24,1,0,,hidden in every month,0,79
+TLF,78,Employment agencies,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,79
+TLF,17,Paper,31,Furniture,manufacturers,24,1,0,,hidden in most months,16,93
+TLF,17,Paper,33,Machinery repair & install,manufacturers,24,1,0,,hidden in most months,16,93
+TLF,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,1
+TLF,35,Energy supply,38,Waste,"energy, water and waste companies",5,1,1,,hidden in every month,0,86
+TLF,35,Energy supply,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,2
+TLF,30,Other transport equipment,49,Land transport,transport and logistics companies,5,1,1,,hidden in most months,5,90
+TLF,30,Other transport equipment,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,13
+TLF,30,Other transport equipment,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,26
+TLF,30,Other transport equipment,52,Warehousing & transport support,transport and logistics companies,5,1,1,,hidden in every month,0,79
+TLF,30,Other transport equipment,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,5
+TLF,49,Land transport,58,Publishing,"technology, media and telecoms companies",6,1,1,,hidden in most months,1,92
+TLF,49,Land transport,59,"Film, TV & music","technology, media and telecoms companies",6,1,1,,hidden in most months,3,83
+TLF,49,Land transport,60,Broadcasting,"technology, media and telecoms companies",6,1,1,,hidden in every month,0,8
+TLF,62,IT & software,65,Insurance & pensions,"banks, insurers and financial firms",3,1,0,,hidden in most months,6,93
+TLF,18,Printing,72,Scientific R&D,professional and business services firms,13,1,0,,hidden in every month,0,93
+TLF,18,Printing,75,Veterinary,professional and business services firms,13,1,0,,hidden in most months,1,64
+TLF,25,Fabricated metal,84,Public administration,central or local government,1,1,1,,hidden in every month,0,84
+TLF,30,Other transport equipment,84,Public administration,central or local government,1,1,1,,hidden in every month,0,17
+TLF,87,Residential care,84,Public administration,central or local government,1,1,1,,hidden in most months,3,61
+TLF,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in every month,0,78
+TLF,87,Residential care,86,Health,health and social care bodies,3,1,0,,hidden in every month,0,93
+TLG,22,Rubber & plastics,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,1,93
+TLG,49,Land transport,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,80
+TLG,22,Rubber & plastics,13,Textiles,manufacturers,24,1,1,,hidden in most months,18,93
+TLG,71,Architecture & engineering,13,Textiles,manufacturers,24,1,1,,hidden in most months,1,90
+TLG,22,Rubber & plastics,14,Clothing,manufacturers,24,1,1,,hidden in most months,1,69
+TLG,25,Fabricated metal,14,Clothing,manufacturers,24,1,1,,hidden in most months,1,93
+TLG,71,Architecture & engineering,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,32
+TLG,22,Rubber & plastics,15,Leather,manufacturers,24,1,1,,hidden in every month,0,92
+TLG,71,Architecture & engineering,15,Leather,manufacturers,24,1,1,,hidden in every month,0,33
+TLG,71,Architecture & engineering,17,Paper,manufacturers,24,1,1,,hidden in most months,13,93
+TLG,22,Rubber & plastics,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,63
+TLG,25,Fabricated metal,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,74
+TLG,49,Land transport,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in most months,12,93
+TLG,71,Architecture & engineering,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,87
+TLG,22,Rubber & plastics,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,40
+TLG,25,Fabricated metal,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,36
+TLG,71,Architecture & engineering,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,87
+TLG,27,Electrical equipment,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in every month,0,67
+TLG,27,Electrical equipment,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,3
+TLG,27,Electrical equipment,39,Remediation,"energy, water and waste companies",5,1,0,,hidden in every month,0,46
+TLG,10,Food manufacturing,47,Retail,retailers and supermarkets,1,1,1,,hidden in most months,18,93
+TLG,21,Pharmaceuticals,47,Retail,retailers and supermarkets,1,1,1,,hidden in every month,0,93
+TLG,78,Employment agencies,50,Water transport,transport and logistics companies,5,1,0,,hidden in every month,0,39
+TLG,78,Employment agencies,51,Air transport,transport and logistics companies,5,1,0,,hidden in every month,0,37
+TLG,78,Employment agencies,53,Post & courier,transport and logistics companies,5,1,0,,hidden in most months,4,88
+TLG,29,Motor vehicles,84,Public administration,central or local government,1,1,0,,hidden in every month,0,54
+TLG,42,Civil engineering,84,Public administration,central or local government,1,1,0,,hidden in every month,0,30
+TLG,78,Employment agencies,84,Public administration,central or local government,1,1,1,,hidden in most months,7,78
+TLG,93,Sport & recreation,84,Public administration,central or local government,1,1,1,,hidden in most months,9,83
+TLH,20,Chemicals,10,Food manufacturing,manufacturers,24,1,1,,hidden in most months,7,93
+TLH,20,Chemicals,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,28,Machinery,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,19,93
+TLH,71,Architecture & engineering,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,11,93
+TLH,72,Scientific R&D,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,86
+TLH,71,Architecture & engineering,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,12
+TLH,82,Office & business support,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,23
+TLH,20,Chemicals,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,89
+TLH,28,Machinery,13,Textiles,manufacturers,24,1,1,,hidden in most months,3,90
+TLH,71,Architecture & engineering,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,77
+TLH,72,Scientific R&D,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,33
+TLH,20,Chemicals,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,16
+TLH,28,Machinery,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,45
+TLH,71,Architecture & engineering,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,33
+TLH,72,Scientific R&D,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,11
+TLH,28,Machinery,15,Leather,manufacturers,24,1,1,,hidden in every month,0,7
+TLH,49,Land transport,15,Leather,manufacturers,24,1,0,,hidden in every month,0,92
+TLH,71,Architecture & engineering,15,Leather,manufacturers,24,1,1,,hidden in every month,0,4
+TLH,82,Office & business support,15,Leather,manufacturers,24,1,1,,hidden in every month,0,79
+TLH,20,Chemicals,16,Wood products,manufacturers,24,1,1,,hidden in most months,13,93
+TLH,72,Scientific R&D,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,11
+TLH,20,Chemicals,17,Paper,manufacturers,24,1,1,,hidden in every month,0,90
+TLH,72,Scientific R&D,17,Paper,manufacturers,24,1,1,,hidden in every month,0,40
+TLH,20,Chemicals,18,Printing,manufacturers,24,1,1,,hidden in most months,1,91
+TLH,72,Scientific R&D,18,Printing,manufacturers,24,1,1,,hidden in every month,0,47
+TLH,20,Chemicals,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,1
+TLH,28,Machinery,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,33
+TLH,49,Land transport,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,70
+TLH,71,Architecture & engineering,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,35
+TLH,72,Scientific R&D,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,1
+TLH,82,Office & business support,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,51
+TLH,72,Scientific R&D,20,Chemicals,manufacturers,24,1,1,,hidden in most months,5,93
+TLH,20,Chemicals,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,80
+TLH,28,Machinery,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,3,93
+TLH,71,Architecture & engineering,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,13,92
+TLH,72,Scientific R&D,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,20,Chemicals,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,7,93
+TLH,72,Scientific R&D,22,Rubber & plastics,manufacturers,24,1,1,,hidden in every month,0,71
+TLH,20,Chemicals,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,4,93
+TLH,71,Architecture & engineering,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,7,92
+TLH,72,Scientific R&D,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in every month,0,10
+TLH,20,Chemicals,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,74
+TLH,72,Scientific R&D,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,10
+TLH,72,Scientific R&D,25,Fabricated metal,manufacturers,24,1,1,,hidden in most months,1,91
+TLH,20,Chemicals,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,20,Chemicals,27,Electrical equipment,manufacturers,24,1,1,,hidden in every month,0,91
+TLH,72,Scientific R&D,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,22,93
+TLH,20,Chemicals,28,Machinery,manufacturers,24,1,1,,hidden in most months,4,93
+TLH,20,Chemicals,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,21
+TLH,28,Machinery,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,49,Land transport,29,Motor vehicles,manufacturers,24,1,0,,hidden in most months,7,93
+TLH,71,Architecture & engineering,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,72,Scientific R&D,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,82,Office & business support,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,17,93
+TLH,20,Chemicals,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,81
+TLH,72,Scientific R&D,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,72
+TLH,20,Chemicals,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,93
+TLH,72,Scientific R&D,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,90
+TLH,20,Chemicals,33,Machinery repair & install,manufacturers,24,1,1,,hidden in most months,1,93
+TLH,72,Scientific R&D,33,Machinery repair & install,manufacturers,24,1,1,,hidden in every month,0,87
+TLH,58,Publishing,35,Energy supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,61
+TLH,42,Civil engineering,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,66
+TLH,58,Publishing,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,21
+TLH,74,Other professional,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLH,42,Civil engineering,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in most months,3,76
+TLH,58,Publishing,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,38
+TLH,74,Other professional,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in most months,1,86
+TLH,42,Civil engineering,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in most months,19,93
+TLH,58,Publishing,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in most months,2,93
+TLH,29,Motor vehicles,45,Motor trades,motor dealers,1,1,1,,hidden in every month,0,93
+TLH,21,Pharmaceuticals,46,Wholesale,wholesalers and distributors,1,1,1,,hidden in most months,5,93
+TLH,17,Paper,47,Retail,retailers and supermarkets,1,1,1,,hidden in every month,0,93
+TLH,51,Air transport,49,Land transport,transport and logistics companies,5,1,1,,hidden in most months,17,93
+TLH,51,Air transport,50,Water transport,transport and logistics companies,5,1,1,,hidden in most months,4,93
+TLH,64,Banking & finance,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,93
+TLH,85,Education,50,Water transport,transport and logistics companies,5,1,0,,hidden in most months,5,83
+TLH,64,Banking & finance,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,93
+TLH,85,Education,51,Air transport,transport and logistics companies,5,1,0,,hidden in most months,14,92
+TLH,51,Air transport,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,41
+TLH,28,Machinery,55,Accommodation,"hotels, restaurants, pubs and caterers",2,1,1,,hidden in most months,3,91
+TLH,33,Machinery repair & install,58,Publishing,"technology, media and telecoms companies",6,1,1,,hidden in most months,4,90
+TLH,33,Machinery repair & install,59,"Film, TV & music","technology, media and telecoms companies",6,1,1,,hidden in most months,19,93
+TLH,33,Machinery repair & install,60,Broadcasting,"technology, media and telecoms companies",6,1,1,,hidden in every month,0,8
+TLH,33,Machinery repair & install,61,Telecoms,"technology, media and telecoms companies",6,1,1,,hidden in most months,20,93
+TLH,33,Machinery repair & install,63,Information services,"technology, media and telecoms companies",6,1,1,,hidden in most months,8,93
+TLH,26,Electronics,84,Public administration,defence,1,1,0,,hidden in most months,1,91
+TLH,30,Other transport equipment,84,Public administration,central or local government,1,1,1,,hidden in every month,0,72
+TLH,32,Other manufacturing,84,Public administration,central or local government,1,1,1,,hidden in most months,2,88
+TLH,42,Civil engineering,84,Public administration,central or local government,1,1,1,,hidden in every month,0,51
+TLH,52,Warehousing & transport support,84,Public administration,central or local government,1,1,1,,hidden in every month,0,91
+TLH,62,IT & software,84,Public administration,central or local government,1,1,1,,hidden in most months,13,93
+TLH,64,Banking & finance,84,Public administration,central or local government,1,1,1,,hidden in most months,11,93
+TLH,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in most months,5,88
+TLH,21,Pharmaceuticals,86,Health,health and social care bodies,3,1,1,,hidden in every month,0,82
+TLH,21,Pharmaceuticals,87,Residential care,health and social care bodies,3,1,1,,hidden in every month,0,54
+TLH,21,Pharmaceuticals,88,Social work,health and social care bodies,3,1,1,,hidden in every month,0,3
+TLI,01,Farming,02,Forestry,farmers and growers,3,1,1,,hidden in every month,0,31
+TLI,10,Food manufacturing,02,Forestry,farmers and growers,3,1,1,,hidden in every month,0,1
+TLI,01,Farming,03,Fishing,farmers and growers,3,1,1,,hidden in every month,0,77
+TLI,10,Food manufacturing,03,Fishing,farmers and growers,3,1,1,,hidden in every month,0,77
+TLI,29,Motor vehicles,10,Food manufacturing,manufacturers,24,1,1,,hidden in every month,0,43
+TLI,25,Fabricated metal,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,71
+TLI,28,Machinery,11,Drinks manufacturing,manufacturers,24,1,0,,hidden in most months,4,93
+TLI,29,Motor vehicles,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,5
+TLI,66,Financial support services,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,1,93
+TLI,96,Personal services,11,Drinks manufacturing,manufacturers,24,1,0,,hidden in most months,5,93
+TLI,25,Fabricated metal,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,10
+TLI,28,Machinery,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,20
+TLI,66,Financial support services,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,92
+TLI,70,Head offices & consultancy,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,90
+TLI,78,Employment agencies,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,60
+TLI,96,Personal services,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,90
+TLI,10,Food manufacturing,13,Textiles,manufacturers,24,1,0,,hidden in every month,0,62
+TLI,25,Fabricated metal,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,66
+TLI,28,Machinery,13,Textiles,manufacturers,24,1,0,,hidden in most months,8,93
+TLI,29,Motor vehicles,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,1
+TLI,66,Financial support services,13,Textiles,manufacturers,24,1,1,,hidden in most months,12,93
+TLI,10,Food manufacturing,14,Clothing,manufacturers,24,1,0,,hidden in most months,7,92
+TLI,25,Fabricated metal,14,Clothing,manufacturers,24,1,1,,hidden in most months,1,89
+TLI,28,Machinery,14,Clothing,manufacturers,24,1,0,,hidden in most months,9,93
+TLI,29,Motor vehicles,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,86
+TLI,10,Food manufacturing,15,Leather,manufacturers,24,1,0,,hidden in every month,0,56
+TLI,25,Fabricated metal,15,Leather,manufacturers,24,1,1,,hidden in most months,1,61
+TLI,28,Machinery,15,Leather,manufacturers,24,1,0,,hidden in every month,0,86
+TLI,29,Motor vehicles,15,Leather,manufacturers,24,1,1,,hidden in every month,0,3
+TLI,10,Food manufacturing,16,Wood products,manufacturers,24,1,0,,hidden in every month,0,49
+TLI,25,Fabricated metal,16,Wood products,manufacturers,24,1,1,,hidden in most months,13,90
+TLI,28,Machinery,16,Wood products,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,29,Motor vehicles,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,5
+TLI,78,Employment agencies,16,Wood products,manufacturers,24,1,0,,hidden in most months,6,84
+TLI,10,Food manufacturing,17,Paper,manufacturers,24,1,0,,hidden in every month,0,92
+TLI,25,Fabricated metal,17,Paper,manufacturers,24,1,1,,hidden in every month,0,78
+TLI,28,Machinery,17,Paper,manufacturers,24,1,0,,hidden in most months,5,93
+TLI,29,Motor vehicles,17,Paper,manufacturers,24,1,1,,hidden in every month,0,1
+TLI,66,Financial support services,17,Paper,manufacturers,24,1,1,,hidden in most months,3,93
+TLI,78,Employment agencies,17,Paper,manufacturers,24,1,0,,hidden in most months,11,93
+TLI,10,Food manufacturing,18,Printing,manufacturers,24,1,0,,hidden in most months,1,92
+TLI,25,Fabricated metal,18,Printing,manufacturers,24,1,1,,hidden in most months,2,86
+TLI,28,Machinery,18,Printing,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,29,Motor vehicles,18,Printing,manufacturers,24,1,1,,hidden in every month,0,52
+TLI,10,Food manufacturing,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,1
+TLI,25,Fabricated metal,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,91
+TLI,28,Machinery,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,77
+TLI,29,Motor vehicles,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,2
+TLI,66,Financial support services,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,91
+TLI,70,Head offices & consultancy,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,78,Employment agencies,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in most months,2,87
+TLI,96,Personal services,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,10,Food manufacturing,20,Chemicals,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,25,Fabricated metal,20,Chemicals,manufacturers,24,1,1,,hidden in most months,1,79
+TLI,28,Machinery,20,Chemicals,manufacturers,24,1,0,,hidden in most months,20,93
+TLI,29,Motor vehicles,20,Chemicals,manufacturers,24,1,1,,hidden in every month,0,4
+TLI,78,Employment agencies,20,Chemicals,manufacturers,24,1,0,,hidden in most months,17,93
+TLI,10,Food manufacturing,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,68
+TLI,25,Fabricated metal,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,9
+TLI,28,Machinery,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,93
+TLI,66,Financial support services,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,5,93
+TLI,10,Food manufacturing,22,Rubber & plastics,manufacturers,24,1,0,,hidden in every month,0,56
+TLI,25,Fabricated metal,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,14,91
+TLI,29,Motor vehicles,22,Rubber & plastics,manufacturers,24,1,1,,hidden in every month,0,6
+TLI,66,Financial support services,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,14,93
+TLI,78,Employment agencies,22,Rubber & plastics,manufacturers,24,1,0,,hidden in most months,16,93
+TLI,10,Food manufacturing,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in every month,0,62
+TLI,25,Fabricated metal,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,3,93
+TLI,28,Machinery,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in most months,21,93
+TLI,66,Financial support services,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,15,93
+TLI,78,Employment agencies,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in most months,13,93
+TLI,96,Personal services,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in most months,17,93
+TLI,10,Food manufacturing,24,Basic metals,manufacturers,24,1,0,,hidden in every month,0,33
+TLI,28,Machinery,24,Basic metals,manufacturers,24,1,0,,hidden in most months,6,93
+TLI,29,Motor vehicles,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,83
+TLI,66,Financial support services,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,93
+TLI,78,Employment agencies,24,Basic metals,manufacturers,24,1,0,,hidden in most months,6,76
+TLI,10,Food manufacturing,25,Fabricated metal,manufacturers,24,1,0,,hidden in every month,0,85
+TLI,29,Motor vehicles,25,Fabricated metal,manufacturers,24,1,1,,hidden in every month,0,43
+TLI,10,Food manufacturing,26,Electronics,manufacturers,24,1,0,,hidden in every month,0,72
+TLI,29,Motor vehicles,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,2
+TLI,10,Food manufacturing,27,Electrical equipment,manufacturers,24,1,0,,hidden in every month,0,70
+TLI,29,Motor vehicles,27,Electrical equipment,manufacturers,24,1,1,,hidden in every month,0,14
+TLI,10,Food manufacturing,28,Machinery,manufacturers,24,1,0,,hidden in every month,0,82
+TLI,25,Fabricated metal,28,Machinery,manufacturers,24,1,1,,hidden in most months,21,93
+TLI,29,Motor vehicles,28,Machinery,manufacturers,24,1,1,,hidden in every month,0,15
+TLI,66,Financial support services,28,Machinery,manufacturers,24,1,1,,hidden in most months,2,93
+TLI,10,Food manufacturing,29,Motor vehicles,manufacturers,24,1,0,,hidden in every month,0,19
+TLI,25,Fabricated metal,29,Motor vehicles,manufacturers,24,1,1,,hidden in every month,0,83
+TLI,28,Machinery,29,Motor vehicles,manufacturers,24,1,0,,hidden in most months,1,93
+TLI,66,Financial support services,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,1,93
+TLI,10,Food manufacturing,30,Other transport equipment,manufacturers,24,1,0,,hidden in every month,0,50
+TLI,25,Fabricated metal,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,12,91
+TLI,28,Machinery,30,Other transport equipment,manufacturers,24,1,0,,hidden in most months,4,93
+TLI,29,Motor vehicles,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,46
+TLI,66,Financial support services,30,Other transport equipment,manufacturers,24,1,1,,hidden in every month,0,93
+TLI,78,Employment agencies,30,Other transport equipment,manufacturers,24,1,0,,hidden in most months,14,91
+TLI,96,Personal services,30,Other transport equipment,manufacturers,24,1,0,,hidden in most months,20,93
+TLI,10,Food manufacturing,31,Furniture,manufacturers,24,1,0,,hidden in every month,0,27
+TLI,28,Machinery,31,Furniture,manufacturers,24,1,0,,hidden in most months,19,93
+TLI,29,Motor vehicles,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,13
+TLI,10,Food manufacturing,32,Other manufacturing,manufacturers,24,1,0,,hidden in most months,6,93
+TLI,29,Motor vehicles,32,Other manufacturing,manufacturers,24,1,1,,hidden in every month,0,83
+TLI,10,Food manufacturing,33,Machinery repair & install,manufacturers,24,1,0,,hidden in most months,4,76
+TLI,29,Motor vehicles,33,Machinery repair & install,manufacturers,24,1,1,,hidden in every month,0,81
+TLI,96,Personal services,35,Energy supply,"energy, water and waste companies",5,1,1,,hidden in most months,17,93
+TLI,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLI,70,Head offices & consultancy,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in most months,7,93
+TLI,71,Architecture & engineering,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in most months,1,91
+TLI,74,Other professional,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in most months,7,93
+TLI,96,Personal services,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,92
+TLI,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLI,62,IT & software,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in most months,23,93
+TLI,70,Head offices & consultancy,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,92
+TLI,71,Architecture & engineering,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,26
+TLI,74,Other professional,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,72
+TLI,96,Personal services,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in most months,18,86
+TLI,35,Energy supply,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in most months,4,93
+TLI,62,IT & software,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLI,71,Architecture & engineering,39,Remediation,"energy, water and waste companies",5,1,0,,hidden in every month,0,81
+TLI,96,Personal services,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in most months,5,93
+TLI,24,Basic metals,42,Civil engineering,construction and housebuilders,3,1,1,,hidden in every month,0,93
+TLI,30,Other transport equipment,49,Land transport,transport and logistics companies,5,1,1,,hidden in every month,0,93
+TLI,42,Civil engineering,49,Land transport,transport and logistics companies,5,1,0,,hidden in every month,0,93
+TLI,30,Other transport equipment,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,50
+TLI,42,Civil engineering,50,Water transport,transport and logistics companies,5,1,0,,hidden in every month,0,39
+TLI,30,Other transport equipment,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,26
+TLI,41,Building construction,51,Air transport,transport and logistics companies,5,1,1,,hidden in most months,2,93
+TLI,42,Civil engineering,51,Air transport,transport and logistics companies,5,1,0,,hidden in every month,0,93
+TLI,80,Security,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,92
+TLI,30,Other transport equipment,52,Warehousing & transport support,transport and logistics companies,5,1,1,,hidden in most months,3,91
+TLI,30,Other transport equipment,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,68
+TLI,42,Civil engineering,53,Post & courier,transport and logistics companies,5,1,0,,hidden in most months,8,82
+TLI,71,Architecture & engineering,60,Broadcasting,"technology, media and telecoms companies",6,1,1,,hidden in most months,14,93
+TLI,60,Broadcasting,61,Telecoms,"technology, media and telecoms companies",6,1,1,,hidden in most months,3,93
+TLI,60,Broadcasting,63,Information services,"technology, media and telecoms companies",6,1,1,,hidden in every month,0,93
+TLI,26,Electronics,65,Insurance & pensions,"banks, insurers and financial firms",3,1,1,,hidden in every month,0,70
+TLI,26,Electronics,66,Financial support services,"banks, insurers and financial firms",3,1,1,,hidden in most months,2,93
+TLI,47,Retail,66,Financial support services,"banks, insurers and financial firms",3,1,1,,hidden in most months,23,93
+TLI,25,Fabricated metal,84,Public administration,central or local government,1,1,1,,hidden in every month,0,85
+TLI,26,Electronics,84,Public administration,central or local government,1,1,1,,hidden in most months,6,92
+TLI,30,Other transport equipment,84,Public administration,defence,1,1,1,,hidden in every month,0,87
+TLI,21,Pharmaceuticals,86,Health,health and social care bodies,3,1,1,,hidden in most months,2,93
+TLI,21,Pharmaceuticals,87,Residential care,health and social care bodies,3,1,1,,hidden in every month,0,64
+TLI,47,Retail,87,Residential care,health and social care bodies,3,1,1,,hidden in most months,21,93
+TLI,21,Pharmaceuticals,88,Social work,health and social care bodies,3,1,1,,hidden in every month,0,60
+TLJ,23,"Glass, cement & ceramics",10,Food manufacturing,manufacturers,24,1,0,,hidden in most months,2,91
+TLJ,29,Motor vehicles,10,Food manufacturing,manufacturers,24,1,1,,hidden in every month,0,89
+TLJ,23,"Glass, cement & ceramics",11,Drinks manufacturing,manufacturers,24,1,0,,hidden in every month,0,42
+TLJ,29,Motor vehicles,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,25
+TLJ,52,Warehousing & transport support,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,19,93
+TLJ,23,"Glass, cement & ceramics",12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,9
+TLJ,25,Fabricated metal,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,3
+TLJ,46,Wholesale,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,59
+TLJ,52,Warehousing & transport support,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,4
+TLJ,62,IT & software,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,26
+TLJ,77,Rental & leasing,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,6
+TLJ,82,Office & business support,12,Tobacco,manufacturers,24,1,0,,hidden in every month,0,71
+TLJ,23,"Glass, cement & ceramics",13,Textiles,manufacturers,24,1,0,,hidden in every month,0,35
+TLJ,29,Motor vehicles,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,43
+TLJ,52,Warehousing & transport support,13,Textiles,manufacturers,24,1,1,,hidden in most months,16,87
+TLJ,23,"Glass, cement & ceramics",14,Clothing,manufacturers,24,1,0,,hidden in every month,0,86
+TLJ,25,Fabricated metal,14,Clothing,manufacturers,24,1,0,,hidden in every month,0,78
+TLJ,29,Motor vehicles,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,19
+TLJ,52,Warehousing & transport support,14,Clothing,manufacturers,24,1,1,,hidden in most months,23,93
+TLJ,23,"Glass, cement & ceramics",15,Leather,manufacturers,24,1,0,,hidden in every month,0,4
+TLJ,25,Fabricated metal,15,Leather,manufacturers,24,1,0,,hidden in every month,0,61
+TLJ,29,Motor vehicles,15,Leather,manufacturers,24,1,1,,hidden in every month,0,2
+TLJ,46,Wholesale,15,Leather,manufacturers,24,1,0,,hidden in most months,6,93
+TLJ,52,Warehousing & transport support,15,Leather,manufacturers,24,1,1,,hidden in every month,0,75
+TLJ,62,IT & software,15,Leather,manufacturers,24,1,0,,hidden in most months,1,86
+TLJ,77,Rental & leasing,15,Leather,manufacturers,24,1,1,,hidden in every month,0,93
+TLJ,29,Motor vehicles,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,91
+TLJ,52,Warehousing & transport support,16,Wood products,manufacturers,24,1,1,,hidden in most months,16,93
+TLJ,23,"Glass, cement & ceramics",17,Paper,manufacturers,24,1,0,,hidden in every month,0,46
+TLJ,25,Fabricated metal,17,Paper,manufacturers,24,1,0,,hidden in most months,5,91
+TLJ,29,Motor vehicles,17,Paper,manufacturers,24,1,1,,hidden in every month,0,14
+TLJ,23,"Glass, cement & ceramics",18,Printing,manufacturers,24,1,0,,hidden in every month,0,93
+TLJ,29,Motor vehicles,18,Printing,manufacturers,24,1,1,,hidden in every month,0,33
+TLJ,25,Fabricated metal,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,89
+TLJ,29,Motor vehicles,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,1
+TLJ,46,Wholesale,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in most months,5,93
+TLJ,52,Warehousing & transport support,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,91
+TLJ,62,IT & software,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,92
+TLJ,77,Rental & leasing,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in most months,1,92
+TLJ,82,Office & business support,19,Coke & refined petroleum,manufacturers,24,1,0,,hidden in every month,0,93
+TLJ,23,"Glass, cement & ceramics",20,Chemicals,manufacturers,24,1,0,,hidden in every month,0,93
+TLJ,29,Motor vehicles,20,Chemicals,manufacturers,24,1,1,,hidden in every month,0,40
+TLJ,23,"Glass, cement & ceramics",21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,74
+TLJ,25,Fabricated metal,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in most months,1,90
+TLJ,29,Motor vehicles,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,27
+TLJ,23,"Glass, cement & ceramics",22,Rubber & plastics,manufacturers,24,1,0,,hidden in most months,1,89
+TLJ,29,Motor vehicles,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,17,93
+TLJ,29,Motor vehicles,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in every month,0,66
+TLJ,23,"Glass, cement & ceramics",24,Basic metals,manufacturers,24,1,0,,hidden in most months,5,93
+TLJ,29,Motor vehicles,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,40
+TLJ,52,Warehousing & transport support,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,92
+TLJ,29,Motor vehicles,25,Fabricated metal,manufacturers,24,1,1,,hidden in most months,23,93
+TLJ,29,Motor vehicles,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,80
+TLJ,23,"Glass, cement & ceramics",27,Electrical equipment,manufacturers,24,1,0,,hidden in most months,7,93
+TLJ,29,Motor vehicles,27,Electrical equipment,manufacturers,24,1,1,,hidden in most months,1,91
+TLJ,23,"Glass, cement & ceramics",28,Machinery,manufacturers,24,1,0,,hidden in every month,0,93
+TLJ,29,Motor vehicles,28,Machinery,manufacturers,24,1,1,,hidden in most months,1,93
+TLJ,23,"Glass, cement & ceramics",29,Motor vehicles,manufacturers,24,1,0,,hidden in most months,6,91
+TLJ,23,"Glass, cement & ceramics",30,Other transport equipment,manufacturers,24,1,0,,hidden in every month,0,87
+TLJ,29,Motor vehicles,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,19,93
+TLJ,29,Motor vehicles,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,71
+TLJ,23,"Glass, cement & ceramics",33,Machinery repair & install,manufacturers,24,1,0,,hidden in most months,14,93
+TLJ,65,Insurance & pensions,42,Civil engineering,construction and housebuilders,3,1,1,,hidden in most months,12,93
+TLJ,27,Electrical equipment,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,59
+TLJ,29,Motor vehicles,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,43
+TLJ,27,Electrical equipment,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,91
+TLJ,29,Motor vehicles,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,33
+TLJ,56,Food & drink service,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,93
+TLJ,29,Motor vehicles,52,Warehousing & transport support,transport and logistics companies,5,1,1,,hidden in most months,10,93
+TLJ,27,Electrical equipment,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,84
+TLJ,29,Motor vehicles,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,53
+TLJ,51,Air transport,53,Post & courier,transport and logistics companies,5,1,1,,hidden in most months,7,93
+TLJ,77,Rental & leasing,55,Accommodation,"hotels, restaurants, pubs and caterers",2,1,1,,hidden in most months,10,93
+TLJ,56,Food & drink service,65,Insurance & pensions,"banks, insurers and financial firms",3,1,1,,hidden in most months,16,93
+TLJ,56,Food & drink service,66,Financial support services,"banks, insurers and financial firms",3,1,1,,hidden in most months,12,93
+TLJ,56,Food & drink service,74,Other professional,professional and business services firms,13,1,1,,hidden in most months,22,93
+TLJ,26,Electronics,84,Public administration,central or local government,1,1,1,,hidden in every month,0,93
+TLJ,56,Food & drink service,84,Public administration,central or local government,1,1,1,,hidden in most months,16,93
+TLJ,88,Social work,84,Public administration,central or local government,1,1,0,,hidden in most months,11,93
+TLJ,21,Pharmaceuticals,86,Health,health and social care bodies,3,1,0,,hidden in most months,18,93
+TLJ,21,Pharmaceuticals,87,Residential care,health and social care bodies,3,1,0,,hidden in every month,0,36
+TLJ,21,Pharmaceuticals,88,Social work,health and social care bodies,3,1,0,,hidden in every month,0,19
+TLK,10,Food manufacturing,02,Forestry,farmers and growers,3,1,1,,hidden in most months,2,87
+TLK,29,Motor vehicles,10,Food manufacturing,manufacturers,24,1,1,,hidden in every month,0,50
+TLK,25,Fabricated metal,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,15,93
+TLK,29,Motor vehicles,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in every month,0,13
+TLK,49,Land transport,11,Drinks manufacturing,manufacturers,24,1,1,,hidden in most months,8,93
+TLK,49,Land transport,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,1
+TLK,10,Food manufacturing,13,Textiles,manufacturers,24,1,0,,hidden in every month,0,65
+TLK,29,Motor vehicles,13,Textiles,manufacturers,24,1,1,,hidden in every month,0,9
+TLK,10,Food manufacturing,14,Clothing,manufacturers,24,1,0,,hidden in every month,0,56
+TLK,25,Fabricated metal,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,66
+TLK,29,Motor vehicles,14,Clothing,manufacturers,24,1,1,,hidden in every month,0,1
+TLK,49,Land transport,14,Clothing,manufacturers,24,1,1,,hidden in most months,9,71
+TLK,10,Food manufacturing,15,Leather,manufacturers,24,1,0,,hidden in every month,0,93
+TLK,25,Fabricated metal,15,Leather,manufacturers,24,1,1,,hidden in every month,0,46
+TLK,29,Motor vehicles,15,Leather,manufacturers,24,1,1,,hidden in every month,0,3
+TLK,49,Land transport,15,Leather,manufacturers,24,1,1,,hidden in every month,0,88
+TLK,10,Food manufacturing,16,Wood products,manufacturers,24,1,0,,hidden in most months,3,93
+TLK,29,Motor vehicles,16,Wood products,manufacturers,24,1,1,,hidden in every month,0,29
+TLK,10,Food manufacturing,17,Paper,manufacturers,24,1,0,,hidden in most months,1,80
+TLK,29,Motor vehicles,17,Paper,manufacturers,24,1,1,,hidden in every month,0,7
+TLK,10,Food manufacturing,18,Printing,manufacturers,24,1,0,,hidden in every month,0,91
+TLK,25,Fabricated metal,18,Printing,manufacturers,24,1,1,,hidden in most months,16,93
+TLK,29,Motor vehicles,18,Printing,manufacturers,24,1,1,,hidden in every month,0,20
+TLK,10,Food manufacturing,20,Chemicals,manufacturers,24,1,0,,hidden in every month,0,80
+TLK,29,Motor vehicles,20,Chemicals,manufacturers,24,1,1,,hidden in every month,0,44
+TLK,10,Food manufacturing,21,Pharmaceuticals,manufacturers,24,1,0,,hidden in every month,0,30
+TLK,25,Fabricated metal,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,92
+TLK,29,Motor vehicles,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,34
+TLK,49,Land transport,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in most months,5,93
+TLK,10,Food manufacturing,22,Rubber & plastics,manufacturers,24,1,0,,hidden in most months,1,92
+TLK,29,Motor vehicles,22,Rubber & plastics,manufacturers,24,1,1,,hidden in most months,1,56
+TLK,10,Food manufacturing,23,"Glass, cement & ceramics",manufacturers,24,1,0,,hidden in every month,0,93
+TLK,29,Motor vehicles,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in every month,0,13
+TLK,10,Food manufacturing,24,Basic metals,manufacturers,24,1,0,,hidden in every month,0,93
+TLK,29,Motor vehicles,24,Basic metals,manufacturers,24,1,1,,hidden in every month,0,49
+TLK,10,Food manufacturing,26,Electronics,manufacturers,24,1,0,,hidden in most months,1,93
+TLK,29,Motor vehicles,26,Electronics,manufacturers,24,1,1,,hidden in every month,0,30
+TLK,10,Food manufacturing,27,Electrical equipment,manufacturers,24,1,0,,hidden in most months,14,93
+TLK,29,Motor vehicles,27,Electrical equipment,manufacturers,24,1,1,,hidden in every month,0,73
+TLK,10,Food manufacturing,28,Machinery,manufacturers,24,1,0,,hidden in most months,19,93
+TLK,29,Motor vehicles,28,Machinery,manufacturers,24,1,1,,hidden in most months,2,92
+TLK,10,Food manufacturing,29,Motor vehicles,manufacturers,24,1,0,,hidden in every month,0,88
+TLK,49,Land transport,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,21,93
+TLK,10,Food manufacturing,30,Other transport equipment,manufacturers,24,1,0,,hidden in most months,9,93
+TLK,29,Motor vehicles,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,10,87
+TLK,10,Food manufacturing,31,Furniture,manufacturers,24,1,0,,hidden in most months,15,89
+TLK,29,Motor vehicles,31,Furniture,manufacturers,24,1,1,,hidden in every month,0,41
+TLK,29,Motor vehicles,32,Other manufacturing,manufacturers,24,1,1,,hidden in every month,0,88
+TLK,10,Food manufacturing,33,Machinery repair & install,manufacturers,24,1,0,,hidden in most months,22,93
+TLK,29,Motor vehicles,33,Machinery repair & install,manufacturers,24,1,1,,hidden in most months,23,93
+TLK,82,Office & business support,36,Water supply,"energy, water and waste companies",5,1,0,,hidden in most months,13,93
+TLK,82,Office & business support,37,Sewerage,"energy, water and waste companies",5,1,0,,hidden in every month,0,93
+TLK,26,Electronics,84,Public administration,defence,1,1,1,,hidden in every month,0,89
+TLK,30,Other transport equipment,84,Public administration,central or local government,1,1,1,,hidden in every month,0,86
+TLK,49,Land transport,84,Public administration,central or local government,1,1,1,,hidden in most months,19,92
+TLK,61,Telecoms,84,Public administration,central or local government,1,1,1,,hidden in most months,1,93
+TLK,81,Building services & landscaping,84,Public administration,central or local government,1,1,1,,hidden in most months,2,88
+TLK,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in most months,1,66
+TLK,10,Food manufacturing,88,Social work,health and social care bodies,3,1,1,,hidden in most months,16,93
+TLL,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,58
+TLL,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,59
+TLL,35,Energy supply,38,Waste,"energy, water and waste companies",5,1,1,,hidden in every month,0,60
+TLL,35,Energy supply,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,13
+TLL,49,Land transport,84,Public administration,central or local government,1,1,1,,hidden in every month,0,21
+TLL,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in every month,0,26
+TLM,81,Building services & landscaping,12,Tobacco,manufacturers,24,1,1,,hidden in every month,0,1
+TLM,32,Other manufacturing,14,Clothing,manufacturers,24,1,1,,hidden in most months,2,79
+TLM,81,Building services & landscaping,14,Clothing,manufacturers,24,1,1,,hidden in most months,12,82
+TLM,32,Other manufacturing,15,Leather,manufacturers,24,1,1,,hidden in most months,1,82
+TLM,81,Building services & landscaping,15,Leather,manufacturers,24,1,1,,hidden in every month,0,67
+TLM,32,Other manufacturing,17,Paper,manufacturers,24,1,1,,hidden in most months,16,93
+TLM,32,Other manufacturing,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,78
+TLM,81,Building services & landscaping,19,Coke & refined petroleum,manufacturers,24,1,1,,hidden in every month,0,17
+TLM,32,Other manufacturing,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,92
+TLM,81,Building services & landscaping,21,Pharmaceuticals,manufacturers,24,1,1,,hidden in every month,0,8
+TLM,81,Building services & landscaping,23,"Glass, cement & ceramics",manufacturers,24,1,1,,hidden in most months,3,89
+TLM,32,Other manufacturing,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,15,93
+TLM,81,Building services & landscaping,29,Motor vehicles,manufacturers,24,1,1,,hidden in most months,21,86
+TLM,32,Other manufacturing,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,22,93
+TLM,81,Building services & landscaping,30,Other transport equipment,manufacturers,24,1,1,,hidden in most months,1,92
+TLM,35,Energy supply,36,Water supply,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLM,35,Energy supply,37,Sewerage,"energy, water and waste companies",5,1,1,,hidden in every month,0,11
+TLM,35,Energy supply,38,Waste,"energy, water and waste companies",5,1,1,,hidden in most months,12,93
+TLM,35,Energy supply,39,Remediation,"energy, water and waste companies",5,1,1,,hidden in every month,0,93
+TLM,29,Motor vehicles,49,Land transport,transport and logistics companies,5,1,1,,hidden in most months,19,93
+TLM,29,Motor vehicles,50,Water transport,transport and logistics companies,5,1,1,,hidden in every month,0,30
+TLM,29,Motor vehicles,51,Air transport,transport and logistics companies,5,1,1,,hidden in every month,0,31
+TLM,29,Motor vehicles,52,Warehousing & transport support,transport and logistics companies,5,1,1,,hidden in most months,15,93
+TLM,29,Motor vehicles,53,Post & courier,transport and logistics companies,5,1,1,,hidden in every month,0,49
+TLM,61,Telecoms,60,Broadcasting,"technology, media and telecoms companies",6,1,1,,hidden in every month,0,56
+TLM,61,Telecoms,63,Information services,"technology, media and telecoms companies",6,1,1,,hidden in most months,19,93
+TLM,66,Financial support services,64,Banking & finance,"banks, insurers and financial firms",3,1,0,,hidden in every month,0,93
+TLM,66,Financial support services,65,Insurance & pensions,"banks, insurers and financial firms",3,1,0,,hidden in every month,0,93
+TLM,82,Office & business support,65,Insurance & pensions,"banks, insurers and financial firms",3,1,1,,hidden in every month,0,93
+TLM,82,Office & business support,66,Financial support services,"banks, insurers and financial firms",3,1,1,,hidden in most months,13,93
+TLM,30,Other transport equipment,84,Public administration,defence,1,1,1,,hidden in every month,0,1
+TLM,81,Building services & landscaping,84,Public administration,central or local government,1,1,1,,hidden in most months,2,88
+TLM,87,Residential care,84,Public administration,central or local government,1,1,1,,hidden in every month,0,93
+TLM,88,Social work,84,Public administration,central or local government,1,1,1,,hidden in most months,8,88
+TLM,32,Other manufacturing,87,Residential care,health and social care bodies,3,1,0,,hidden in most months,21,93

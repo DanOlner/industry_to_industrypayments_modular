@@ -12,7 +12,8 @@ Three tests were written and run (`tests/26`, `27` and `28`), and a list of othe
 - **The payments record only part of that trade between regions, mostly a tenth to a half, and disagree with it on balance.** They see 10% of wholesale's purchases from other regions. Whether an industry group in a region sells more to the rest of the UK than it buys is no better than a coin toss between the two sources.
 - **Large companies' accounts say where they sell, and it can be read.** A model read the accounts of 66 large companies registered in Yorkshire and the Humber for 40 cents (test 29, section 5.5). 55 give a share of turnover outside the UK that passes every check: 12% for the manufacturers, 2% for the wholesalers and motor traders, nil for the retailers.
 - **They don't give imports as figures, but many say where they buy.** 20 of the 66 say something about where their goods come from and 15 name the currencies they buy in, mostly dollars and euros.
-- **They also say who the customers are, and that turned up a chain the page can't show.** Manufacturers with £7.6bn of turnover, nearly all food makers, say their customers are mainly retailers and supermarkets, and three more with £1.8bn say their main customer is their own supermarket group. ONS has never published a single month of retail paying food manufacturing inside the region.
+- **The same reading was then run over all 1,956 accounts, across Great Britain** (test 30, section 5.6), for $12. 1,206 give a share of sales abroad. Most large companies sell nothing abroad: the median is nil in seven of nine industry groups, and 5% for manufacturers. About half of manufacturers and wholesalers, and 63% of retailers, say they buy from abroad.
+- **They also say who the customers are, and that turned up a chain the page can't show.** Manufacturers with £7.6bn of turnover, nearly all food makers, say their customers are mainly retailers and supermarkets, and three more with £1.8bn say their main customer is their own supermarket group. ONS has never published a single month of retail paying food manufacturing inside the region. The UK-wide reading shows Yorkshire and the Humber is the only region where that is so.
 - **The best untested sources** are ONS's regional Annual Business Survey (turnover and purchases by division and region, placed at sites), regional household spending, Visa card spending by where shoppers live and shop, and HMRC's lists of importers and exporters by name.
 
 **My recommendation:** put the official trade figures beside the payments first, because they exist, cover every region and need no guessing. Section 8 has the order I'd work in, and section 9 the decisions.
@@ -333,6 +334,90 @@ Some of the companies read, from their filed accounts:
 - **The two customer patterns were counted by matching words** in the sentence the model quoted, so the counts are a floor.
 - **One table failed its check** (the rows don't add up to the turnover) and was left out.
 
+### 5.6 The UK-wide reading
+
+*Test `tests/30_accounts_reading_all.R`, run 24 November 2026. Outputs `accounts_all_by_region_group.csv`, `accounts_all_by_division.csv`, `accounts_all_customers_by_group.csv`, `accounts_all_customers_by_division.csv` and `accounts_all_hidden_links.csv`. Company-level results are in `local/paymentflowsviz_ynh/accounts_all_results.csv`. Logs `30_accounts_reading_all.log` and `30_tidy.log` in `local/paymentflowsviz_ynh/`.*
+
+**What was read.** All 1,956 sets of accounts: every employer of 1,000 or more that the `companieshouseopen` project had read by OCR, registered all over Great Britain. The form is section 5.5's with three things added: the kinds of customer each company names, the kinds of supplier, and whether it says it buys from abroad.
+
+**The run.** 87 minutes, six at a time, no failures. Notional cost $12.45.
+
+**The checks.**
+
+- **Figures:** 7,263 of the 7,364 returned are in the text sent (99%).
+- **Quotes:** 6,901 of 7,476 are found in the text (92%).
+- **Turnover:** agrees with the figure read earlier from the same accounts for 1,644 of 1,660.
+- **Against section 5.5:** all 55 shares that the earlier form gave for the Yorkshire and the Humber set come out the same.
+- **By eye:** three more tables were compared with the scanned pages, making eight. All match.
+- **Customer kinds:** I read 22 at random beside the sentence each came from. 21 fit. One is arguable: a housebuilder put under households whose sentence speaks of housing associations.
+
+**Where they sell.** 1,206 of the 1,956 give a usable share: 537 from a checked table and 669 from a sentence saying all turnover is in the UK. Of the rest, 573 say nothing, 70 have a table that fails a check, 65 say "mostly" in the UK and 42 say the split is withheld.
+
+| Industry group | Companies | With a share | Their turnover | Outside the UK, weighted | Median | Sell over a quarter abroad |
+|----|----|----|----|----|----|----|
+| Manufacturing | 231 | 177 | £205bn | 36% | 5% | 45 |
+| Information and communication | 111 | 69 | £50bn | 32% | 6% | 15 |
+| Professional, scientific and technical | 140 | 88 | £55bn | 18% | 0% | 12 |
+| Transport, storage, accommodation and food | 221 | 173 | £71bn | 17% | 0% | 5 |
+| Retail | 131 | 103 | £190bn | 7% | 0% | 7 |
+| Other services | 694 | 368 | £128bn | 7% | 0% | 12 |
+| Non-manufacturing production | 127 | 80 | £111bn | 6% | 0% | 2 |
+| Finance and insurance | 131 | 39 | £48bn | 3% | 0% | 3 |
+| Wholesale and motor trades | 121 | 89 | £87bn | 2% | 0% | 4 |
+
+- **Most large companies sell nothing abroad.** The median is nil in seven of the nine groups.
+- **The weighted figures are carried by a minority.** A quarter of manufacturers sell over a quarter of their turnover abroad, and they are the largest. One services company checked by eye books 89% of £12bn outside the UK.
+- **Manufacturers by region of registration** (median, where five or more give a share): West Midlands 14%, Scotland 12%, South East 6%, Yorkshire and the Humber and the East of England 5%, North West and South West 4%, London 3%, East Midlands 2%.
+- **By division:** machinery has a median of 70%, other transport equipment 27%, electronics 23%, chemicals 17%, fabricated metal 16%. Other manufacturing has 12% across 14 companies (29% weighted), against 58% in the national table.
+- **Region by group is thin.** With a floor of five companies, Wales has no group to show and the North East three. London has all nine.
+
+**Whether they buy from abroad.** 488 say they do (a quarter of all), 5 say they don't, and the rest don't say.
+
+- **Retail 63%, wholesale and motor trades 50%, manufacturing 49%.** Then information and communication 31%, and 10% to 21% for the others.
+- **This is a floor,** since silence isn't "no". But it is the first figure in this plan on who imports, by industry, on the payments' footing.
+
+**Who they sell to.** A main kind of customer was given for 1,867: stated in the accounts for 1,281, and plain from the description of the business for 586.
+
+| Seller's group | Main kinds of customer, by share of companies |
+|----|----|
+| Manufacturing | Retailers and supermarkets 25%, manufacturers 14%, own group 14% |
+| Wholesale and motor trades | Households 40%, retailers and supermarkets 16%, construction 10% |
+| Retail | Households 90% |
+| Non-manufacturing production | Households 27%, government 19%, energy, water and waste companies 18% |
+| Transport, storage, accommodation and food | Households 58%, government 8% |
+| Information and communication | Mixed businesses 22%, households 19%, government 17% |
+| Finance and insurance | Households 49%, own group 21%, financial firms 13% |
+| Professional, scientific and technical | Own group 28%, households 25%, government 15% |
+| Other services | Households 30%, government 28%, own group 16% |
+
+- **Food manufacturers sell to supermarkets:** 44 of 63 across Great Britain name retailers as their main customer.
+- **Other manufacturing sells to health.** Of 19 companies, health and social care bodies are the main customer for four, level with "own group". That matches the link the page shows in Yorkshire and the Humber (section 13).
+- **One in nine say most of their turnover comes from their own group** (222). Those are companies whose payments, if they are paid at all, are inside a group.
+- **Households are the main customer for 40% of wholesale and motor trades.** Most of those are motor dealers, who share the group (33 of the 47). Among wholesalers alone, retailers and supermarkets come first (19 of 75), then households and construction.
+
+**Hidden links the accounts vouch for.** A pair counts where companies registered in a region, in one division, name a kind of customer that maps to another division, and the payments between the two inside that region are hidden in every month or in most.
+
+- **The one that started this is real, and it is Yorkshire and the Humber's alone.** Nine food manufacturers registered there, with £12.0bn of turnover, name retailers as their main customer. Retail paying food manufacturing there is hidden in all 93 months.
+- **In every other region that link is published:** in all 93 months in eight regions, 90 in Wales and 71 in the East of England. The West Midlands has it in only 18.
+- **Two more of the same kind:** farming selling to retail in Yorkshire and the Humber (three companies, £1.2bn, hidden in every month), and drinks manufacturing selling to retail in the West Midlands (two companies, hidden in most months).
+- **Nearly all the rest have public administration as the buyer.** Schools, care homes and bus and rail companies whose main customer is government: education in the South West (15 companies) and Yorkshire and the Humber (10), residential care in the South East (9). That is not ONS hiding a link. It is section 14.1's problem again: public administration's accounts have no region, so they are not inside any region to pay.
+- **Where a kind of customer covers several divisions** ("manufacturers", "construction") there are 736 hidden pairs, far too loose to draw.
+
+**What this means for the scoped feature (section 7.1).**
+
+- **The table works for the UK and for the larger regions.** For small regions it would mostly say "too few to show". Showing the UK's row beside the region's would keep it useful everywhere.
+- **The dotted line is worth having but will be rare.** It marks three links in two regions. Yorkshire and the Humber is the region the page opens on, and the link is among its largest, so it still earns its place.
+- **The public administration pairs belong in words, not lines.** A side panel sentence for those industries: "Its main customer is government, whose payments have no region, so they are not on this chart."
+- **Two things the reading adds that weren't planned:** a "buys from abroad" figure for each group, and the share of companies whose main customer is their own group.
+
+**Limits.**
+
+- **Employers of 1,000 or more only,** and only those whose accounts were read by OCR. Not the economy.
+- **Great Britain.** The lookup from local authority to region has no Northern Ireland, and 21 companies have no region.
+- **A group's accounts include its companies abroad,** which is what lifts some weighted shares. The medians are the safer reading.
+- **Customer kinds are a model's reading of a sentence or two.** They are right most of the time, not every time.
+- **"Not given" is 573 companies.** Many are schools, charities and care providers, which sell only in the UK and have no reason to say so.
+
 ## 6. Idea 4: other sources
 
 Ordered by how soon each could be used. "Checked" means I read ONS's or the publisher's own page or file today. "From a search" means a search summary only.
@@ -378,10 +463,66 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 - **Draw abroad or households as circles on the chart.** They would dwarf everything and their links would be on a different footing.
 - **Use card takings as a measure of household spending.**
 
+### 7.1 Scoped: company accounts on the page
+
+*Scoped 24 November 2026, on request. Not built. It depended on the UK-wide reading of accounts, which is now done: section 5.6 ends with what that reading means for this feature.*
+
+**The decision.** Mostly a separate part of the page, as the national accounts are, with two small links into the main view.
+
+- **Why separate.** The accounts give shares and statements for a few dozen large companies in a region. They are not monthly flows between pairs of industries, so they can't become links with a width.
+- **Why not wholly separate.** They are closer to the page than the national table is: the same region, and placed at registered offices exactly as the payments are. And in one case they correct something the chart gets wrong, where it shows no link because ONS hides one.
+
+**The three parts.**
+
+1. **A section under the chart, "What the payments leave out".** It holds the outside sources together, each with its source and what it covers: ONS's trade figures at the region's edge (section 4), the accounts, and later households. For the accounts it is one small table for the region shown, a row for each broad industry group:
+    - how many large companies registered there were read, and their turnover;
+    - the share of that turnover sold outside the UK;
+    - the kinds of customer they name most;
+    - how many say they buy from abroad.
+2. **A short block in the side panel when an industry is pinned.** Two or three sentences from its group's row. For example: "From the accounts of 22 large manufacturers registered here: 12% of turnover is sold abroad. Their customers are mainly retailers and supermarkets."
+3. **A marker for hidden links the accounts vouch for.** A thin dotted line with no width between two industries, where both of these hold:
+    - ONS has that pair's payments hidden in every month in that region, so the chart draws nothing;
+    - companies registered there, in the supplying industry, name that kind of customer as their main one.
+
+   It shows when either end is pinned, and its tooltip says what it is: "Hidden by ONS in every month. Accounts of 6 large food makers registered here name supermarkets as their main customers."
+
+**Rules.**
+
+- **Groups, not divisions.** The nine broad groups ONS uses for regional trade, so the two sources line up.
+- **A floor on numbers.** No figure for a group with fewer than five companies read, or where one company is most of the turnover. It says "too few to show".
+- **No company is named on the page.**
+- **Every figure carries its footing:** "from the accounts of N employers of 1,000 or more registered here", and the years the accounts cover.
+- **No widths and no adding up.** Nothing from the accounts is put on the payments' scale.
+- **The dotted line means "there is a link", not "this much".**
+
+**What it adds to the data files.** A small block in each region's file, built from the reading's outputs: the table's rows, and a short list of vouched hidden links (supplying division, buying division, how many companies, their turnover). A few kilobytes a region.
+
+**Controls.** One switch, "Hidden links that company accounts point to", on by default when an industry is pinned. It goes in the address like the others.
+
+**What has to be true first.**
+
+- **The UK-wide reading is done and checked** (section 5.6), with customer kinds on the form.
+- **Customer kinds map onto divisions well enough.** "Retailers" is division 47. "Public sector" or "construction" is several. Where a kind covers several divisions the dotted line goes to each that has a hidden pair, or the marker is left out and the side panel says it in words.
+- **Enough companies in each region.** The North East, Wales and Northern Ireland have few large employers registered there. They may get the table with most rows blank.
+- **A hand check** of a sample of the customer kinds against the pages.
+
+**Checks when built.**
+
+- **The table's figures match the reading's output** for each region.
+- **Every dotted line is a pair hidden in every month** in that region's data.
+- **Screenshots** of the section, the side panel block and a pinned industry with a dotted line, light and dark.
+- **No page or console errors, and no loss of speed.**
+
+**Open questions.**
+
+- **Group accounts.** A group's turnover can include companies registered elsewhere, and two companies in one group can both be in the set. The table should count each group once where it can.
+- **Whether a hidden link that the accounts don't vouch for should be marked at all.** About a quarter of cells are never published. Most are small. Marking them all would bury the chart, which is why this uses the accounts to pick.
+- **How to word the buying side.** Accounts say that a company imports, not how much.
+
 ## 8. The order I'd work in
 
 1. **Put ONS's regional trade figures in the build** as a small lookup by region and group, and draft the side panel block. Small, and it changes what the page can say about wholesale.
-2. **The model reading on the 66 accounts: done** (section 5.5). Next, add a short list of customer kinds to the form and run it over all 1,956 accounts, for about $12.
+2. **The model reading: done,** on the 66 (section 5.5) and then on all 1,956 with customer kinds added (section 5.6). Next for this strand is building section 7.1, if wanted.
 3. **The Annual Business Survey check.** Open the regional datasets, and set turnover and purchases by division and region against the payments.
 4. **Households:** open the regional household spending dataset and the Visa data on Nomis, and see how well kinds of spending map onto divisions.
 5. **HMRC lists against Companies House:** a count of importing and exporting businesses by division in Yorkshire and the Humber. This needs the `companieshouseopen` database and a name and postcode match.
@@ -390,8 +531,8 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 ## 9. Decisions for you
 
 1. **Is the side panel block (step 1) wanted,** and at group level only? My recommendation: yes, with the group named.
-2. **Run the reading over all 1,956 accounts, with customer kinds added to the form?** About $12 of model time. It would give sales abroad by division and by region of registration, and a rough table of who supplies whom.
-3. **Should the page say that the food manufacturing to retail link is hidden?** My recommendation: yes, in the notes for Yorkshire and the Humber, since it is one of the region's largest chains. It needs a check of which other regions have the same gap.
+2. **Build the accounts feature (section 7.1)?** The reading it needed is done (section 5.6). My recommendation: yes, with the UK's row shown beside the region's, the dotted line kept, and the public administration cases put in words.
+3. **Should the page say that the food manufacturing to retail link is hidden?** My recommendation: yes, in the notes for Yorkshire and the Humber, since it is one of the region's largest chains. The check is done: it is the only region where the link is never published. The West Midlands has it in 18 months of 93.
 4. **Named companies in this plan** (section 5.3): keep, or take out before it is published?
 5. **Should the interregional figures be shown on the page at all,** given the oddities in 4.3? My recommendation: the goods figures yes, as a rough guide; the services figures no.
 6. **Which of steps 3 to 5 matters most to you?** I'd take the Annual Business Survey first.
@@ -404,13 +545,15 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 | `tests/27_trade_at_the_edge.R` | ONS's regional and interregional trade figures beside the payments, by industry group |
 | `tests/28_accounts_geography.R` | Turnover by geography read from large employers' OCR'd accounts |
 | `tests/29_accounts_reading.R` | A model reading of 66 Yorkshire and the Humber companies' accounts: where they sell, where they buy, and who their customers are |
-| `tests/outputs/card_takings_by_payer.csv`, `card_takings_retail_by_region.csv`, `trade_at_the_edge.csv`, `accounts_geography_by_industry.csv`, `accounts_reading_summary.csv` | Their outputs |
+| `tests/30_accounts_reading_all.R`, `tests/functions_accounts.R` | The same reading over all 1,956 accounts, with customer and supplier kinds; and the mechanics the two tests share |
+| `tests/lookups/la_itl1.csv` | Local authority to region, Great Britain, made by test 30 from a postcode lookup in `companieshouseopen` |
+| `tests/outputs/card_takings_by_payer.csv`, `card_takings_retail_by_region.csv`, `trade_at_the_edge.csv`, `accounts_geography_by_industry.csv`, `accounts_reading_summary.csv`, and five files beginning `accounts_all_` | Their outputs |
 | `local/paymentflowsviz_ynh/downloads/` | The three ONS workbooks, each in its own folder (not published) |
-| `local/paymentflowsviz_ynh/accounts_geography_companies.csv`, `accounts_reading_set.csv`, `accounts_reading_results.csv`, `accounts_read/` | Company-level results, the reading set, and each answer from the model (not published) |
+| `local/paymentflowsviz_ynh/accounts_geography_companies.csv`, `accounts_reading_set.csv`, `accounts_reading_results.csv`, `accounts_all_results.csv`, `accounts_read/`, `accounts_read_all/` | Company-level results, the reading set, and each answer from the model (not published) |
 
 **Checked.**
 
-- **All four tests run from a clean start** with no errors or warnings.
+- **All five tests run from a clean start** with no errors or warnings. Test 30's report can be re-made from the kept answers with `--tidy`.
 - **Test 28's readings pass two checks each:** the rows add up, and the total is the turnover read earlier from the same accounts.
 - **Figures in this plan were taken from the test logs.**
 
@@ -421,8 +564,8 @@ The principle from section 13.10 holds: keep local links and wider role apart, a
 - **The 2008 Regulations' current wording** on turnover by market was not read in full.
 - **Several sources in section 6 were found by search only,** as marked.
 - **The services side of ONS's interregional figures** was not looked into beyond noticing it is lopsided.
-- **Test 28 was not checked by hand** against page images. Test 29 was, for five companies of 66.
-- **The customer patterns in section 5.5 were not checked beyond reading the quotes.**
+- **Test 28 was not checked by hand** against page images. Tests 29 and 30 were, for eight companies in all.
+- **Customer kinds were checked only by reading 22 of them** beside their sentences.
 - **The lockdown and December marks are for the UK,** not for one region.
 
 ## Sources

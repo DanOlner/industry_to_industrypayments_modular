@@ -1,0 +1,78 @@
+sic2,industry,companies,with_a_share,turnover_with_a_share_gbp_bn,outside_uk_weighted,outside_uk_median,sell_over_a_quarter_abroad,largest_company_share_of_turnover,say_they_buy_abroad,customers_stated
+01,Farming,7,5,1.7,0.012,0,0,0.44,4,7
+06,Oil & gas extraction,2,0,,,,,,,
+08,Quarrying,5,2,,,,,,2,3
+09,Mining support,3,2,,,,,,,
+10,Food manufacturing,63,55,39.98,0.059,0.006,2,0.08,32,54
+11,Drinks manufacturing,19,14,12.52,0.175,0.007,1,0.18,6,15
+13,Textiles,3,2,,,,,,,
+16,Wood products,1,1,,,,,,,
+17,Paper,5,5,2.66,0.136,0.127,0,0.38,2,2
+18,Printing,2,2,,,,,,,
+19,Coke & refined petroleum,1,1,,,,,,,
+20,Chemicals,10,10,17.01,0.528,0.166,5,0.74,2,9
+21,Pharmaceuticals,7,6,5.91,0.042,0.022,1,0.5,2,5
+22,Rubber & plastics,3,3,,,,,,,
+23,"Glass, cement & ceramics",7,5,2.33,0.02,0.016,0,0.43,2,2
+24,Basic metals,2,2,,,,,,,
+25,Fabricated metal,14,10,33.79,0.663,0.159,4,0.84,7,11
+26,Electronics,9,5,5.73,0.12,0.234,2,0.61,7,6
+27,Electrical equipment,10,7,7.22,0.092,0.115,2,0.58,8,5
+28,Machinery,11,6,6.51,0.804,0.702,4,0.44,6,9
+29,Motor vehicles,23,17,30.41,0.569,0.063,6,0.63,16,21
+30,Other transport equipment,18,10,17.18,0.38,0.267,5,0.44,9,16
+31,Furniture,2,1,,,,,,,
+32,Other manufacturing,19,14,8.83,0.288,0.124,6,0.21,7,15
+33,Machinery repair & install,2,1,,,,,,,
+35,Energy supply,24,14,53.87,0.068,0,0,0.36,8,21
+36,Water supply,13,5,8.21,0,0,0,0.46,1,13
+37,Sewerage,1,1,,,,,,,
+38,Waste,5,4,,,,,,0,4
+41,Building construction,32,19,25.35,0.079,0,2,0.18,5,24
+42,Civil engineering,19,15,8.95,0.022,0,0,0.17,4,16
+43,Building trades,16,13,3.88,0.009,0,0,0.26,1,13
+45,Motor trades,46,36,39.44,0.001,0,0,0.16,14,24
+46,Wholesale,75,53,47.77,0.031,0,4,0.11,46,62
+47,Retail,131,103,190.48,0.07,0,7,0.28,82,41
+49,Land transport,77,67,34.11,0.144,0,2,0.21,12,50
+50,Water transport,2,0,,,,,,,
+51,Air transport,9,4,,,,,,5,6
+52,Warehousing & transport support,20,14,4.66,0.039,0,0,0.24,7,14
+53,Post & courier,5,3,,,,,,3,5
+55,Accommodation,32,22,7.61,0.036,0,0,0.38,3,15
+56,Food & drink service,76,63,11.09,0.007,0,0,0.1,13,31
+58,Publishing,18,11,4.94,0.323,0.247,5,0.28,4,12
+59,"Film, TV & music",13,7,3.08,0.211,0,1,0.33,2,6
+60,Broadcasting,1,1,,,,,,,
+61,Telecoms,15,11,4.15,0.024,0,2,0.45,6,14
+62,IT & software,55,37,36.26,0.365,0.055,6,0.33,19,47
+63,Information services,9,2,,,,,,3,7
+64,Banking & finance,89,24,27.51,0.032,0,1,0.32,18,66
+65,Insurance & pensions,21,7,1.98,0.171,0,1,0.24,3,11
+66,Financial support services,21,8,18.76,0.021,0,1,0.89,2,14
+68,Real estate,27,20,4.8,0.008,0,0,0.34,0,21
+69,Legal & accounting,4,4,,,,,,,
+70,Head offices & consultancy,81,47,37.23,0.219,0,6,0.27,14,52
+71,Architecture & engineering,22,15,7.36,0.111,0.049,2,0.19,5,16
+72,Scientific R&D,7,2,,,,,,1,5
+73,Advertising & market research,3,1,,,,,,,
+74,Other professional,18,15,3.9,0.157,0.036,2,0.2,4,13
+75,Veterinary,5,4,,,,,,0,3
+77,Rental & leasing,14,14,7.05,0.014,0,0,0.29,4,11
+78,Employment agencies,76,59,17.68,0.003,0,0,0.14,5,54
+79,Travel agencies,6,4,,,,,,3,4
+80,Security,13,11,1.93,0.014,0,0,0.26,0,5
+81,Building services & landscaping,33,29,6.8,0.003,0,0,0.2,1,26
+82,Office & business support,118,69,37.56,0.106,0,7,0.22,26,98
+84,Public administration,12,10,3.03,0.105,0,1,0.17,4,12
+85,Education,170,14,1.94,0.014,0,0,0.15,2,62
+86,Health,68,45,10.42,0,0,0,0.14,3,55
+87,Residential care,55,27,3.11,0,0,0,0.19,2,49
+88,Social work,16,8,0.61,0,0,0,0.4,1,12
+90,Arts & entertainment,7,4,,,,,,0,3
+92,Gambling,9,7,3.56,0.047,0,0,0.34,1,2
+93,Sport & recreation,27,21,5.61,0.007,0,0,0.15,9,13
+94,Membership organisations,6,1,,,,,,1,4
+95,Repair of goods,1,1,,,,,,,
+96,Personal services,35,23,11.34,0.104,0,3,0.25,6,24
+99,Extraterritorial,1,1,,,,,,,

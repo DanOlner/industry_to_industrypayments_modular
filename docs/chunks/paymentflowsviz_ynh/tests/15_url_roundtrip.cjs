@@ -51,6 +51,14 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   let f = await open(q), a = await state(f); await f.close();
   rows.push({ control: 'month (step buttons)', kind: 'buttons', values: 1, come_back: +(a.t === b.t), problems: a.t === b.t ? '' : `${q}: ${b.t} became ${a.t}` });
 
+  // the side panel's "Show table" button, which has no control in the main row: pin an industry, press it, reload
+  page = await open('?sel=32'); await page.click('#detail .d-toggle'); await wait(450);
+  q = await page.evaluate(() => location.search); await page.close();
+  f = await open(q); const shows = await f.evaluate(() => ({ button: document.querySelector('#detail .d-toggle').textContent, chart: !!document.querySelector('#detail .pchart') }));
+  await f.click('#detail .d-toggle'); await wait(450); const qBack = await f.evaluate(() => location.search); await f.close();
+  const tableOk = /ptable=1/.test(q) && shows.button === 'Show chart' && !shows.chart && !/ptable/.test(qBack);
+  rows.push({ control: 'partners table (side panel button)', kind: 'button', values: 2, come_back: tableOk ? 2 : 0, problems: tableOk ? '' : `${q} gave ${JSON.stringify(shows)}, and back to ${qBack}` });
+
   // pinning by clicking a circle is covered by 'pick' above. Things that are not in the address:
   page = await open('');
   await page.evaluate(() => { document.getElementById('tablebox').open = true; document.getElementById('order-note').open = true; }); await wait(400);
@@ -58,7 +66,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   await page.click('#play'); await wait(600); extras.playing_in_address = /play/.test(await page.evaluate(() => location.search)); await page.click('#play'); await page.close();
 
   // everything at once, then a mangled address
-  const all = '?layout=hybrid&cols=shift&lens=is8%3AAdvanced+manufacturing&show=goods&dir=up&measure=count&scale=amount&net=gross&cover=0.5&speed=6&smooth=0&dots=0&inter=1&halo=1&pubonly=1&m=2021-06&sel=64';
+  const all = '?layout=hybrid&cols=shift&lens=is8%3AAdvanced+manufacturing&show=goods&dir=up&measure=count&scale=amount&net=gross&cover=0.5&speed=6&smooth=0&dots=0&inter=1&halo=1&pubonly=1&trace=1&ptable=1&m=2021-06&sel=64';
   page = await open(all); const sAll = await state(page); await wait(400); const qAll = await page.evaluate(() => location.search); await page.close();
   page = await open('?layout=sideways&cols=nonsense&lens=is8:Nothing&m=1999-01&sel=zz&cover=7&smooth=maybe'); const sBad = await state(page); await page.close();
   await browser.close();
@@ -66,7 +74,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   console.table(rows);
   console.log('Not carried in the address:', JSON.stringify(extras));
   console.log('All options at once: layout', sAll.layout, '| cols', sAll.cols, '| lens', sAll.lens, '| show', sAll.show, '| dir', sAll.dir, '| measure', sAll.measure, '| scale', sAll.scale, '| net', sAll.net,
-    '| cover', sAll.cover, '| speed', sAll.speed, '| smooth', sAll.smooth, '| dots', sAll.dots, '| inter', sAll.inter, '| halo', sAll.halo, '| pubonly', sAll.pubonly, '| month', sAll.t, '| pinned', sAll.sel);
+    '| cover', sAll.cover, '| speed', sAll.speed, '| smooth', sAll.smooth, '| dots', sAll.dots, '| inter', sAll.inter, '| halo', sAll.halo, '| pubonly', sAll.pubonly, '| trace', sAll.trace, '| partners table', sAll.ptable, '| month', sAll.t, '| pinned', sAll.sel);
   console.log('  address after loading it:', qAll, `(${qAll.length} characters)`);
   console.log('Mangled address falls back to: layout', sBad.layout, '| cols', sBad.cols, '| lens', sBad.lens, '| month', sBad.t, '| pinned', sBad.sel, '| cover', sBad.cover, '| smooth', sBad.smooth);
   fs.writeFileSync(path.resolve(__dirname, 'outputs/url_roundtrip.csv'), 'control,kind,values_tried,came_back,problems\n' + rows.map(r => [r.control, r.kind, r.values, r.come_back, '"' + r.problems.replace(/"/g, "'") + '"'].join(',')).join('\n') + '\n');

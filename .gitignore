@@ -9,3 +9,7 @@
 local/
 
 **/*.quarto_ipynb
+
+# Python bytecode (the conversation export scripts are Python)
+__pycache__/
+*.pyc

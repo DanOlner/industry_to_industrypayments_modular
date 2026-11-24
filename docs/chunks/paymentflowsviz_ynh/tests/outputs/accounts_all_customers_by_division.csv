@@ -1,0 +1,370 @@
+sic2,industry,main_customer,companies,of_which_stated,turnover_gbp_bn
+01,Farming,retailers and supermarkets,4,4,1.58
+01,Farming,own group companies,1,1,
+01,Farming,households and consumers,1,1,
+01,Farming,farmers and growers,1,1,
+08,Quarrying,construction and housebuilders,5,3,6.09
+09,Mining support,"energy, water and waste companies",3,2,1.81
+10,Food manufacturing,retailers and supermarkets,44,42,36.72
+10,Food manufacturing,households and consumers,8,4,4.65
+10,Food manufacturing,own group companies,4,4,2.1
+10,Food manufacturing,farmers and growers,2,2,
+10,Food manufacturing,manufacturers,2,0,
+10,Food manufacturing,health and social care bodies,1,1,
+10,Food manufacturing,"hotels, restaurants, pubs and caterers",1,1,
+11,Drinks manufacturing,households and consumers,6,3,0.84
+11,Drinks manufacturing,own group companies,5,5,4.37
+11,Drinks manufacturing,retailers and supermarkets,3,3,4.67
+11,Drinks manufacturing,wholesalers and distributors,3,2,5.63
+11,Drinks manufacturing,"hotels, restaurants, pubs and caterers",2,2,
+13,Textiles,own group companies,1,1,
+13,Textiles,manufacturers,1,1,
+13,Textiles,other or mixed businesses,1,1,
+17,Paper,retailers and supermarkets,2,2,
+17,Paper,other or mixed businesses,1,0,
+17,Paper,manufacturers,1,0,
+18,Printing,professional and business services firms,1,0,
+18,Printing,retailers and supermarkets,1,1,
+19,Coke & refined petroleum,households and consumers,1,0,
+20,Chemicals,manufacturers,4,3,14.6
+20,Chemicals,own group companies,2,2,
+20,Chemicals,wholesalers and distributors,2,2,
+20,Chemicals,construction and housebuilders,1,1,
+20,Chemicals,retailers and supermarkets,1,1,
+21,Pharmaceuticals,health and social care bodies,3,2,2.56
+21,Pharmaceuticals,retailers and supermarkets,1,1,
+21,Pharmaceuticals,other or mixed businesses,1,1,
+21,Pharmaceuticals,wholesalers and distributors,1,1,
+22,Rubber & plastics,construction and housebuilders,1,1,
+22,Rubber & plastics,households and consumers,1,1,
+22,Rubber & plastics,manufacturers,1,1,
+23,"Glass, cement & ceramics",construction and housebuilders,3,0,0.96
+23,"Glass, cement & ceramics",manufacturers,3,1,1.33
+23,"Glass, cement & ceramics",households and consumers,1,1,
+24,Basic metals,construction and housebuilders,1,1,
+25,Fabricated metal,manufacturers,5,4,23.2
+25,Fabricated metal,central or local government,3,3,30.15
+25,Fabricated metal,wholesalers and distributors,2,2,
+25,Fabricated metal,construction and housebuilders,1,0,
+25,Fabricated metal,own group companies,1,1,
+25,Fabricated metal,other or mixed businesses,1,1,
+25,Fabricated metal,transport and logistics companies,1,0,
+26,Electronics,defence,2,1,
+26,Electronics,other or mixed businesses,2,1,
+26,Electronics,central or local government,2,2,
+26,Electronics,"banks, insurers and financial firms",1,1,
+26,Electronics,retailers and supermarkets,1,1,
+27,Electrical equipment,"energy, water and waste companies",2,0,
+27,Electrical equipment,own group companies,2,2,
+27,Electrical equipment,households and consumers,1,0,
+27,Electrical equipment,transport and logistics companies,1,1,
+27,Electrical equipment,wholesalers and distributors,1,1,
+27,Electrical equipment,manufacturers,1,1,
+28,Machinery,own group companies,4,4,1.21
+28,Machinery,manufacturers,2,1,
+28,Machinery,property owners and landlords,1,1,
+28,Machinery,construction and housebuilders,1,0,
+28,Machinery,wholesalers and distributors,1,1,
+28,Machinery,"hotels, restaurants, pubs and caterers",1,1,
+28,Machinery,other or mixed businesses,1,1,
+29,Motor vehicles,own group companies,6,6,13.1
+29,Motor vehicles,motor dealers,5,5,22.39
+29,Motor vehicles,manufacturers,5,5,2.22
+29,Motor vehicles,transport and logistics companies,2,2,
+29,Motor vehicles,wholesalers and distributors,1,1,
+29,Motor vehicles,other or mixed businesses,1,0,
+29,Motor vehicles,retailers and supermarkets,1,1,
+29,Motor vehicles,central or local government,1,0,
+29,Motor vehicles,households and consumers,1,1,
+30,Other transport equipment,central or local government,7,7,14.43
+30,Other transport equipment,manufacturers,4,2,6.77
+30,Other transport equipment,transport and logistics companies,2,2,
+30,Other transport equipment,wholesalers and distributors,2,2,
+30,Other transport equipment,defence,2,2,
+30,Other transport equipment,own group companies,1,1,
+31,Furniture,retailers and supermarkets,1,1,
+31,Furniture,"hotels, restaurants, pubs and caterers",1,0,
+32,Other manufacturing,health and social care bodies,4,3,2.68
+32,Other manufacturing,own group companies,4,4,1.48
+32,Other manufacturing,households and consumers,3,1,2.05
+32,Other manufacturing,manufacturers,3,3,2.12
+32,Other manufacturing,central or local government,2,2,
+32,Other manufacturing,"schools, colleges and universities",1,1,
+32,Other manufacturing,construction and housebuilders,1,0,
+32,Other manufacturing,"hotels, restaurants, pubs and caterers",1,1,
+33,Machinery repair & install,"technology, media and telecoms companies",1,1,
+33,Machinery repair & install,households and consumers,1,1,
+35,Energy supply,"energy, water and waste companies",14,11,18.97
+35,Energy supply,own group companies,5,5,15.29
+35,Energy supply,households and consumers,5,5,44.02
+36,Water supply,households and consumers,13,13,18.74
+37,Sewerage,"energy, water and waste companies",1,1,
+38,Waste,central or local government,2,2,
+38,Waste,other or mixed businesses,1,1,
+38,Waste,households and consumers,1,1,
+38,Waste,manufacturers,1,0,
+41,Building construction,central or local government,11,11,16.19
+41,Building construction,households and consumers,10,5,23.91
+41,Building construction,own group companies,4,4,1.29
+41,Building construction,"schools, colleges and universities",2,1,
+41,Building construction,property owners and landlords,2,1,
+41,Building construction,other or mixed businesses,1,1,
+41,Building construction,transport and logistics companies,1,1,
+42,Civil engineering,central or local government,6,5,3.69
+42,Civil engineering,"energy, water and waste companies",4,4,4.59
+42,Civil engineering,own group companies,3,3,1.01
+42,Civil engineering,transport and logistics companies,2,1,
+42,Civil engineering,construction and housebuilders,2,1,
+42,Civil engineering,households and consumers,1,1,
+42,Civil engineering,manufacturers,1,1,
+43,Building trades,central or local government,5,5,1.69
+43,Building trades,construction and housebuilders,4,3,1.89
+43,Building trades,own group companies,2,2,
+43,Building trades,property owners and landlords,2,1,
+43,Building trades,households and consumers,2,1,
+43,Building trades,other or mixed businesses,1,1,
+45,Motor trades,households and consumers,33,17,48.55
+45,Motor trades,motor dealers,7,3,4.02
+45,Motor trades,"banks, insurers and financial firms",2,2,
+45,Motor trades,transport and logistics companies,1,1,
+45,Motor trades,manufacturers,1,1,
+46,Wholesale,retailers and supermarkets,19,19,23.62
+46,Wholesale,households and consumers,14,7,10.39
+46,Wholesale,construction and housebuilders,12,9,17.78
+46,Wholesale,other or mixed businesses,7,5,8.59
+46,Wholesale,"hotels, restaurants, pubs and caterers",5,5,9.4
+46,Wholesale,own group companies,5,5,3.13
+46,Wholesale,health and social care bodies,3,3,3.08
+46,Wholesale,wholesalers and distributors,3,3,4.77
+46,Wholesale,manufacturers,3,2,0.69
+46,Wholesale,professional and business services firms,2,2,
+46,Wholesale,"technology, media and telecoms companies",1,1,
+46,Wholesale,central or local government,1,1,
+47,Retail,households and consumers,118,30,288.4
+47,Retail,health and social care bodies,4,3,1.65
+47,Retail,own group companies,4,3,1.87
+47,Retail,construction and housebuilders,1,1,
+47,Retail,"banks, insurers and financial firms",1,1,
+47,Retail,central or local government,1,1,
+47,Retail,retailers and supermarkets,1,1,
+47,Retail,transport and logistics companies,1,1,
+49,Land transport,households and consumers,41,24,18.23
+49,Land transport,central or local government,13,13,5.19
+49,Land transport,other or mixed businesses,9,5,5.9
+49,Land transport,manufacturers,3,1,1.18
+49,Land transport,transport and logistics companies,3,1,1.59
+49,Land transport,retailers and supermarkets,2,2,
+49,Land transport,own group companies,2,2,
+49,Land transport,"energy, water and waste companies",1,0,
+49,Land transport,"hotels, restaurants, pubs and caterers",1,1,
+49,Land transport,"technology, media and telecoms companies",1,1,
+50,Water transport,own group companies,1,1,
+50,Water transport,households and consumers,1,0,
+51,Air transport,own group companies,3,2,2.49
+51,Air transport,households and consumers,3,1,32.1
+51,Air transport,transport and logistics companies,3,3,1.98
+52,Warehousing & transport support,transport and logistics companies,4,4,1.93
+52,Warehousing & transport support,manufacturers,4,3,1.51
+52,Warehousing & transport support,central or local government,3,2,1.37
+52,Warehousing & transport support,other or mixed businesses,3,3,0.99
+52,Warehousing & transport support,own group companies,2,2,
+52,Warehousing & transport support,retailers and supermarkets,1,0,
+53,Post & courier,other or mixed businesses,4,4,2.92
+53,Post & courier,households and consumers,1,1,
+55,Accommodation,households and consumers,25,8,7.73
+55,Accommodation,own group companies,5,5,0.14
+55,Accommodation,property owners and landlords,1,1,
+55,Accommodation,central or local government,1,1,
+56,Food & drink service,households and consumers,54,10,13.71
+56,Food & drink service,"schools, colleges and universities",11,11,1.6
+56,Food & drink service,own group companies,1,1,
+56,Food & drink service,"banks, insurers and financial firms",1,1,
+56,Food & drink service,other or mixed businesses,1,1,
+56,Food & drink service,central or local government,1,1,
+56,Food & drink service,professional and business services firms,1,1,
+56,Food & drink service,wholesalers and distributors,1,1,
+56,Food & drink service,health and social care bodies,1,1,
+56,Food & drink service,transport and logistics companies,1,1,
+56,Food & drink service,"hotels, restaurants, pubs and caterers",1,1,
+56,Food & drink service,retailers and supermarkets,1,1,
+58,Publishing,households and consumers,6,4,2.04
+58,Publishing,"schools, colleges and universities",3,1,1.47
+58,Publishing,own group companies,3,3,0.73
+58,Publishing,"energy, water and waste companies",1,1,
+58,Publishing,professional and business services firms,1,1,
+58,Publishing,central or local government,1,1,
+58,Publishing,motor dealers,1,1,
+58,Publishing,retailers and supermarkets,1,0,
+59,"Film, TV & music","technology, media and telecoms companies",5,3,2.73
+59,"Film, TV & music",households and consumers,5,1,11.28
+59,"Film, TV & music",own group companies,2,2,
+59,"Film, TV & music",retailers and supermarkets,1,0,
+60,Broadcasting,"technology, media and telecoms companies",1,1,
+61,Telecoms,households and consumers,6,6,35.51
+61,Telecoms,other or mixed businesses,3,2,0.47
+61,Telecoms,own group companies,3,3,1.88
+61,Telecoms,"technology, media and telecoms companies",2,2,
+61,Telecoms,central or local government,1,1,
+62,IT & software,central or local government,17,16,10.45
+62,IT & software,other or mixed businesses,17,13,22.85
+62,IT & software,own group companies,7,7,3.09
+62,IT & software,households and consumers,3,3,16.9
+62,IT & software,"banks, insurers and financial firms",2,1,
+62,IT & software,"energy, water and waste companies",2,2,
+62,IT & software,health and social care bodies,2,2,
+62,IT & software,wholesalers and distributors,1,1,
+62,IT & software,professional and business services firms,1,1,
+62,IT & software,manufacturers,1,0,
+62,IT & software,retailers and supermarkets,1,1,
+63,Information services,other or mixed businesses,4,3,2.92
+63,Information services,own group companies,3,3,0.64
+63,Information services,health and social care bodies,1,0,
+63,Information services,households and consumers,1,1,
+64,Banking & finance,households and consumers,45,32,173.22
+64,Banking & finance,own group companies,16,16,3.91
+64,Banking & finance,"banks, insurers and financial firms",10,6,4.27
+64,Banking & finance,other or mixed businesses,7,7,2.35
+64,Banking & finance,central or local government,2,2,
+64,Banking & finance,transport and logistics companies,1,1,
+64,Banking & finance,"hotels, restaurants, pubs and caterers",1,1,
+64,Banking & finance,retailers and supermarkets,1,1,
+65,Insurance & pensions,households and consumers,10,2,8.19
+65,Insurance & pensions,own group companies,6,6,3.57
+65,Insurance & pensions,other or mixed businesses,3,1,4.02
+65,Insurance & pensions,construction and housebuilders,1,1,
+65,Insurance & pensions,"banks, insurers and financial firms",1,1,
+66,Financial support services,households and consumers,5,2,17.78
+66,Financial support services,"banks, insurers and financial firms",5,3,1.81
+66,Financial support services,own group companies,4,4,2.89
+66,Financial support services,other or mixed businesses,3,3,2.19
+66,Financial support services,manufacturers,1,1,
+66,Financial support services,retailers and supermarkets,1,1,
+68,Real estate,households and consumers,8,4,2.53
+68,Real estate,own group companies,5,5,0.86
+68,Real estate,property owners and landlords,5,5,1.44
+68,Real estate,central or local government,3,3,0.37
+68,Real estate,other or mixed businesses,2,2,
+68,Real estate,retailers and supermarkets,1,1,
+68,Real estate,health and social care bodies,1,1,
+69,Legal & accounting,other or mixed businesses,2,2,
+69,Legal & accounting,"banks, insurers and financial firms",1,1,
+69,Legal & accounting,households and consumers,1,1,
+70,Head offices & consultancy,households and consumers,24,12,30.83
+70,Head offices & consultancy,own group companies,23,23,27.82
+70,Head offices & consultancy,central or local government,8,7,5.21
+70,Head offices & consultancy,other or mixed businesses,4,3,4.8
+70,Head offices & consultancy,construction and housebuilders,4,2,0.7
+70,Head offices & consultancy,"energy, water and waste companies",1,1,
+70,Head offices & consultancy,wholesalers and distributors,1,1,
+70,Head offices & consultancy,manufacturers,1,0,
+70,Head offices & consultancy,property owners and landlords,1,0,
+70,Head offices & consultancy,"banks, insurers and financial firms",1,1,
+70,Head offices & consultancy,professional and business services firms,1,1,
+70,Head offices & consultancy,transport and logistics companies,1,1,
+71,Architecture & engineering,central or local government,8,8,5.86
+71,Architecture & engineering,own group companies,4,4,0.91
+71,Architecture & engineering,manufacturers,2,2,
+71,Architecture & engineering,"energy, water and waste companies",2,0,
+71,Architecture & engineering,construction and housebuilders,1,0,
+71,Architecture & engineering,property owners and landlords,1,1,
+71,Architecture & engineering,"technology, media and telecoms companies",1,1,
+72,Scientific R&D,own group companies,2,2,
+72,Scientific R&D,manufacturers,2,2,
+72,Scientific R&D,households and consumers,1,0,
+72,Scientific R&D,"schools, colleges and universities",1,1,
+73,Advertising & market research,other or mixed businesses,2,0,
+73,Advertising & market research,own group companies,1,1,
+74,Other professional,own group companies,4,4,0.84
+74,Other professional,retailers and supermarkets,3,2,0.46
+74,Other professional,"energy, water and waste companies",3,3,0.32
+74,Other professional,central or local government,2,2,
+74,Other professional,other or mixed businesses,2,2,
+74,Other professional,households and consumers,1,0,
+74,Other professional,wholesalers and distributors,1,0,
+75,Veterinary,households and consumers,4,3,2.21
+77,Rental & leasing,households and consumers,6,4,3.88
+77,Rental & leasing,construction and housebuilders,3,3,0.94
+77,Rental & leasing,other or mixed businesses,3,2,1.36
+77,Rental & leasing,manufacturers,1,1,
+77,Rental & leasing,"hotels, restaurants, pubs and caterers",1,1,
+78,Employment agencies,other or mixed businesses,26,11,7.55
+78,Employment agencies,own group companies,14,14,5.15
+78,Employment agencies,central or local government,7,7,1.12
+78,Employment agencies,health and social care bodies,7,7,1.84
+78,Employment agencies,manufacturers,6,4,0.54
+78,Employment agencies,"schools, colleges and universities",5,5,0.32
+78,Employment agencies,property owners and landlords,2,2,
+78,Employment agencies,professional and business services firms,2,1,
+78,Employment agencies,transport and logistics companies,1,0,
+78,Employment agencies,"energy, water and waste companies",1,1,
+78,Employment agencies,"technology, media and telecoms companies",1,1,
+78,Employment agencies,"hotels, restaurants, pubs and caterers",1,1,
+79,Travel agencies,households and consumers,5,3,13.4
+79,Travel agencies,other or mixed businesses,1,1,
+80,Security,other or mixed businesses,3,1,0.71
+80,Security,"banks, insurers and financial firms",2,1,
+80,Security,property owners and landlords,2,2,
+80,Security,transport and logistics companies,1,1,
+80,Security,retailers and supermarkets,1,0,
+81,Building services & landscaping,central or local government,12,10,3.16
+81,Building services & landscaping,other or mixed businesses,11,10,3.72
+81,Building services & landscaping,"hotels, restaurants, pubs and caterers",1,1,
+81,Building services & landscaping,health and social care bodies,1,1,
+81,Building services & landscaping,retailers and supermarkets,1,1,
+81,Building services & landscaping,property owners and landlords,1,1,
+81,Building services & landscaping,construction and housebuilders,1,0,
+81,Building services & landscaping,"schools, colleges and universities",1,1,
+81,Building services & landscaping,manufacturers,1,1,
+82,Office & business support,own group companies,66,66,54.42
+82,Office & business support,households and consumers,12,7,11.11
+82,Office & business support,central or local government,11,11,3.31
+82,Office & business support,other or mixed businesses,10,5,1.56
+82,Office & business support,property owners and landlords,3,0,2.76
+82,Office & business support,"banks, insurers and financial firms",2,2,
+82,Office & business support,"energy, water and waste companies",2,1,
+82,Office & business support,professional and business services firms,2,2,
+82,Office & business support,manufacturers,2,1,
+82,Office & business support,health and social care bodies,1,1,
+82,Office & business support,"technology, media and telecoms companies",1,1,
+82,Office & business support,retailers and supermarkets,1,1,
+84,Public administration,central or local government,10,10,3.27
+84,Public administration,other or mixed businesses,1,1,
+84,Public administration,health and social care bodies,1,1,
+85,Education,central or local government,81,26,1.96
+85,Education,households and consumers,77,31,3.92
+85,Education,"schools, colleges and universities",4,3,0
+85,Education,other or mixed businesses,2,2,
+85,Education,transport and logistics companies,1,0,
+86,Health,health and social care bodies,26,25,5.09
+86,Health,central or local government,18,17,1.26
+86,Health,households and consumers,16,7,2.42
+86,Health,"banks, insurers and financial firms",3,3,2.63
+86,Health,own group companies,3,3,0.2
+87,Residential care,central or local government,32,32,2.77
+87,Residential care,households and consumers,17,12,2.16
+87,Residential care,health and social care bodies,4,3,0.14
+87,Residential care,own group companies,2,2,
+88,Social work,central or local government,9,8,0.82
+88,Social work,households and consumers,6,3,0.3
+88,Social work,own group companies,1,1,
+90,Arts & entertainment,households and consumers,7,3,5.28
+92,Gambling,households and consumers,9,2,5.71
+93,Sport & recreation,households and consumers,22,10,5.59
+93,Sport & recreation,other or mixed businesses,2,1,
+93,Sport & recreation,central or local government,2,2,
+93,Sport & recreation,"technology, media and telecoms companies",1,0,
+94,Membership organisations,households and consumers,2,2,
+94,Membership organisations,own group companies,1,1,
+94,Membership organisations,"schools, colleges and universities",1,1,
+95,Repair of goods,households and consumers,1,0,
+96,Personal services,own group companies,10,9,3.87
+96,Personal services,households and consumers,8,4,3.12
+96,Personal services,central or local government,4,4,1.42
+96,Personal services,"hotels, restaurants, pubs and caterers",2,2,
+96,Personal services,other or mixed businesses,2,2,
+96,Personal services,"energy, water and waste companies",1,1,
+96,Personal services,property owners and landlords,1,1,
+96,Personal services,professional and business services firms,1,0,
+96,Personal services,manufacturers,1,0,
+96,Personal services,"schools, colleges and universities",1,1,
+99,Extraterritorial,own group companies,1,1,
